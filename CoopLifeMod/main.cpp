@@ -70,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	Memory mem;
 	mem.Open("Risk of Rain");
 
-	double health;
+	double health = 0;
 	std::vector<LPVOID> offsets;
 	offsets.push_back((LPVOID)0x005AE468);
 	offsets.push_back((LPVOID)0x0);
@@ -81,31 +81,36 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	int frame = 0;
 	int fps = 60;
 	std::string str = "MyLife: ";
+	std::stringstream s;
+	std::string healthStr;
 
 	while (TRUE)
 	{		
+		//mem.WriteMem(90, offsets);
 		health = mem.GetDouble(offsets);
 		::SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 		if (!FindWindow(NULL, value))
 			ExitProcess(1337);
 		
-		std::stringstream s;
-		std::string healthStr = std::to_string(health);				
+		healthStr = std::to_string(health);		
+		s.str("");
 
 		if (health > 0 && health < 10000)
-		{				
+		{
 			s << str << healthStr;
 		}
+		else
+			s << str << "?";
 
-		if (GetActiveWindow() == FindWindow(NULL, value))
-		{
+		/*if (GetActiveWindow() == FindWindow(NULL, value))
+		{*/
 			if (frame >= fps)
 			{
 				hook.render((char*)(s.str().c_str()));
 				frame = 0;
 			}
-		}		
+		//}		
 		
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{

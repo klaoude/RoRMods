@@ -37,6 +37,7 @@ void D3DHook::render(char* str)
 	m_d3ddev->BeginScene();    // begins the 3D scene
 
 	drawString(10, 100, D3DCOLOR_ARGB(255, 255, 255, 0), m_pFont, str);
+	D3DXCreateText(m_d3ddev, NULL, "Test", 1, 1, NULL, NULL, NULL);
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 

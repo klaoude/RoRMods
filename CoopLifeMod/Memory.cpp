@@ -24,11 +24,6 @@ bool Memory::Open(LPCSTR windowName)
 
 HMODULE Memory::GetProcessAddr()
 {
-	if (m_handle == NULL)
-	{
-		std::cerr << "[Memory] [ERROR] Use Open() methode before GetProcessAddr() !" << std::endl;
-		return NULL;
-	}
 
 	HMODULE *lphModule;
 	int count = 1;
@@ -37,7 +32,7 @@ HMODULE Memory::GetProcessAddr()
 
 	do
 	{
-		lphModule = new HMODULE[++count];
+		lphModule = new HMODULE [++count];
 		cb = sizeof(HMODULE) * count;
 		EnumProcessModulesEx(m_handle, lphModule, cb, &cbNeeded, LIST_MODULES_ALL);
 	} while (cbNeeded > cb);
@@ -81,4 +76,26 @@ double Memory::GetDouble(std::vector<LPVOID> offsets)
 	std::cout << "[Memory] [INFO] 0x" << offsets[offsets.size() - 1] << " -> " << ret << std::endl;
 
 	return ret;
+}
+
+LPVOID Memory::GetAddr(std::vector<LPVOID> offsets)
+{
+	LPVOID tmpBuffer;
+	double ret;
+
+	LPVOID bp = (LPVOID)GetBasePointer(offsets[0]);
+
+	for (auto i = 1; i < offsets.size() - 1; i++)
+	{
+		ReadProcessMemory(m_handle, addLPVOID((i == 1 ? bp : tmpBuffer), offsets[i]), &tmpBuffer, sizeof(offsets[i]), 0);
+		std::cout << "[Memory] [INFO] 0x" << addLPVOID((i == 1 ? bp : tmpBuffer), offsets[i]) << " -> 0x" << tmpBuffer << std::endl;
+	}
+
+	return tmpBuffer;
+}
+
+void Memory::WriteMem(double val, std::vector<LPVOID> offsets)
+{
+	double ret;
+	WriteProcessMemory(m_handle, GetAddr(offsets), &ret, sizeof(ret), NULL);
 }
