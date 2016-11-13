@@ -70,47 +70,59 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	Memory mem;
 	mem.Open("Risk of Rain");
 
-	double health = 0;
-	std::vector<LPVOID> offsets;
-	offsets.push_back((LPVOID)0x005AE468);
-	offsets.push_back((LPVOID)0x0);
-	offsets.push_back((LPVOID)0x0);
-	offsets.push_back((LPVOID)0x4);
-	offsets.push_back((LPVOID)0x3A0);
+	int health = 0, maxHealth = 0;
+	std::vector<LPVOID> health_offsets;
+	health_offsets.push_back((LPVOID)0x005A9B38);
+	health_offsets.push_back((LPVOID)0x2F0);
+	health_offsets.push_back((LPVOID)0x4);
+	health_offsets.push_back((LPVOID)0x3A0);
+	//health_offsets.push_back((LPVOID)0x3A0);
+
+	std::vector<LPVOID> max_health_offsets;
+	max_health_offsets.push_back((LPVOID)0x005AE468);
+	max_health_offsets.push_back((LPVOID)0x0);
+	max_health_offsets.push_back((LPVOID)0x0);
+	max_health_offsets.push_back((LPVOID)0x4);
+	max_health_offsets.push_back((LPVOID)0x390);
 
 	int frame = 0;
-	int fps = 60;
-	std::string str = "MyLife: ";
+	int fps = 10;
 	std::stringstream s;
 	std::string healthStr;
+	int stableHealth = 1;
+	int oldMax = 1;
 
 	while (TRUE)
-	{		
+	{				
 		//mem.WriteMem(90, offsets);
-		health = mem.GetDouble(offsets);
-		::SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		oldMax = maxHealth;
+		health = (int)mem.GetDouble(health_offsets);
+		maxHealth = (int)mem.GetDouble(max_health_offsets);
+
+		if (maxHealth < oldMax)
+			maxHealth = oldMax;
+
+		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 		if (!FindWindow(NULL, value))
 			ExitProcess(1337);
-		
-		healthStr = std::to_string(health);		
+			
 		s.str("");
 
-		if (health > 0 && health < 10000)
+		if (health >= 1 && health < 10000)
 		{
-			s << str << healthStr;
+			s << health << "/" << maxHealth;
+			stableHealth = health;
 		}
 		else
-			s << str << "?";
+			s << stableHealth << "/" << maxHealth;
 
-		/*if (GetActiveWindow() == FindWindow(NULL, value))
-		{*/
-			if (frame >= fps)
-			{
-				hook.render((char*)(s.str().c_str()));
-				frame = 0;
-			}
-		//}		
+
+		if (frame >= fps)
+		{
+			hook.render((char*)(s.str().c_str()));
+			frame = 0;
+		}	
 		
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -122,6 +134,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			exit(0);
 
 		frame++;
+		Sleep(1);
 	}
 
 	return msg.wParam;
