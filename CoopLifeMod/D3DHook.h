@@ -17,7 +17,7 @@ public:
 
 	void initD3D(HWND hWnd);
 
-	void render(char* str);
+	void render(char* str, int life, int mlife);
 	void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char *fmt);
 
 	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str);

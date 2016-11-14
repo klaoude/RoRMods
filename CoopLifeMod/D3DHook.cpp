@@ -4,12 +4,7 @@
 float width = 40; //global width
 float lenght = width * 15; //global lenght
 
-float life = 4269/2;
-float mlife = 4269;
 
-float lmlife = lenght - 2 * width / 8;
-
-float llife = life * lmlife / mlife;
 
 LPD3DXFONT pFont;
 
@@ -42,8 +37,14 @@ void D3DHook::initD3D(HWND hWnd)
 
 }
 
-void D3DHook::render(char* str)
+void D3DHook::render(char* str, int life, int mlife)
 {
+
+	lmlife = lenght - 2 * width / 8;
+
+	llife = life * lmlife / mlife;
+
+
 	// clear the window alpha
 	m_d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 
@@ -51,11 +52,17 @@ void D3DHook::render(char* str)
 
 	//drawString(10, 100, D3DCOLOR_ARGB(255, 255, 255, 0), m_pFont, str);
 
-	std::stringstream swag;
-	swag << (int)life << "/" << (int)mlife;
+	// select which vertex format we are using
+	m_d3ddev->SetFVF(CUSTOMFVF);
 
+	// select the vertex buffer to display
+	m_d3ddev->SetStreamSource(0, v_buffer, 0, sizeof(CUSTOMVERTEX));
 
-	DrawTextString(100, 100 + 2*width/8, width - 2*width/8, lenght, D3DCOLOR_XRGB(255, 255, 255), swag.str().c_str());
+	// copy the vertex buffer to the back buffer
+	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 8);
+
+	//Draw lifeText
+	DrawTextString(100, 100 + 2*width/8, width - 2*width/8, lenght, D3DCOLOR_XRGB(255, 255, 255), str);
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
@@ -85,20 +92,14 @@ void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char
 {
 
 
-	// Get a handle for the font to us
-
-	// Create the D3DX Font
-	
-
-
-	// Inform font it is about to be used
+	// set container of text
 	RECT shit = { x, y, x + w, y + h };
 
 
-	// Output the text, left aligned
+	// Output the text, center aligned
 	pFont->DrawText(NULL, str, -1, &shit, DT_CENTER, color);
 
-	// Finish up drawing
+
 }
 
 

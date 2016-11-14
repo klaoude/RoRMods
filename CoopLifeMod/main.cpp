@@ -120,7 +120,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 		if (frame >= fps)
 		{
-			hook.render((char*)(s.str().c_str()));
+			hook.render((char*)(s.str().c_str()), health, maxHealth);
 			frame = 0;
 		}	
 		
