@@ -33,8 +33,9 @@ void D3DHook::initD3D(HWND hWnd)
 		&d3dpp,
 		&m_d3ddev);
 
-	D3DXCreateFont(m_d3ddev, 20, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFont);
+	lifebar();    // call the function to initialize the lifebar
 
+	initFont(); //init font
 }
 
 void D3DHook::render(char* str, int life, int mlife)
