@@ -20,6 +20,10 @@ public:
 	void render(char* str);
 	void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char *fmt);
 
+	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str);
+	void initFont();
+	void lifebar();
+
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev;
 	LPD3DXFONT m_pFont;
