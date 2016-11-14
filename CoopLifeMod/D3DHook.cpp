@@ -60,10 +60,13 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->SetStreamSource(0, m_vbuffer, 0, sizeof(CUSTOMVERTEX));
 
 	// copy the vertex buffer to the back buffer
-	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 8);
+	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 10);
 
 	//Draw lifeText
 	DrawTextString(100, 100 + 2*width/8, width - 2*width/8, lenght, D3DCOLOR_XRGB(255, 255, 255), str);
+
+	//DRAW ITEMS
+	DrawTextString(100, 100 + width, width, lenght - lenght/4, D3DCOLOR_XRGB(255, 255, 255), "Items: 1337");
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
@@ -91,16 +94,10 @@ void D3DHook::initFont()
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str)
 {
-
-
 	// set container of text
 	RECT shit = { x, y, x + w, y + h };
-
-
 	// Output the text, center aligned
 	pFont->DrawText(NULL, str, -1, &shit, DT_CENTER, color);
-
-
 }
 
 
@@ -151,9 +148,20 @@ void D3DHook::vHUD(void)
 		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), }
 
 
+
+		//NB OF ITEMS
+		{ 100.0f, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), }, 
+		{ 100.0f + lenght/4, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
+		{ 100.0f, 100.0f + width + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
+
+		{ 100.0f + lenght/4, 100.0f + width , 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
+		{ 100.0f + lenght/4, 100.0f + width + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
+		{ 100.0f, 100.0f + width + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
+
+
 	};
 	// create a vertex buffer interface called m_vbuffer
-	d3ddev->CreateVertexBuffer(24 * sizeof(CUSTOMVERTEX),
+	d3ddev->CreateVertexBuffer(30 * sizeof(CUSTOMVERTEX),
 		0,
 		CUSTOMFVF,
 		D3DPOOL_MANAGED,
