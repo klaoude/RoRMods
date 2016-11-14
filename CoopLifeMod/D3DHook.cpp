@@ -57,7 +57,7 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->SetFVF(CUSTOMFVF);
 
 	// select the vertex buffer to display
-	m_d3ddev->SetStreamSource(0, v_buffer, 0, sizeof(CUSTOMVERTEX));
+	m_d3ddev->SetStreamSource(0, m_vbuffer, 0, sizeof(CUSTOMVERTEX));
 
 	// copy the vertex buffer to the back buffer
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 8);
@@ -86,7 +86,7 @@ void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const ch
 void D3DHook::initFont()
 {
 	AddFontResourceEx("Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0);
-	D3DXCreateFont(d3ddev, 20, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &pFont);
+	D3DXCreateFont(d3ddev, 20, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str)
@@ -104,14 +104,15 @@ void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char
 }
 
 
-void D3DHook::lifebar(void)
+void D3DHook::vHUD(void)
 {
 	
 	
 	// create the vertices using the CUSTOMVERTEX struct
 	CUSTOMVERTEX vertices[] =
 	{
-		{ 100.0f, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
+		//FIRST OUTLINE
+		{ 100.0f, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), }, 
 		{ 100.0f + lenght, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
 		{ 100.0f, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
 
@@ -120,7 +121,7 @@ void D3DHook::lifebar(void)
 		{ 100.0f, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
 
 
-
+		//SECOND OUTLINE
 		{ 100.0f + width / 8 , 100.0f + width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
 		{ 100.0f + lenght - width / 8, 100.0f + width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
 		{ 100.0f + width / 8, 100.0f + width - width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
@@ -130,7 +131,7 @@ void D3DHook::lifebar(void)
 		{ 100.0f + width / 8, 100.0f + width - width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
 
 
-
+		//BACKGROUND (NO-LIFE)
 		{ 100.0f + 2 * width / 8 , 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
 		{ 100.0f + lenght - 2 * width / 8, 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
 		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
@@ -140,7 +141,7 @@ void D3DHook::lifebar(void)
 		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
 
 
-
+		//HEALTH (GREEN)
 		{ 100.0f + 2 * width / 8 , 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
 		{ 100.0f + llife, 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
 		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
@@ -149,20 +150,20 @@ void D3DHook::lifebar(void)
 		{ 100.0f + llife, 100.0f + width - 2 * width / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
 		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), }
 
-	};
 
-	// create a vertex buffer interface called v_buffer
+	};
+	// create a vertex buffer interface called m_vbuffer
 	d3ddev->CreateVertexBuffer(24 * sizeof(CUSTOMVERTEX),
 		0,
 		CUSTOMFVF,
 		D3DPOOL_MANAGED,
-		&v_buffer,
+		&m_vbuffer,
 		NULL);
 
 	VOID* pVoid;    // a void pointer
 
-					// lock v_buffer and load the vertices into it
-	v_buffer->Lock(0, 0, (void**)&pVoid, 0);
+					// lock m_vbuffer and load the vertices into it
+	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);
 	memcpy(pVoid, vertices, sizeof(vertices));
-	v_buffer->Unlock();
+	m_vbuffer->Unlock();
 }

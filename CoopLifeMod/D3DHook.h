@@ -22,10 +22,11 @@ public:
 
 	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str);
 	void initFont();
-	void lifebar();
+	void vHUD();
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev;
+	LPDIRECT3DVERTEXBUFFER9 m_vbuffer; 
 	LPD3DXFONT m_pFont;
 	LPDIRECT3D9 m_d3d;
 
