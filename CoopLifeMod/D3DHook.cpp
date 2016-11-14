@@ -1,4 +1,7 @@
 #include "D3DHook.h"
+#include "dhFastFont9.h"
+
+
 
 void D3DHook::initD3D(HWND hWnd)
 {
@@ -46,43 +49,33 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->SetStreamSource(0, m_vbuffer, 0, sizeof(CUSTOMVERTEX));
 
 	// copy the vertex buffer to the back buffer
-	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 10);
+	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 8);
 
 	//Draw lifeText
-	DrawTextString(100, 100 + 2*WIDTH/8, WIDTH - 2* WIDTH /8, LENGHT, D3DCOLOR_XRGB(255, 255, 255), str);
+	DrawTextString(10, 100 + 2*WIDTH/8, WIDTH - 2* WIDTH /8, LENGHT, D3DCOLOR_XRGB(255, 255, 255), str, m_pFont);
 
 	//DRAW ITEMS
-	DrawTextString(100, 100 + WIDTH, WIDTH, LENGHT - LENGHT /4, D3DCOLOR_XRGB(255, 255, 255), "Items: 1337");
+	DrawTextString(10, 100 + WIDTH, WIDTH, LENGHT - LENGHT /4, D3DCOLOR_ARGB(255, 255, 255, 255), "Items: 1337", m_pFontSmall);
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
 	m_d3ddev->Present(NULL, NULL, NULL, NULL);   // displays the created frame on the screen
 }
 
-void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
-{
-	RECT FontPos = { x, y, x + 120, y + 16 };
-	char buf[1024] = { '\0' };
-	va_list va_alist;
-
-	va_start(va_alist, fmt);
-	vsprintf_s(buf, fmt, va_alist);
-	va_end(va_alist);
-	g_pFont->DrawText(NULL, buf, -1, &FontPos, DT_NOCLIP, color);
-}
 
 void D3DHook::initFont()
 {
 	AddFontResourceEx("Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0);
-	D3DXCreateFont(m_d3ddev, 20, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
+	D3DXCreateFont(m_d3ddev, 20, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
+	D3DXCreateFont(m_d3ddev, 20, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
 }
 
-void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str)
+void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont)
 {
 	// set container of text
-	RECT shit = { x, y, x + w, y + h };
+	RECT container = { x, y, x + w, y + h };
 	// Output the text, center aligned
-	m_pFont->DrawText(NULL, str, -1, &shit, DT_CENTER, color);
+	pfont->DrawText(NULL, str, -1, &container, DT_CENTER, color);
 }
 
 void D3DHook::vHUD()
@@ -91,53 +84,53 @@ void D3DHook::vHUD()
 	CUSTOMVERTEX vertices[] =
 	{
 		//FIRST OUTLINE
-		{ 100.0f, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) }, 
-		{ 100.0f + LENGHT, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
-		{ 100.0f, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) }, 
+		{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 
-		{ 100.0f + LENGHT, 100.0f , 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
-		{ 100.0f + LENGHT, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
-		{ 100.0f, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 10.0f + LENGHT, 100.0f , 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 
 		//SECOND OUTLINE
-		{ 100.0f + WIDTH / 8 , 100.0f + WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
-		{ 100.0f + LENGHT - WIDTH / 8, 100.0f + WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
-		{ 100.0f + WIDTH / 8, 100.0f + WIDTH - WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 10.0f + WIDTH / 16 , 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 10.0f + LENGHT - WIDTH / 16, 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 10.0f + WIDTH / 16, 100.0f + WIDTH - WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
 
-		{ 100.0f + LENGHT - WIDTH / 8 , 100.0f + WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
-		{ 100.0f + LENGHT - WIDTH / 8, 100.0f + WIDTH - WIDTH / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
-		{ 100.0f + WIDTH / 8, 100.0f + WIDTH - WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 10.0f + LENGHT - WIDTH / 16 , 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 10.0f + LENGHT - WIDTH / 16, 100.0f + WIDTH - WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 10.0f + WIDTH / 16, 100.0f + WIDTH - WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
 
 		//BACKGROUND (NO-LIFE)
-		{ 100.0f + 2 * WIDTH / 8 , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
-		{ 100.0f + LENGHT - 2 * WIDTH / 8, 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
-		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 10.0f + 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 10.0f + LENGHT - 2 * WIDTH / 16, 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
 
-		{ 100.0f + LENGHT - 2 * WIDTH / 8 , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
-		{ 100.0f + LENGHT - 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
-		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 10.0f + LENGHT - 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 10.0f + LENGHT - 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
 
 		//HEALTH (GREEN)
-		{ 100.0f + 2 * WIDTH / 8 , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
-		{ 100.0f + m_llife, 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
-		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 10.0f + 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 10.0f + m_llife, 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
 
-		{ 100.0f + m_llife , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
-		{ 100.0f + m_llife, 100.0f + WIDTH - 2 * WIDTH / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
-		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 10.0f + m_llife , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 10.0f + m_llife, 100.0f + WIDTH - 2 * WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
 
 		//NB OF ITEMS
-		{ 100.0f, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) }, 
-		{ 100.0f + LENGHT/4, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
-		{ 100.0f, 100.0f + WIDTH + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
+		{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_ARGB(128, 51, 43, 60) }, 
+		{ 10.0f + LENGHT/4, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
+		{ 10.0f, 100.0f + WIDTH + WIDTH, 0.0f, 0.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
 
-		{ 100.0f + LENGHT/4, 100.0f + WIDTH , 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
-		{ 100.0f + LENGHT/4, 100.0f + WIDTH + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
-		{ 100.0f, 100.0f + WIDTH + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) }
+		{ 10.0f + LENGHT/4, 100.0f + WIDTH , 0.0f, 0.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
+		{ 10.0f + LENGHT/4, 100.0f + WIDTH + WIDTH, 0.0f, 0.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
+		{ 10.0f, 100.0f + WIDTH + WIDTH, 0.0f, 0.0f, D3DCOLOR_ARGB(128, 51, 43, 60) }
 	};
 
 	// create a vertex buffer interface called m_vbuffer
-	m_d3ddev->CreateVertexBuffer(30 * sizeof(CUSTOMVERTEX),
+	m_d3ddev->CreateVertexBuffer(24 * sizeof(CUSTOMVERTEX),
 		0,
 		CUSTOMFVF,
 		D3DPOOL_MANAGED,
