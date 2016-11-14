@@ -1,13 +1,5 @@
 #include "D3DHook.h"
 
-
-float width = 40; //global width
-float lenght = width * 15; //global lenght
-
-
-
-LPD3DXFONT pFont;
-
 void D3DHook::initD3D(HWND hWnd)
 {
 	m_d3d = Direct3DCreate9(D3D_SDK_VERSION);    // create the Direct3D interface
@@ -33,25 +25,19 @@ void D3DHook::initD3D(HWND hWnd)
 		&d3dpp,
 		&m_d3ddev);
 
-	lifebar();    // call the function to initialize the lifebar
+	vHUD();    // call the function to initialize the lifebar
 
-	initFont(); //init font
+	initFont(); //init font	
 }
 
 void D3DHook::render(char* str, int life, int mlife)
 {
-
-	lmlife = lenght - 2 * width / 8;
-
-	llife = life * lmlife / mlife;
-
+	m_llife = life * m_lmlife / mlife;
 
 	// clear the window alpha
 	m_d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 
 	m_d3ddev->BeginScene();    // begins the 3D scene
-
-	//drawString(10, 100, D3DCOLOR_ARGB(255, 255, 255, 0), m_pFont, str);
 
 	// select which vertex format we are using
 	m_d3ddev->SetFVF(CUSTOMFVF);
@@ -63,10 +49,10 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 10);
 
 	//Draw lifeText
-	DrawTextString(100, 100 + 2*width/8, width - 2*width/8, lenght, D3DCOLOR_XRGB(255, 255, 255), str);
+	DrawTextString(100, 100 + 2*WIDTH/8, WIDTH - 2* WIDTH /8, LENGHT, D3DCOLOR_XRGB(255, 255, 255), str);
 
 	//DRAW ITEMS
-	DrawTextString(100, 100 + width, width, lenght - lenght/4, D3DCOLOR_XRGB(255, 255, 255), "Items: 1337");
+	DrawTextString(100, 100 + WIDTH, WIDTH, LENGHT - LENGHT /4, D3DCOLOR_XRGB(255, 255, 255), "Items: 1337");
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
@@ -85,11 +71,10 @@ void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const ch
 	g_pFont->DrawText(NULL, buf, -1, &FontPos, DT_NOCLIP, color);
 }
 
-
 void D3DHook::initFont()
 {
 	AddFontResourceEx("Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0);
-	D3DXCreateFont(d3ddev, 20, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
+	D3DXCreateFont(m_d3ddev, 20, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str)
@@ -97,71 +82,62 @@ void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char
 	// set container of text
 	RECT shit = { x, y, x + w, y + h };
 	// Output the text, center aligned
-	pFont->DrawText(NULL, str, -1, &shit, DT_CENTER, color);
+	m_pFont->DrawText(NULL, str, -1, &shit, DT_CENTER, color);
 }
 
-
-void D3DHook::vHUD(void)
-{
-	
-	
+void D3DHook::vHUD()
+{	
 	// create the vertices using the CUSTOMVERTEX struct
 	CUSTOMVERTEX vertices[] =
 	{
 		//FIRST OUTLINE
-		{ 100.0f, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), }, 
-		{ 100.0f + lenght, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
-		{ 100.0f, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
+		{ 100.0f, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) }, 
+		{ 100.0f + LENGHT, 100.0f, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 100.0f, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
 
-		{ 100.0f + lenght, 100.0f , 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
-		{ 100.0f + lenght, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
-		{ 100.0f, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60), },
-
+		{ 100.0f + LENGHT, 100.0f , 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 100.0f + LENGHT, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
+		{ 100.0f, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_XRGB(51, 43, 60) },
 
 		//SECOND OUTLINE
-		{ 100.0f + width / 8 , 100.0f + width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
-		{ 100.0f + lenght - width / 8, 100.0f + width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
-		{ 100.0f + width / 8, 100.0f + width - width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
+		{ 100.0f + WIDTH / 8 , 100.0f + WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 100.0f + LENGHT - WIDTH / 8, 100.0f + WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 100.0f + WIDTH / 8, 100.0f + WIDTH - WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
 
-		{ 100.0f + lenght - width / 8 , 100.0f + width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
-		{ 100.0f + lenght - width / 8, 100.0f + width - width / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
-		{ 100.0f + width / 8, 100.0f + width - width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87), },
-
+		{ 100.0f + LENGHT - WIDTH / 8 , 100.0f + WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 100.0f + LENGHT - WIDTH / 8, 100.0f + WIDTH - WIDTH / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
+		{ 100.0f + WIDTH / 8, 100.0f + WIDTH - WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(64, 65, 87) },
 
 		//BACKGROUND (NO-LIFE)
-		{ 100.0f + 2 * width / 8 , 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
-		{ 100.0f + lenght - 2 * width / 8, 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
-		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
+		{ 100.0f + 2 * WIDTH / 8 , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 100.0f + LENGHT - 2 * WIDTH / 8, 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
 
-		{ 100.0f + lenght - 2 * width / 8 , 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
-		{ 100.0f + lenght - 2 * width / 8, 100.0f + width - 2 * width / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
-		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26), },
-
+		{ 100.0f + LENGHT - 2 * WIDTH / 8 , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 100.0f + LENGHT - 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
+		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(26, 26, 26) },
 
 		//HEALTH (GREEN)
-		{ 100.0f + 2 * width / 8 , 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
-		{ 100.0f + llife, 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
-		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
+		{ 100.0f + 2 * WIDTH / 8 , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 100.0f + m_llife, 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
 
-		{ 100.0f + llife , 100.0f + 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
-		{ 100.0f + llife, 100.0f + width - 2 * width / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), },
-		{ 100.0f + 2 * width / 8, 100.0f + width - 2 * width / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103), }
-
-
+		{ 100.0f + m_llife , 100.0f + 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 100.0f + m_llife, 100.0f + WIDTH - 2 * WIDTH / 8 , 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
+		{ 100.0f + 2 * WIDTH / 8, 100.0f + WIDTH - 2 * WIDTH / 8, 0.5f, 1.0f, D3DCOLOR_XRGB(136, 211, 103) },
 
 		//NB OF ITEMS
-		{ 100.0f, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), }, 
-		{ 100.0f + lenght/4, 100.0f + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
-		{ 100.0f, 100.0f + width + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
+		{ 100.0f, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) }, 
+		{ 100.0f + LENGHT/4, 100.0f + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
+		{ 100.0f, 100.0f + WIDTH + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
 
-		{ 100.0f + lenght/4, 100.0f + width , 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
-		{ 100.0f + lenght/4, 100.0f + width + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
-		{ 100.0f, 100.0f + width + width, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60), },
-
-
+		{ 100.0f + LENGHT/4, 100.0f + WIDTH , 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
+		{ 100.0f + LENGHT/4, 100.0f + WIDTH + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) },
+		{ 100.0f, 100.0f + WIDTH + WIDTH, 0.5f, 1.0f, D3DCOLOR_ARGB(128, 51, 43, 60) }
 	};
+
 	// create a vertex buffer interface called m_vbuffer
-	d3ddev->CreateVertexBuffer(30 * sizeof(CUSTOMVERTEX),
+	m_d3ddev->CreateVertexBuffer(30 * sizeof(CUSTOMVERTEX),
 		0,
 		CUSTOMFVF,
 		D3DPOOL_MANAGED,
@@ -170,7 +146,7 @@ void D3DHook::vHUD(void)
 
 	VOID* pVoid;    // a void pointer
 
-					// lock m_vbuffer and load the vertices into it
+	// lock m_vbuffer and load the vertices into it
 	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);
 	memcpy(pVoid, vertices, sizeof(vertices));
 	m_vbuffer->Unlock();

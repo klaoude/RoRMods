@@ -1,5 +1,4 @@
 #pragma once
-
 #include <windows.h>
 #include <d3d9.h>
 #include <iostream>
@@ -7,8 +6,11 @@
 #include <Dwmapi.h> 
 #include <TlHelp32.h>
 
-#define CENTERX (GetSystemMetrics(SM_CXSCREEN)/2)-(s_width/2)
-#define CENTERY (GetSystemMetrics(SM_CYSCREEN)/2)-(s_height/2)
+struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; };
+#define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
+
+const float WIDTH = 40; //global width
+const float LENGHT = WIDTH * 15; //global lenght
 
 class D3DHook
 {
@@ -26,10 +28,11 @@ public:
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev;
-	LPDIRECT3DVERTEXBUFFER9 m_vbuffer; 
+	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL; 
 	LPD3DXFONT m_pFont;
 	LPDIRECT3D9 m_d3d;
 
 	int m_width, m_height;
+	float m_llife = LENGHT - 2 * WIDTH / 8, m_lmlife;
 };
 

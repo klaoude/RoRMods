@@ -4,11 +4,8 @@
 
 int s_width = 800;
 int s_height = 600;
-#define CENTERX (GetSystemMetrics(SM_CXSCREEN)/2)-(s_width/2)
-#define CENTERY (GetSystemMetrics(SM_CYSCREEN)/2)-(s_height/2)
 HWND hWnd;
 const MARGINS  margin = { 0,0,s_width,s_height };
-LPD3DXFONT pFont;
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
