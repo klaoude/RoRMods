@@ -131,7 +131,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			exit(0);
 
 		frame++;
-		Sleep(1);
+		Sleep(10);
 	}
 
 	return msg.wParam;
