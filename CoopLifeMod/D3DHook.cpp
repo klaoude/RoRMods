@@ -69,7 +69,6 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->Present(NULL, NULL, NULL, NULL);   // displays the created frame on the screen
 }
 
-
 void D3DHook::initFont()
 {
 	AddFontResourceEx("Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0);
@@ -101,8 +100,7 @@ void D3DHook::vHUD()
 
 
 	// create the vertices using the CUSTOMVERTEX struct
-
-
+	
 	// create a vertex buffer interface called m_vbuffer
 	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
 

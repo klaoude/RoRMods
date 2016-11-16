@@ -82,13 +82,24 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	max_health_offsets.push_back((LPVOID)0x4);
 	max_health_offsets.push_back((LPVOID)0x390);
 
-	std::vector<LPVOID> portOffsets;
-	portOffsets.push_back((LPVOID)0x0034E464);
-	portOffsets.push_back((LPVOID)0x26C);
-	portOffsets.push_back((LPVOID)0xC);
-	portOffsets.push_back((LPVOID)0xC);
-	portOffsets.push_back((LPVOID)0x4);
-	portOffsets.push_back((LPVOID)0xC0);
+	std::vector<LPVOID> portClientOffsets;
+	portClientOffsets.push_back((LPVOID)0x0034E464);
+	portClientOffsets.push_back((LPVOID)0x26C);
+	portClientOffsets.push_back((LPVOID)0xC);
+	portClientOffsets.push_back((LPVOID)0xC);
+	portClientOffsets.push_back((LPVOID)0x4);
+	portClientOffsets.push_back((LPVOID)0xC0);
+
+	std::vector<LPVOID> portServerOffsets;
+	portServerOffsets.push_back((LPVOID)0x0034E464);
+	portServerOffsets.push_back((LPVOID)0x26C);
+	portServerOffsets.push_back((LPVOID)0xC);
+	portServerOffsets.push_back((LPVOID)0xC);
+	portServerOffsets.push_back((LPVOID)0x4);
+	portServerOffsets.push_back((LPVOID)0x930);
+
+	std::vector<LPVOID> ipOffsets;
+	ipOffsets.push_back((LPVOID)0x3906F8);
 
 	int frame = 0;
 	int fps = 10;
@@ -101,9 +112,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	{				
 		//mem.WriteMem(90, offsets);
 		oldMax = maxHealth;
-		//health = (int)mem.GetDouble(health_offsets);
-		//maxHealth = (int)mem.GetDouble(max_health_offsets);
-		int port = (int)mem.GetDouble(portOffsets);
+		health = (int)mem.GetDouble(health_offsets);
+		maxHealth = (int)mem.GetDouble(max_health_offsets);
+		/*int port = (int)mem.GetDouble(portClientOffsets);
+		char* ip = mem.getChar(ipOffsets, 15);*/
 
 		if (maxHealth < oldMax)
 			maxHealth = oldMax;
@@ -123,18 +135,22 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		else
 			s << stableHealth << "/" << maxHealth;*/
 
-		s << port;
+		//s << port << "|" << ip;
 
-		if (frame >= fps)
-		{
-			hook.render((char*)(s.str().c_str()), health, maxHealth);
-			frame = 0;
-		}	
 		
-		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+		}
+		else
+		{
+			if (frame >= fps)
+			{
+				hook.render((char*)(s.str().c_str()), health, maxHealth);
+				frame = 0;
+			}
 		}
 
 		if (msg.message == WM_QUIT)
