@@ -13,6 +13,7 @@ public:
 	LPVOID GetBasePointer(LPVOID offset = 0x0);
 
 	double GetDouble(std::vector<LPVOID> offsets);
+	double GetDouble(LPVOID addr);
 	LPVOID GetAddr(std::vector<LPVOID> offsets);
 
 	void WriteMem(double val, std::vector<LPVOID> offsets);

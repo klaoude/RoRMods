@@ -8,6 +8,22 @@
 
 const int BUFFER_LENGHT = 256;
 
+struct Client
+{
+	sockaddr_in addr;
+	int clilen = sizeof(sockaddr_in);
+	int socket;
+
+	hostent* server;
+};
+
+struct Server
+{
+	sockaddr_in addr;
+	int port;
+	int socket;
+};
+
 class Net
 {
 public:
@@ -24,20 +40,4 @@ private:
 	Server m_server;
 
 	bool m_isServer;
-};
-
-struct Client
-{
-	sockaddr_in addr;
-	int clilen = sizeof(sockaddr_in);
-	int socket;
-
-	hostent* server;
-};
-
-struct Server
-{
-	sockaddr_in addr;
-	int port;
-	int socket;
 };

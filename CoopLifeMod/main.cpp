@@ -93,8 +93,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	{				
 		//mem.WriteMem(90, offsets);
 		oldMax = maxHealth;
-		health = (int)mem.GetDouble(health_offsets);
-		maxHealth = (int)mem.GetDouble(max_health_offsets);
+		//health = (int)mem.GetDouble(health_offsets);
+		//maxHealth = (int)mem.GetDouble(max_health_offsets);
+		health = (int)mem.GetDouble((LPVOID)0x03F306C8);
 
 		if (maxHealth < oldMax)
 			maxHealth = oldMax;

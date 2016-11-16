@@ -78,6 +78,13 @@ double Memory::GetDouble(std::vector<LPVOID> offsets)
 	return ret;
 }
 
+double Memory::GetDouble(LPVOID addr)
+{
+	double ret; 
+	ReadProcessMemory(m_handle, addr, &ret, sizeof(ret), 0);
+	return ret;
+}
+
 LPVOID Memory::GetAddr(std::vector<LPVOID> offsets)
 {
 	LPVOID tmpBuffer;

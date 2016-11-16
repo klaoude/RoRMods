@@ -1,7 +1,5 @@
 #include "D3DHook.h"
-#include "dhFastFont9.h"
-
-
+//#include "dhFastFont9.h"
 
 void D3DHook::initD3D(HWND hWnd)
 {
