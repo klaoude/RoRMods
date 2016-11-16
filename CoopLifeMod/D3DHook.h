@@ -19,7 +19,7 @@ public:
 
 	void render(char* str, int life, int mlife);
 
-	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont);
+	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align);
 	void addRect(float x, float y, float l, float w, D3DCOLOR color);
 	void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
 
@@ -28,7 +28,7 @@ public:
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
-	LPD3DXFONT m_pFont, m_pFontSmall;
+	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontOut;
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL;
 	int m_width, m_height;

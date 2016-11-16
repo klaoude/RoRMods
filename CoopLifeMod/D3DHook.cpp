@@ -50,7 +50,16 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, m_vertices.size());
 
 	//Draw lifeText
-	DrawTextString(10, 100, WIDTH, LENGHT, D3DCOLOR_XRGB(255, 255, 255), str, m_pFont);
+	DrawTextString(m_width-105, 17, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host", m_pFontDefault, DT_RIGHT);
+	DrawTextString(m_width - 105, 27, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F2 to connect", m_pFontDefault, DT_RIGHT);
+
+	DrawTextString(11, 100 - WIDTH / 16, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFont, DT_CENTER);
+	DrawTextString(10, 101 - WIDTH / 16, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFont, DT_CENTER);
+	DrawTextString(10, 99 - WIDTH / 16, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFont, DT_CENTER);
+	DrawTextString(9, 100 - WIDTH / 16, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFont, DT_CENTER);
+	DrawTextString(10, 100-WIDTH/16, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), str, m_pFont, DT_CENTER);
+
+
 
 	//DRAW ITEMS
 	//DrawTextString(10, 100 + WIDTH, WIDTH, LENGHT - LENGHT /4, D3DCOLOR_ARGB(255, 255, 255, 255), "Items: 1337", m_pFontSmall);
@@ -64,24 +73,28 @@ void D3DHook::render(char* str, int life, int mlife)
 void D3DHook::initFont()
 {
 	AddFontResourceEx("Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0);
-	D3DXCreateFont(m_d3ddev, 20, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
-	D3DXCreateFont(m_d3ddev, 20, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
+	D3DXCreateFont(m_d3ddev, 19, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontOut);
+	D3DXCreateFont(m_d3ddev, 18, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
+	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
+
+	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
+
 }
 
-void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont)
+void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align)
 {
 	// set container of text
 	RECT container = { x, y, x + w, y + h };
 	// Output the text, center aligned
-	pfont->DrawText(NULL, str, -1, &container, DT_CENTER, color);
+	pfont->DrawText(NULL, str, -1, &container, align, color);
 }
 
 void D3DHook::vHUD()
 {	
-	addRect(10.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_XRGB(51, 43, 60)); //EXTERNAL OUTLINE
-	addRect(10.0f + WIDTH / 16, 100.0f + WIDTH / 16, LENGHT - 2*WIDTH/16, WIDTH - 2 * WIDTH / 16, D3DCOLOR_XRGB(64, 65, 87)); //INTERNAL OUTLINE
-	addRect(10.0f + 2*WIDTH / 16, 100.0f + 2*WIDTH / 16, LENGHT - 4 * WIDTH / 16, WIDTH - 4 * WIDTH / 16, D3DCOLOR_XRGB(26, 26 , 26)); //HEALTH BACKGROUND
-	addRect(10 + 2*WIDTH / 16, 100.0f + 2*WIDTH / 16, LENGHT - 4 * WIDTH / 16, WIDTH - 4 * WIDTH / 16, D3DCOLOR_XRGB(136, 211, 103)); //HEALTH
+	addRect(10.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
+	addRect(10.0f + WIDTH / 16, 100.0f + WIDTH / 16, LENGHT - 2*WIDTH/16, WIDTH - 2 * WIDTH / 16, D3DCOLOR_ARGB(255, 64, 65, 87)); //INTERNAL OUTLINE
+	addRect(10.0f + 2*WIDTH / 16, 100.0f + 2*WIDTH / 16, LENGHT - 4 * WIDTH / 16, WIDTH - 4 * WIDTH / 16, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+	addRect(10 + 2*WIDTH / 16, 100.0f + 2*WIDTH / 16, LENGHT - 4 * WIDTH / 16, WIDTH - 4 * WIDTH / 16, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 
 
 
