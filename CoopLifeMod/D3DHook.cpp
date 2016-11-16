@@ -1,8 +1,6 @@
 #include "D3DHook.h"
 //#include "dhFastFont9.h"
 
-
-
 void D3DHook::initD3D(HWND hWnd)
 {
 	m_d3d = Direct3DCreate9(D3D_SDK_VERSION);    // create the Direct3D interface
@@ -52,10 +50,10 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, m_vertices.size());
 
 	//Draw lifeText
-	DrawTextString(10, 100 + 2*WIDTH/8, WIDTH - 2* WIDTH /8, LENGHT, D3DCOLOR_XRGB(255, 255, 255), str, m_pFont);
+	DrawTextString(10, 100, WIDTH, LENGHT, D3DCOLOR_XRGB(255, 255, 255), str, m_pFont);
 
 	//DRAW ITEMS
-	DrawTextString(10, 100 + WIDTH, WIDTH, LENGHT - LENGHT /4, D3DCOLOR_ARGB(255, 255, 255, 255), "Items: 1337", m_pFontSmall);
+	//DrawTextString(10, 100 + WIDTH, WIDTH, LENGHT - LENGHT /4, D3DCOLOR_ARGB(255, 255, 255, 255), "Items: 1337", m_pFontSmall);
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 

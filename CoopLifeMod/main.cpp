@@ -107,14 +107,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			
 		s.str("");
 
-		if (health >= 1 && health < 10000)
+		/*if (health >= 1 && health < 10000)
 		{
 			s << health << "/" << maxHealth;
 			stableHealth = health;
 		}
 		else
-			s << stableHealth << "/" << maxHealth;
+			s << stableHealth << "/" << maxHealth;*/
 
+		s << health;
 
 		if (frame >= fps)
 		{
