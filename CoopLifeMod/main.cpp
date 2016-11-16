@@ -82,6 +82,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	max_health_offsets.push_back((LPVOID)0x4);
 	max_health_offsets.push_back((LPVOID)0x390);
 
+	std::vector<LPVOID> portOffsets;
+	portOffsets.push_back((LPVOID)0x0034E464);
+	portOffsets.push_back((LPVOID)0x26C);
+	portOffsets.push_back((LPVOID)0xC);
+	portOffsets.push_back((LPVOID)0xC);
+	portOffsets.push_back((LPVOID)0x4);
+	portOffsets.push_back((LPVOID)0xC0);
+
 	int frame = 0;
 	int fps = 10;
 	std::stringstream s;
@@ -95,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		oldMax = maxHealth;
 		//health = (int)mem.GetDouble(health_offsets);
 		//maxHealth = (int)mem.GetDouble(max_health_offsets);
-		health = (int)mem.GetDouble((LPVOID)0x03F306C8);
+		int port = (int)mem.GetDouble(portOffsets);
 
 		if (maxHealth < oldMax)
 			maxHealth = oldMax;
@@ -115,7 +123,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		else
 			s << stableHealth << "/" << maxHealth;*/
 
-		s << health;
+		s << port;
 
 		if (frame >= fps)
 		{

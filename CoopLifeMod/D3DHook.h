@@ -10,7 +10,6 @@
 struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; };
 #define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
 
-
 class D3DHook
 {
 public:
@@ -22,6 +21,7 @@ public:
 
 	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont);
 	void addRect(float x, float y, float l, float w, D3DCOLOR color);
+	void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
 
 	void initFont();
 	void vHUD();

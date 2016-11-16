@@ -114,6 +114,18 @@ void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
 	m_vertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
 }
 
+void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
+{
+	RECT FontPos = { x, y, x + 120, y + 16 };
+	char buf[1024] = { '\0' };
+	va_list va_alist;
+
+	va_start(va_alist, fmt);
+	vsprintf_s(buf, fmt, va_alist);
+	va_end(va_alist);
+	g_pFont->DrawText(NULL, buf, -1, &FontPos, DT_NOCLIP, color);
+}
+
 //CUSTOMVERTEX vertices[] =
 //{
 //	//FIRST OUTLINE
