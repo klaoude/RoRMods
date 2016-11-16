@@ -100,7 +100,8 @@ void D3DHook::vHUD()
 
 
 	// create the vertices using the CUSTOMVERTEX struct
-	
+
+
 	// create a vertex buffer interface called m_vbuffer
 	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
 
@@ -112,10 +113,7 @@ void D3DHook::vHUD()
 	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);
 	memcpy(pVoid, array, 20*m_vertices.size());
 	m_vbuffer->Unlock();
-
 }
-
-
 
 void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
 {
