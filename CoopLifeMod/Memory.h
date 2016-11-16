@@ -4,6 +4,9 @@
 #include <tchar.h>
 #include <psapi.h>
 #include <vector>
+#include <TlHelp32.h>
+
+#define UNINITIALIZED 0xFFFFFFFF
 
 class Memory
 {
@@ -14,6 +17,10 @@ public:
 
 	double GetDouble(std::vector<LPVOID> offsets);
 	double GetDouble(LPVOID addr);
+
+	char* getChar(LPVOID addr, int size);
+	char* getChar(std::vector<LPVOID> offsets, int size);
+
 	LPVOID GetAddr(std::vector<LPVOID> offsets);
 
 	void WriteMem(double val, std::vector<LPVOID> offsets);
