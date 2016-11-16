@@ -5,6 +5,7 @@
 #include <d3dx9.h>
 #include <Dwmapi.h> 
 #include <TlHelp32.h>
+#include <vector>
 
 struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; };
 #define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
@@ -20,6 +21,8 @@ public:
 	void render(char* str, int life, int mlife);
 
 	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont);
+	void addRect(float x, float y, float l, float w, D3DCOLOR color);
+
 	void initFont();
 	void vHUD();
 
@@ -33,5 +36,6 @@ private:
 	float WIDTH, LENGHT;
 	float m_lmlife = LENGHT - 2* WIDTH / 8;
 	float m_llife;
+	std::vector<CUSTOMVERTEX> m_vertices;
 };
 
