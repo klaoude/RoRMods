@@ -55,11 +55,21 @@ void D3DHook::render(char* str, int life, int mlife)
 	//DrawTextString(m_width-105, 17, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host", m_pFontDefault, DT_RIGHT);
 	//DrawTextString(m_width - 105, 27, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F2 to connect", m_pFontDefault, DT_RIGHT);
 
-	DrawTextString(9, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(11, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(10, 59 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(10, 61 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(10, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), str, m_pFontSmall, DT_CENTER);
+	if (m_err_life > 0)
+	{
+		error("Swag");
+		m_err_life--;
+	}
+
+	if (m_info_life > 0)
+	{
+		error("Swag");
+		m_info_life--;
+	}
+
+	textHud(str);
+
+	
 
 	//error("Swag Overflow");
 
@@ -74,9 +84,11 @@ void D3DHook::render(char* str, int life, int mlife)
 void D3DHook::initFont()
 {
 	AddFontResourceEx("Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0);
+	AddFontResourceEx("Resources/RiskofRainFont.ttf", FR_PRIVATE, 0);
 
 	D3DXCreateFont(m_d3ddev, 18, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
 	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
+	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontStat);
 
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
 
@@ -94,6 +106,8 @@ void D3DHook::vHUD()
 {	
 	addRect(10.0f, 60.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
 	addRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, LENGHT - 2.5 * WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+
+	addRect(100, 100, 20, 20, D3DCOLOR_ARGB(255, 255, 255, 255));
 
 	addLifeRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 
@@ -167,6 +181,35 @@ void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const ch
 }
 
 
+float pixToShit(float pix)
+{
+	return 797 * pix / 1440 - 1;
+}
+void D3DHook::textHud(char * str)
+{
+
+
+	//LIFE & OUTLINE
+	DrawTextString(9, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
+	DrawTextString(11, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
+	DrawTextString(10, 59 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
+	DrawTextString(10, 61 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
+	DrawTextString(10, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), str, m_pFontSmall, DT_CENTER);
+
+	int yoff = 1;
+	float height = 9.8;
+
+	DrawTextString( 76*m_width/100, m_height/10 + 18 + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo",  m_pFontStat, DT_RIGHT);
+	yoff++;
+	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
+	yoff++;
+	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
+	yoff+=2;
+	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
+	yoff++;
+	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
+
+}
 
 void D3DHook::error(const char *str)
 {
@@ -175,6 +218,21 @@ void D3DHook::error(const char *str)
 
 	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_CALCRECT, 0);
 	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 0, 0));
+}
+
+void D3DHook::info(const char *str)
+{
+
+	RECT Rect = { 10, m_height - 20,0,0 };
+
+	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_CALCRECT, 0);
+	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
+}
+
+
+void D3DHook::ipBox(const char *str)
+{
+
 }
 
 

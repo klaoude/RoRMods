@@ -24,18 +24,27 @@ public:
 	void addLifeRect(float x, float y, float w, D3DCOLOR color);
 	void refreshLife();
 	void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
-
+	void textHud(char * str);
+	
 	void error(const char *str);
+	void info(const char *str);
+
+	void ipBox(const char *str);
+
 	void initFont();
 	void vHUD();
+	
+	void setErr_life(int val) { m_err_life = val; }
+	void setInfo_life(int val) { m_info_life = val; }
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
-	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontOut;
+	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat;
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL;
 	int m_width, m_height;
 
+	int m_err_life, m_info_life;
 	float WIDTH, LENGHT;
 	float m_lmlife;
 	float m_llife;

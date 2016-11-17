@@ -69,11 +69,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	int health = 0, maxHealth = 0;
 	std::vector<LPVOID> health_offsets;
-	health_offsets.push_back((LPVOID)0x005A9B38);
-	health_offsets.push_back((LPVOID)0x2F0);
+	health_offsets.push_back((LPVOID)0x005AE468);
+	health_offsets.push_back((LPVOID)0x0);
+	health_offsets.push_back((LPVOID)0x0);
 	health_offsets.push_back((LPVOID)0x4);
 	health_offsets.push_back((LPVOID)0x3A0);
-	//health_offsets.push_back((LPVOID)0x3A0);
 
 	std::vector<LPVOID> max_health_offsets;
 	max_health_offsets.push_back((LPVOID)0x005AE468);
@@ -149,7 +149,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		{
 			if (frame >= fps)
 			{
-				hook.render((char *)s.str().c_str(), health, maxHealth);
+				hook.render((char *)s.str().c_str(), stableHealth, maxHealth);
 				frame = 0;
 			}
 		}
