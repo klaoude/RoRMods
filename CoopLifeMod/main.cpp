@@ -116,12 +116,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect;
+	bool isConnect = true;
 
 	while (TRUE)
 	{			
 		if (isConnect)
 		{
+
+
 			oldMax = maxHealth;
 			health = (int)mem.GetDouble(health_offsets);
 			maxHealth = (int)mem.GetDouble(max_health_offsets);
@@ -182,9 +184,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			else
 				s << stableHealth << "/" << maxHealth;
 
+
+			std::stringstream info, error;
+			info << "AZERTY";
+			hook.setInfo_life(30);
+
 			if (frame >= fps)
 			{
-				hook.render((char *)s.str().c_str(), health, maxHealth);
+				hook.render((char *)s.str().c_str(), health, maxHealth, info.str().c_str(), error.str().c_str());
 				frame = 0;
 			}
 		}

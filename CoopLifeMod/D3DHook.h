@@ -17,7 +17,7 @@ public:
 
 	void initD3D(HWND hWnd);
 	void setlmlife() {m_lmlife = LENGHT - 2.5 * WIDTH / 8; }
-	void render(char* str, int life, int mlife);
+	void render(char* str, int life, int mlife, const char *inf, const char* err);
 
 	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align);
 	void addRect(float x, float y, float l, float w, D3DCOLOR color);
@@ -39,15 +39,15 @@ public:
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
-	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat;
+	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall;
 	LPDIRECT3D9 m_d3d;
-	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL;
+	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL, m_ipvbuffer = NULL;
 	int m_width, m_height;
 
 	int m_err_life, m_info_life;
 	float WIDTH, LENGHT;
 	float m_lmlife;
 	float m_llife;
-	std::vector<CUSTOMVERTEX> m_vertices;
+	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices;
 };
 
