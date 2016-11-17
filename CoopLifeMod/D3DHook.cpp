@@ -32,7 +32,7 @@ void D3DHook::initD3D(HWND hWnd)
 	setlmlife();
 }
 
-void D3DHook::render(char* str, int life, int mlife)
+void D3DHook::render(char* str, int life, int mlife, const char *inf, const char* err)
 {
 	m_llife = life * m_lmlife / mlife;
 
@@ -49,28 +49,27 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->SetStreamSource(0, m_vbuffer, 0, sizeof(CUSTOMVERTEX));
 
 	// copy the vertex buffer to the back buffer
-	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, m_vertices.size());
-	
-	if (!m_f1)
-	{
-		DrawTextString(m_width - 105, 17, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host", m_pFontDefault, DT_RIGHT);
-		DrawTextString(m_width - 105, 27, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F2 to connect", m_pFontDefault, DT_RIGHT);
-	}	
+	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size()/3);
+
+
+	DrawTextString(m_width-105, 17, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host", m_pFontDefaultSmall, DT_RIGHT);
+	DrawTextString(m_width - 105, 27, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F2 to connect", m_pFontDefaultSmall, DT_RIGHT);
 
 	if (m_err_life > 0)
 	{
+		error(inf);
 		m_err_life--;
 	}
 
 	if (m_info_life > 0)
 	{
+		info(inf);
 		m_info_life--;
 	}
 
 	textHud(str);
 
-	if (GetAsyncKeyState(VK_F1))
-		m_f1 = true;
+	
 
 	//error("Swag Overflow");
 
@@ -91,7 +90,8 @@ void D3DHook::initFont()
 	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
 	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontStat);
 
-	D3DXCreateFont(m_d3ddev, 20, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
+	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefaultSmall);
+	D3DXCreateFont(m_d3ddev, 15, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
 
 }
 
@@ -108,10 +108,12 @@ void D3DHook::vHUD()
 	addRect(10.0f, 60.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
 	addRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, LENGHT - 2.5 * WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 
-	addRect(100, 100, 20, 20, D3DCOLOR_ARGB(255, 255, 255, 255));
+
 
 	addLifeRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 
+
+	addRect(100, m_height / 5, 100, 9.8, D3DCOLOR_ARGB(255, 0, 0, 0));
 
 
 	// create a vertex buffer interface called m_vbuffer
@@ -119,17 +121,44 @@ void D3DHook::vHUD()
 
 	VOID* pVoid;    // a void pointer
 
-	CUSTOMVERTEX array[50];
+	CUSTOMVERTEX array[100];
 	std::copy(m_vertices.begin(), m_vertices.end(), array);
 	// lock m_vbuffer and load the vertices into it
+
 	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);
 	memcpy(pVoid, array, 20*m_vertices.size());
 	m_vbuffer->Unlock();
 }
 
+
+void D3DHook::ipBox(const char *str)
+{
+
+	
+
+	addRect(100, m_height / 5, 100, 9.8, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+
+	// create a vertex buffer interface called m_vbuffer
+	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_ipvbuffer, NULL);
+
+	VOID* pVoid;    // a void pointer
+
+	CUSTOMVERTEX array[100];
+	std::copy(m_vertices.begin(), m_vertices.end(), array);
+	// lock m_vbuffer and load the vertices into it
+
+	m_ipvbuffer->Lock(0, 0, (void**)&pVoid, 0);
+	memcpy(pVoid, array, 20 * m_vertices.size());
+	m_ipvbuffer->Unlock();
+}
+
+
+
+
 void D3DHook::refreshLife()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 		m_vertices.pop_back();
 
 
@@ -139,7 +168,10 @@ void D3DHook::refreshLife()
 
 	VOID* pVoid;    // a void pointer
 
-	CUSTOMVERTEX array[50];
+
+	int size = m_vertices.size();
+
+	CUSTOMVERTEX array[100];
 	std::copy(m_vertices.begin(), m_vertices.end(), array);
 	// lock m_vbuffer and load the vertices into it
 	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);
@@ -153,7 +185,11 @@ void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
 	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+
+	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+	
 }
 
 
@@ -161,8 +197,15 @@ void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color)
 {
 	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x + m_llife, y, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
+
+	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
+
+
+
+
 }
 
 void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
@@ -184,6 +227,8 @@ float pixToShit(float pix)
 }
 void D3DHook::textHud(char * str)
 {
+
+
 	//LIFE & OUTLINE
 	DrawTextString(9, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
 	DrawTextString(11, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
@@ -221,14 +266,11 @@ void D3DHook::info(const char *str)
 	RECT Rect = { 10, m_height - 20,0,0 };
 
 	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_CALCRECT, 0);
-	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 255, 255));
+	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
 }
 
 
-void D3DHook::ipBox(const char *str)
-{
 
-}
 
 
 //CUSTOMVERTEX vertices[] =

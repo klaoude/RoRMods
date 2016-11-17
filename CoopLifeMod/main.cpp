@@ -125,6 +125,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	{			
 		if (isConnect)
 		{
+
+
 			oldMax = maxHealth;
 			health = (int)mem.GetDouble(health_offsets);
 			maxHealth = (int)mem.GetDouble(max_health_offsets);
