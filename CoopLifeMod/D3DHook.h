@@ -49,5 +49,6 @@ private:
 	float m_lmlife;
 	float m_llife;
 	std::vector<CUSTOMVERTEX> m_vertices;
+	bool m_f1 = false;
 };
 

@@ -50,26 +50,27 @@ void D3DHook::render(char* str, int life, int mlife)
 
 	// copy the vertex buffer to the back buffer
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, m_vertices.size());
-
-
-	//DrawTextString(m_width-105, 17, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host", m_pFontDefault, DT_RIGHT);
-	//DrawTextString(m_width - 105, 27, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F2 to connect", m_pFontDefault, DT_RIGHT);
+	
+	if (!m_f1)
+	{
+		DrawTextString(m_width - 105, 17, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host", m_pFontDefault, DT_RIGHT);
+		DrawTextString(m_width - 105, 27, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F2 to connect", m_pFontDefault, DT_RIGHT);
+	}	
 
 	if (m_err_life > 0)
 	{
-		error("Swag");
 		m_err_life--;
 	}
 
 	if (m_info_life > 0)
 	{
-		error("Swag");
 		m_info_life--;
 	}
 
 	textHud(str);
 
-	
+	if (GetAsyncKeyState(VK_F1))
+		m_f1 = true;
 
 	//error("Swag Overflow");
 
@@ -90,7 +91,7 @@ void D3DHook::initFont()
 	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
 	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontStat);
 
-	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
+	D3DXCreateFont(m_d3ddev, 20, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
 
 }
 
@@ -164,10 +165,6 @@ void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color)
 	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
 }
 
-
-
-
-
 void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
 {
 	RECT FontPos = { x, y, x + 120, y + 16 };
@@ -187,8 +184,6 @@ float pixToShit(float pix)
 }
 void D3DHook::textHud(char * str)
 {
-
-
 	//LIFE & OUTLINE
 	DrawTextString(9, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
 	DrawTextString(11, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
@@ -226,7 +221,7 @@ void D3DHook::info(const char *str)
 	RECT Rect = { 10, m_height - 20,0,0 };
 
 	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_CALCRECT, 0);
-	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
+	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 255, 255));
 }
 
 

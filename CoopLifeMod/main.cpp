@@ -1,3 +1,4 @@
+#include "Net.h"
 #include "D3DHook.h"
 #include "Memory.h"
 #include <sstream>
@@ -116,7 +117,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect;
+	bool isConnect = false;
+
+	Net net(&hook);
 
 	while (TRUE)
 	{			
@@ -181,16 +184,23 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			}
 			else
 				s << stableHealth << "/" << maxHealth;
-
-			if (frame >= fps)
-			{
-				hook.render((char *)s.str().c_str(), health, maxHealth);
-				frame = 0;
-			}
+			
 		}
 		else
 		{
+			if (GetAsyncKeyState(VK_F1))
+			{
+				/*hook.setInfo_life(10);
+				hook.info("Server created");*/
+				net.create(mem.GetDouble(portServerOffsets));	
+				net.conn("127.0.0.1", mem.GetDouble(portServerOffsets));
+			}
+		}
 
+		if (frame >= fps)
+		{
+			hook.render((char *)s.str().c_str(), health, maxHealth);
+			frame = 0;
 		}
 
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
