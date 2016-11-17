@@ -32,14 +32,15 @@ public:
 	void info();
 
 
-	void ipBox(const char *str);
+	//void ipBox(const char *str);
+	//void setIp(char const* str) { m_ip = str; }
 
 	void initFont();
 	void vHUD();
 	
 	void setErr(char const* str, int val) { m_error = str; m_err_life = val; }
 	void setInfo(char const* str, int val) { m_info = str;  m_info_life = val; }
-	void setIp(char const* str) { m_ip = str;  }
+	
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
