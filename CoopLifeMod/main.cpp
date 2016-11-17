@@ -1,6 +1,9 @@
 #include "D3DHook.h"
 #include "Memory.h"
 #include <sstream>
+#include <map>
+
+typedef std::map<int, int> CounterMap;
 
 int s_width = 800;
 int s_height = 600;
@@ -108,50 +111,97 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	int stableHealth = 1;
 	int oldMax = 1;
 
-	while (TRUE)
-	{				
-		//mem.WriteMem(90, offsets);
-		oldMax = maxHealth;
-		health = (int)mem.GetDouble(health_offsets);
-		maxHealth = (int)mem.GetDouble(max_health_offsets);
-		/*int port = (int)mem.GetDouble(portClientOffsets);
-		char* ip = mem.getChar(ipOffsets, 15);*/
+	std::vector<int> maxHealths;
 
-		if (maxHealth < oldMax)
-			maxHealth = oldMax;
+	CounterMap counts;
+	CounterMap::iterator it;
+
+	bool isConnect;
+
+	while (TRUE)
+	{			
+		if (isConnect)
+		{
+			oldMax = maxHealth;
+			health = (int)mem.GetDouble(health_offsets);
+			maxHealth = (int)mem.GetDouble(max_health_offsets);
+
+			if (maxHealths.size() > 20)
+				maxHealths.erase(maxHealths.begin());
+
+			if (maxHealth > 0)
+				maxHealths.push_back(maxHealth);
+
+			if (maxHealths.size() > 19)
+			{
+				counts.clear();
+				for (int i = 0; i < maxHealths.size(); ++i)
+				{
+					it = counts.find(maxHealths[i]);
+					if (it != counts.end()) {
+						it->second++;
+					}
+					else {
+						counts[maxHealths[i]] = 1;
+					}
+				}
+
+				int max = 0;
+				int pos = 0;
+				int i = 0;
+				for (auto it = counts.begin(); it != counts.end(); it++)
+				{
+					if (it->second > max)
+					{
+						max = it->second;
+						pos = i;
+					}
+					i++;
+				}
+
+				it = counts.begin();
+				for (auto j = 0; j < pos; j++)
+					it++;
+				maxHealth = it->first;
+			}
+
+			/*int port = (int)mem.GetDouble(portClientOffsets);
+			char* ip = mem.getChar(ipOffsets, 15);*/
+
+			/*if (maxHealth < oldMax)
+			{
+				maxHealth = oldMax;
+			}*/
+
+			s.str("");
+			if (health >= 1 && health < 10000)
+			{
+				s << health << "/" << maxHealth;
+				stableHealth = health;
+			}
+			else
+				s << stableHealth << "/" << maxHealth;
+
+			if (frame >= fps)
+			{
+				hook.render((char *)s.str().c_str(), health, maxHealth);
+				frame = 0;
+			}
+		}
+		else
+		{
+
+		}
 
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 		if (!FindWindow(NULL, value))
-			ExitProcess(1337);
-			
-		
-		
-		s.str("");
-		if (health >= 1 && health < 10000)
-		{
-			s << health << "/" << maxHealth;
-			stableHealth = health;
-		}
-		else
-			s << stableHealth << "/" << maxHealth;
-
-		//s << port << "|" << ip;
-
-		
+			ExitProcess(1337);	
 		
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
-		}
-		else
-		{
-			if (frame >= fps)
-			{
-				hook.render((char *)s.str().c_str(), stableHealth, maxHealth);
-				frame = 0;
-			}
 		}
 
 		if (msg.message == WM_QUIT)
