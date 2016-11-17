@@ -55,6 +55,7 @@ void D3DHook::render(char* str, int life, int mlife)
 	if (true) //draw howto if...
 		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefaultSmall, DT_CENTER);
 		
+	int shit;
 
 	if (m_err_life > 0)
 	{

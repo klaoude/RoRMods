@@ -186,11 +186,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			}
 		}
 		
-		/*if (swag == 0)
+		if (swag == 0)
 		{
-			hook.setErr("swag overflow", 60);
+			net.setError("FUCK YOU", 15);
 			swag++;
-		}*/
+		}
 
 		if (frame >= fps)
 		{

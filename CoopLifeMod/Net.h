@@ -34,6 +34,9 @@ public:
 	void create(int port);
 	void conn(std::string ip, int port);
 
+	void setErr(const char *str, int val) { m_hook->setErr(str, val); };
+	void setInfo(const char *str, int val) { m_hook->setInfo(str, val); };
+
 	void sendDouble(double val);
 	double recvDouble();
 

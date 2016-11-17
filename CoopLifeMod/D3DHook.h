@@ -38,8 +38,8 @@ public:
 	void initFont();
 	void vHUD();
 	
-	void setErr(char const* str, int val) { m_error = str; m_err_life = val; }
-	void setInfo(char const* str, int val) { m_info = str;  m_info_life = val; }
+	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
+	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }
 	
 
 private:
