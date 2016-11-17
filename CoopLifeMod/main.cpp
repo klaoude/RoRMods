@@ -125,15 +125,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		if (!FindWindow(NULL, value))
 			ExitProcess(1337);
 			
+		
+		
 		s.str("");
-
-		/*if (health >= 1 && health < 10000)
+		if (health >= 1 && health < 10000)
 		{
 			s << health << "/" << maxHealth;
 			stableHealth = health;
 		}
 		else
-			s << stableHealth << "/" << maxHealth;*/
+			s << stableHealth << "/" << maxHealth;
 
 		//s << port << "|" << ip;		
 		
@@ -146,7 +147,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		{
 			if (frame >= fps)
 			{
-				hook.render((char*)(s.str().c_str()), health, maxHealth);
+				hook.render((char *)s.str().c_str(), health, maxHealth);
 				frame = 0;
 			}
 		}
