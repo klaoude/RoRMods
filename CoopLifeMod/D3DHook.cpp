@@ -27,9 +27,11 @@ void D3DHook::initD3D(HWND hWnd)
 		&m_d3ddev);
 
 	vHUD();    // call the function to initialize the lifebar
-	ipBox("");
+	
 	initFont(); //init font	
 	setlmlife();
+
+	//ipBox("");
 }
 
 void D3DHook::render(char* str, int life, int mlife)
@@ -50,14 +52,9 @@ void D3DHook::render(char* str, int life, int mlife)
 	// copy the vertex buffer to the back buffer
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size()/3);
 
-	if (false) //draw ipbox if...
-	{
-		m_d3ddev->SetStreamSource(0, m_ipvbuffer, 0, sizeof(CUSTOMVERTEX));
-		m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_ipvertices.size() / 3);
-		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), m_ip, m_pFontDefaultSmall, DT_CENTER);
-	}
-	else
-		DrawTextString(m_width /2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefaultSmall, DT_CENTER);
+	if (true) //draw howto if...
+		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefaultSmall, DT_CENTER);
+		
 
 	if (m_err_life > 0)
 	{
@@ -73,12 +70,6 @@ void D3DHook::render(char* str, int life, int mlife)
 
 	textHud(str);
 
-	
-
-	//error("Swag Overflow");
-
-	//DRAW ITEMS
-	//DrawTextString(10, 100 + WIDTH, WIDTH, LENGHT - LENGHT /4, D3DCOLOR_ARGB(255, 255, 255, 255), "Items: 1337", m_pFontSmall);
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
@@ -135,41 +126,6 @@ void D3DHook::vHUD()
 }
 
 
-void D3DHook::ipBox(const char *str)
-{
-
-	float x = m_width/2, y = m_height / 15, l = 100, w = 13;
-	x -= l / 2;
-	D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 0, 0);
-
-	m_ipvertices.push_back({ x, y, 0.0f, 0.0f, color });
-	m_ipvertices.push_back({ x + l, y, 0.0f, 0.0f, color });
-	m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
-
-	m_ipvertices.push_back({ x + l, y, 0.0f, 0.0f, color });
-	m_ipvertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
-	m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
-	
-
-
-
-
-	
-
-
-	// create a vertex buffer interface called m_vbuffer
-	m_d3ddev->CreateVertexBuffer(m_ipvertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_ipvbuffer, NULL);
-
-	VOID* pipVoid;    // a void pointer
-
-	CUSTOMVERTEX iparray[100];
-	std::copy(m_ipvertices.begin(), m_ipvertices.end(), iparray);
-	// lock m_vbuffer and load the vertices into it
-
-	m_ipvbuffer->Lock(0, 0, (void**)&pipVoid, 0);
-	memcpy(pipVoid, iparray, 20 * m_ipvertices.size());
-	m_ipvbuffer->Unlock();
-}
 
 
 
@@ -287,55 +243,93 @@ void D3DHook::info()
 
 
 
-//CUSTOMVERTEX vertices[] =
-//{
-//	//FIRST OUTLINE
-//	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//
-//
-//	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//
-//
-//	/*{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//
-//	/*{ 10.0f + LENGHT, 100.0f , 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-//
-//	//SECOND OUTLINE
-//	{ 10.0f + WIDTH / 16 , 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
-//	{ 10.0f + LENGHT - WIDTH / 16, 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
-//	{ 10.0f + WIDTH / 16, 100.0f + WIDTH - WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
-//
-//	{ 10.0f + LENGHT - WIDTH / 16 , 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
-//	{ 10.0f + LENGHT - WIDTH / 16, 100.0f + WIDTH - WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
-//	{ 10.0f + WIDTH / 16, 100.0f + WIDTH - WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
-//
-//	//BACKGROUND (NO-LIFE)
-//	{ 10.0f + 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
-//	{ 10.0f + LENGHT - 2 * WIDTH / 16, 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
-//	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
-//
-//	{ 10.0f + LENGHT - 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
-//	{ 10.0f + LENGHT - 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
-//	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
-//
-//	//HEALTH (GREEN)
-//	{ 10.0f + 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
-//	{ 10.0f + m_llife, 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
-//	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
-//
-//	{ 10.0f + m_llife , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
-//	{ 10.0f + m_llife, 100.0f + WIDTH - 2 * WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
-//	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },*/
-//
-//};
+/*CUSTOMVERTEX vertices[] =
+{
+	//FIRST OUTLINE
+	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+
+
+	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+
+
+	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+
+	{ 10.0f + LENGHT, 100.0f , 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
+
+	//SECOND OUTLINE
+	{ 10.0f + WIDTH / 16 , 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+	{ 10.0f + LENGHT - WIDTH / 16, 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+	{ 10.0f + WIDTH / 16, 100.0f + WIDTH - WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+
+	{ 10.0f + LENGHT - WIDTH / 16 , 100.0f + WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+	{ 10.0f + LENGHT - WIDTH / 16, 100.0f + WIDTH - WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+	{ 10.0f + WIDTH / 16, 100.0f + WIDTH - WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(64, 65, 87) },
+
+	//BACKGROUND (NO-LIFE)
+	{ 10.0f + 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+	{ 10.0f + LENGHT - 2 * WIDTH / 16, 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+
+	{ 10.0f + LENGHT - 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+	{ 10.0f + LENGHT - 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(26, 26, 26) },
+
+	//HEALTH (GREEN)
+	{ 10.0f + 2 * WIDTH / 16 , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+	{ 10.0f + m_llife, 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+
+	{ 10.0f + m_llife , 100.0f + 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+	{ 10.0f + m_llife, 100.0f + WIDTH - 2 * WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
+
+};*/
+
+/*
+void D3DHook::ipBox(const char *str)
+{
+
+float x = m_width/2, y = m_height / 15, l = 100, w = 13;
+x -= l / 2;
+D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 0, 0);
+
+m_ipvertices.push_back({ x, y, 0.0f, 0.0f, color });
+m_ipvertices.push_back({ x + l, y, 0.0f, 0.0f, color });
+m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+
+m_ipvertices.push_back({ x + l, y, 0.0f, 0.0f, color });
+m_ipvertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
+m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+
+
+
+
+
+
+
+
+// create a vertex buffer interface called m_vbuffer
+m_d3ddev->CreateVertexBuffer(m_ipvertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_ipvbuffer, NULL);
+
+VOID* pipVoid;    // a void pointer
+
+CUSTOMVERTEX iparray[100];
+std::copy(m_ipvertices.begin(), m_ipvertices.end(), iparray);
+// lock m_vbuffer and load the vertices into it
+
+m_ipvbuffer->Lock(0, 0, (void**)&pipVoid, 0);
+memcpy(pipVoid, iparray, 20 * m_ipvertices.size());
+m_ipvbuffer->Unlock();
+}
+*/
