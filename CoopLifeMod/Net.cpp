@@ -22,6 +22,7 @@ void Net::create(int port)
 	int sizeof_csin = sizeof(m_client.addr);
 
 	m_client.socket = accept(m_server.socket, (SOCKADDR*)&m_client.addr, &sizeof_csin);
+	Beep(600, 100);
 }
 
 void Net::conn(std::string ip, int port)

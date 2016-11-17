@@ -117,10 +117,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = false;
+	bool isConnect = true;
 
 	Net net(&hook);
-
+	int swag = 0;
 	while (TRUE)
 	{			
 		if (isConnect)
@@ -181,14 +181,20 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		{
 			if (GetAsyncKeyState(VK_F1))
 			{
-				net.create(mem.GetDouble(portServerOffsets));	
+				net.create(mem.GetDouble(portServerOffsets)+1);	
 				//net.conn("86.194.155.196", 1337);
 			}
 		}
+		
+		/*if (swag == 0)
+		{
+			hook.setErr("swag overflow", 60);
+			swag++;
+		}*/
 
 		if (frame >= fps)
 		{
-			hook.render((char *)s.str().c_str(), health, maxHealth, "", "");
+			hook.render((char *)s.str().c_str(), health, maxHealth);
 			frame = 0;
 		}
 
