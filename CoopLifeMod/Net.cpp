@@ -2,14 +2,6 @@
 
 void Net::ServerThread()
 {
-	m_hook->setInfo_life(1000);
-	m_hook->info("Server listening ...");
-	bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
-	listen(m_server.socket, 0);
-
-	int sizeof_csin = sizeof(m_client.addr);
-
-	m_client.socket = accept(m_server.socket, (SOCKADDR*)&m_client.addr, &sizeof_csin);
 	Beep(1000, 1000);
 }
 
@@ -24,7 +16,12 @@ void Net::create(int port)
 	m_server.addr.sin_port = htons(port);
 	m_isServer = true;
 
-	m_threads.push_back(std::thread(&Net::ServerThread, this));	
+	bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
+	listen(m_server.socket, 0);
+
+	int sizeof_csin = sizeof(m_client.addr);
+
+	m_client.socket = accept(m_server.socket, (SOCKADDR*)&m_client.addr, &sizeof_csin);
 }
 
 void Net::conn(std::string ip, int port)
@@ -40,7 +37,7 @@ void Net::conn(std::string ip, int port)
 		m_client.server->h_length);
 	m_server.addr.sin_port = htons(port);
 
-	m_threads.push_back(std::thread(connect, m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr)));
+	connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
 	m_isServer = false;
 }
 

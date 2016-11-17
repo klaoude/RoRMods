@@ -125,8 +125,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	{			
 		if (isConnect)
 		{
-
-
 			oldMax = maxHealth;
 			health = (int)mem.GetDouble(health_offsets);
 			maxHealth = (int)mem.GetDouble(max_health_offsets);
@@ -170,14 +168,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				maxHealth = it->first;
 			}
 
-			/*int port = (int)mem.GetDouble(portClientOffsets);
-			char* ip = mem.getChar(ipOffsets, 15);*/
-
-			/*if (maxHealth < oldMax)
-			{
-				maxHealth = oldMax;
-			}*/
-
 			s.str("");
 			if (health >= 1 && health < 10000)
 			{
@@ -185,23 +175,20 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				stableHealth = health;
 			}
 			else
-				s << stableHealth << "/" << maxHealth;
-			
+				s << stableHealth << "/" << maxHealth;			
 		}
 		else
 		{
 			if (GetAsyncKeyState(VK_F1))
 			{
-				/*hook.setInfo_life(10);
-				hook.info("Server created");*/
 				net.create(mem.GetDouble(portServerOffsets));	
-				net.conn("127.0.0.1", mem.GetDouble(portServerOffsets));
+				//net.conn("86.194.155.196", 1337);
 			}
 		}
 
 		if (frame >= fps)
 		{
-			hook.render((char *)s.str().c_str(), health, maxHealth);
+			hook.render((char *)s.str().c_str(), health, maxHealth, "", "");
 			frame = 0;
 		}
 
