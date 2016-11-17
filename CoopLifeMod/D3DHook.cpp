@@ -27,12 +27,12 @@ void D3DHook::initD3D(HWND hWnd)
 		&m_d3ddev);
 
 	vHUD();    // call the function to initialize the lifebar
-
+	ipBox("");
 	initFont(); //init font	
 	setlmlife();
 }
 
-void D3DHook::render(char* str, int life, int mlife, const char *inf, const char* err)
+void D3DHook::render(char* str, int life, int mlife)
 {
 	m_llife = life * m_lmlife / mlife;
 
@@ -47,23 +47,27 @@ void D3DHook::render(char* str, int life, int mlife, const char *inf, const char
 
 	// select the vertex buffer to display
 	m_d3ddev->SetStreamSource(0, m_vbuffer, 0, sizeof(CUSTOMVERTEX));
-
 	// copy the vertex buffer to the back buffer
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size()/3);
 
-
-	DrawTextString(m_width-105, 17, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host", m_pFontDefaultSmall, DT_RIGHT);
-	DrawTextString(m_width - 105, 27, 100, 100, D3DCOLOR_ARGB(255, 255, 255, 255), "F2 to connect", m_pFontDefaultSmall, DT_RIGHT);
+	if (false) //draw ipbox if...
+	{
+		m_d3ddev->SetStreamSource(0, m_ipvbuffer, 0, sizeof(CUSTOMVERTEX));
+		m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_ipvertices.size() / 3);
+		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), m_ip, m_pFontDefaultSmall, DT_CENTER);
+	}
+	else
+		DrawTextString(m_width /2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefaultSmall, DT_CENTER);
 
 	if (m_err_life > 0)
 	{
-		error(inf);
+		error();
 		m_err_life--;
 	}
 
 	if (m_info_life > 0)
 	{
-		info(inf);
+		info();
 		m_info_life--;
 	}
 
@@ -134,22 +138,36 @@ void D3DHook::vHUD()
 void D3DHook::ipBox(const char *str)
 {
 
+	float x = m_width/2, y = m_height / 15, l = 100, w = 13;
+	x -= l / 2;
+	D3DCOLOR color = D3DCOLOR_ARGB(255, 0, 0, 0);
+
+	m_ipvertices.push_back({ x, y, 0.0f, 0.0f, color });
+	m_ipvertices.push_back({ x + l, y, 0.0f, 0.0f, color });
+	m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+
+	m_ipvertices.push_back({ x + l, y, 0.0f, 0.0f, color });
+	m_ipvertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
+	m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
 	
 
-	addRect(100, m_height / 5, 100, 9.8, D3DCOLOR_ARGB(255, 0, 0, 0));
+
+
+
+	
 
 
 	// create a vertex buffer interface called m_vbuffer
-	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_ipvbuffer, NULL);
+	m_d3ddev->CreateVertexBuffer(m_ipvertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_ipvbuffer, NULL);
 
-	VOID* pVoid;    // a void pointer
+	VOID* pipVoid;    // a void pointer
 
-	CUSTOMVERTEX array[100];
-	std::copy(m_vertices.begin(), m_vertices.end(), array);
+	CUSTOMVERTEX iparray[100];
+	std::copy(m_ipvertices.begin(), m_ipvertices.end(), iparray);
 	// lock m_vbuffer and load the vertices into it
 
-	m_ipvbuffer->Lock(0, 0, (void**)&pVoid, 0);
-	memcpy(pVoid, array, 20 * m_vertices.size());
+	m_ipvbuffer->Lock(0, 0, (void**)&pipVoid, 0);
+	memcpy(pipVoid, iparray, 20 * m_ipvertices.size());
 	m_ipvbuffer->Unlock();
 }
 
@@ -202,10 +220,6 @@ void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color)
 	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
-
-
-
-
 }
 
 void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
@@ -251,22 +265,22 @@ void D3DHook::textHud(char * str)
 
 }
 
-void D3DHook::error(const char *str)
+void D3DHook::error()
 {
 
 	RECT Rect = { 10, m_height - 20,0,0 };
 
-	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_CALCRECT, 0);
-	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 0, 0));
+	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_CALCRECT, 0);
+	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 0, 0));
 }
 
-void D3DHook::info(const char *str)
+void D3DHook::info()
 {
 
 	RECT Rect = { 10, m_height - 20,0,0 };
 
-	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_CALCRECT, 0);
-	m_pFontDefault->DrawText(NULL, str, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
+	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_CALCRECT, 0);
+	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
 }
 
 

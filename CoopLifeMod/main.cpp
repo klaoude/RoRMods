@@ -122,13 +122,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = false;
+	bool isConnect = true;
 
 	Net net(&hook);
 
 	char* ip;
 	std::string ipstr;
 
+	int swag = 0;
 	while (TRUE)
 	{			
 		if (isConnect)
@@ -198,10 +199,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			}
 				
 		}
+		
+		/*if (swag == 0)
+		{
+			hook.setErr("swag overflow", 60);
+			swag++;
+		}*/
 
 		if (frame >= fps)
 		{
-			hook.render((char *)s.str().c_str(), health, maxHealth, "", "");
+			hook.render((char *)s.str().c_str(), health, maxHealth);
 			frame = 0;
 		}
 
