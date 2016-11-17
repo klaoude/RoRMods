@@ -26,6 +26,9 @@ void Net::create(int port)
 
 void Net::conn(std::string ip, int port)
 {
+	WSADATA WSAData;
+	WSAStartup(MAKEWORD(2, 0), &WSAData);
+
 	m_client.server = gethostbyname(ip.c_str());
 	m_server.socket = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -33,8 +36,7 @@ void Net::conn(std::string ip, int port)
 		printf("[CLIENT] [ERROR] error creating server link\n");
 
 	m_server.addr.sin_family = AF_INET;
-	memcpy((char*)m_client.server->h_addr, (char*)&m_server.addr.sin_addr.s_addr,
-		m_client.server->h_length);
+	m_server.addr.sin_addr.s_addr = inet_addr(ip.c_str());
 	m_server.addr.sin_port = htons(port);
 
 	connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));

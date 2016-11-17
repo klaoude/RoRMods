@@ -103,7 +103,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	portServerOffsets.push_back((LPVOID)0x930);
 
 	std::vector<LPVOID> ipOffsets;
-	ipOffsets.push_back((LPVOID)0x3906F8);
+	ipOffsets.push_back((LPVOID)0x0034E464);
+	ipOffsets.push_back((LPVOID)0x26C);
+	ipOffsets.push_back((LPVOID)0xC);
+	ipOffsets.push_back((LPVOID)0xC);
+	ipOffsets.push_back((LPVOID)0x4);
+	ipOffsets.push_back((LPVOID)-0x3DE3E54);
 
 	int frame = 0;
 	int fps = 10;
@@ -120,6 +125,9 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bool isConnect = false;
 
 	Net net(&hook);
+
+	char* ip;
+	std::string ipstr;
 
 	while (TRUE)
 	{			
@@ -180,10 +188,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		else
 		{
 			if (GetAsyncKeyState(VK_F1))
+				net.create(mem.GetDouble(portServerOffsets) + 1);	
+			if (GetAsyncKeyState(VK_F2))
 			{
-				net.create(mem.GetDouble(portServerOffsets));	
-				//net.conn("86.194.155.196", 1337);
+				ip = mem.getChar(ipOffsets, 15);
+				ipstr = std::string(ip);				
+				ipstr.resize(15);
+				net.conn(ipstr, mem.GetDouble(portClientOffsets) + 1);
 			}
+				
 		}
 
 		if (frame >= fps)

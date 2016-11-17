@@ -131,22 +131,18 @@ char* Memory::getChar(LPVOID addr, int size)
 char* Memory::getChar(std::vector<LPVOID> offsets, int size)
 {
 	LPVOID tmpBuffer = (LPVOID)UNINITIALIZED;
-	char* ret = new char[size];
+	char* ret = new char[15];
 
 	LPVOID bp = (LPVOID)GetBasePointer(offsets[0]);
 
-	ReadProcessMemory(m_handle, addLPVOID(GetProcessAddr(), offsets[0]), &ret[0], 2, 0);
-
-	return (char*)addLPVOID(GetProcessAddr(), offsets[0]);
-
-	/*for (auto i = 1; i < offsets.size() - 1; i++)
+	for (auto i = 1; i < offsets.size() - 1; i++)
 	{
 		ReadProcessMemory(m_handle, addLPVOID((i == 1 ? bp : tmpBuffer), offsets[i]), &tmpBuffer, sizeof(offsets[i]), 0);
 		std::cout << "[Memory] [INFO] 0x" << addLPVOID((i == 1 ? bp : tmpBuffer), offsets[i]) << " -> 0x" << tmpBuffer << std::endl;
 	}
 
-	ReadProcessMemory(m_handle, addLPVOID(bp, offsets[offsets.size() - 1]), &ret[0], 2, 0);
-	std::cout << "[Memory] [INFO] 0x" << offsets[offsets.size() - 1] << " -> " << ret << std::endl;*/
+	ReadProcessMemory(m_handle, addLPVOID(tmpBuffer, offsets[offsets.size() - 1]), &ret[0], size, 0);
+	std::cout << "[Memory] [INFO] 0x" << offsets[offsets.size() - 1] << " -> " << ret << std::endl;
 
 	return ret;
 }
