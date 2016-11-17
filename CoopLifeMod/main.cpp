@@ -103,7 +103,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	portServerOffsets.push_back((LPVOID)0x930);
 
 	std::vector<LPVOID> ipOffsets;
-	ipOffsets.push_back((LPVOID)0x3906F8);
+	ipOffsets.push_back((LPVOID)0x0034E464);
+	ipOffsets.push_back((LPVOID)0x26C);
+	ipOffsets.push_back((LPVOID)0xC);
+	ipOffsets.push_back((LPVOID)0xC);
+	ipOffsets.push_back((LPVOID)0x4);
+	ipOffsets.push_back((LPVOID)-0x3DE3E54);
 
 	int frame = 0;
 	int fps = 10;
@@ -120,12 +125,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bool isConnect = false;
 
 	Net net(&hook);
+
+	char* ip;
+	std::string ipstr;
+
 	int swag = 0;
 	while (TRUE)
 	{			
 		if (isConnect)
 		{
-			oldMax = maxHealth;
 			health = (int)mem.GetDouble(health_offsets);
 			maxHealth = (int)mem.GetDouble(max_health_offsets);
 
@@ -168,6 +176,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				maxHealth = it->first;
 			}
 
+			net.sendDouble(health);
+			net.sendDouble(maxHealth);
+			health = net.recvDouble();
+			maxHealth = net.recvDouble();
+
 			s.str("");
 			if (health >= 1 && health < 10000)
 			{
@@ -175,22 +188,26 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				stableHealth = health;
 			}
 			else
-				s << stableHealth << "/" << maxHealth;			
+				s << stableHealth << "/" << maxHealth;					
 		}
 		else
 		{
 			if (GetAsyncKeyState(VK_F1))
 			{
-				net.create(mem.GetDouble(portServerOffsets)+1);	
-				//net.conn("86.194.155.196", 1337);
-			}
+				net.create(mem.GetDouble(portServerOffsets) + 1);
+				isConnect = true;
+			}				
+			if (GetAsyncKeyState(VK_F2))
+			{
+				ip = mem.getChar(ipOffsets, 15);
+				ipstr = std::string(ip);				
+				ipstr.resize(15);
+				net.conn(ipstr, mem.GetDouble(portClientOffsets) + 1);
+				isConnect = true;
+			}	
 		}
 		
-		if (swag == 0)
-		{
-			net.setError("FUCK YOU", 15);
-			swag++;
-		}
+		//hook.setErr("swag overflow", 60);
 
 		if (frame >= fps)
 		{
