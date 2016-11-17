@@ -16,6 +16,7 @@ void Net::create(int port)
 	m_server.addr.sin_port = htons(port);
 	m_isServer = true;
 
+	m_hook->setErr("Server Created", 60);
 	bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
 	listen(m_server.socket, 0);
 
