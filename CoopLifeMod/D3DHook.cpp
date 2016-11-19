@@ -1,39 +1,6 @@
 #include "D3DHook.h"
 //#include "dhFastFont9.h"
 
-void D3DHook::initD3D(HWND hWnd)
-{
-	m_d3d = Direct3DCreate9(D3D_SDK_VERSION);    // create the Direct3D interface
-
-	D3DPRESENT_PARAMETERS d3dpp;    // create a struct to hold various device information
-
-	ZeroMemory(&d3dpp, sizeof(d3dpp));    // clear out the struct for use
-	d3dpp.Windowed = TRUE;    // program windowed, not fullscreen
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;    // discard old frames
-	d3dpp.hDeviceWindow = hWnd;    // set the window to be used by Direct3D
-	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;     // set the back buffer format to 32-bit
-	d3dpp.BackBufferWidth = m_width;    // set the width of the buffer
-	d3dpp.BackBufferHeight = m_height;    // set the height of the buffer
-
-	d3dpp.EnableAutoDepthStencil = TRUE;
-	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-
-	// create a device class using this information and the info from the d3dpp stuct
-	m_d3d->CreateDevice(D3DADAPTER_DEFAULT,
-		D3DDEVTYPE_HAL,
-		hWnd,
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-		&d3dpp,
-		&m_d3ddev);
-
-	vHUD();    // call the function to initialize the lifebar
-	
-	initFont(); //init font	
-	setlmlife();
-
-	//ipBox("");
-}
-
 void D3DHook::render()
 {
 	m_llife = m_life * m_lmlife / m_mlife;
@@ -76,6 +43,39 @@ void D3DHook::render()
 	m_d3ddev->Present(NULL, NULL, NULL, NULL);   // displays the created frame on the screen
 }
 
+void D3DHook::initD3D(HWND hWnd)
+{
+	m_d3d = Direct3DCreate9(D3D_SDK_VERSION);    // create the Direct3D interface
+
+	D3DPRESENT_PARAMETERS d3dpp;    // create a struct to hold various device information
+
+	ZeroMemory(&d3dpp, sizeof(d3dpp));    // clear out the struct for use
+	d3dpp.Windowed = TRUE;    // program windowed, not fullscreen
+	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;    // discard old frames
+	d3dpp.hDeviceWindow = hWnd;    // set the window to be used by Direct3D
+	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;     // set the back buffer format to 32-bit
+	d3dpp.BackBufferWidth = m_width;    // set the width of the buffer
+	d3dpp.BackBufferHeight = m_height;    // set the height of the buffer
+
+	d3dpp.EnableAutoDepthStencil = TRUE;
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+
+	// create a device class using this information and the info from the d3dpp stuct
+	m_d3d->CreateDevice(D3DADAPTER_DEFAULT,
+		D3DDEVTYPE_HAL,
+		hWnd,
+		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+		&d3dpp,
+		&m_d3ddev);
+
+	vHUD();    // call the function to initialize the lifebar
+	
+	initFont(); //init font	
+	setlmlife();
+
+	//ipBox("");
+}
+
 void D3DHook::initFont()
 {
 	AddFontResourceEx("Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0);
@@ -87,14 +87,6 @@ void D3DHook::initFont()
 
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefaultSmall);
 	D3DXCreateFont(m_d3ddev, 17, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
-}
-
-void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align)
-{
-	// set container of text
-	RECT container = { x, y, x + w, y + h };
-	// Output the text, center aligned
-	pfont->DrawText(NULL, str, -1, &container, align, color);
 }
 
 void D3DHook::vHUD()
@@ -120,6 +112,28 @@ void D3DHook::vHUD()
 	m_vbuffer->Unlock();
 }
 
+void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
+{
+	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+
+	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });	
+}
+
+void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color)
+{
+	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x + m_llife, y, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
+
+	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
+	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
+}
+
 void D3DHook::refreshLife()
 {
 	for (int i = 0; i < 6; i++)
@@ -141,49 +155,9 @@ void D3DHook::refreshLife()
 	m_vbuffer->Unlock();
 }
 
-
-void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
-{
-	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
-
-	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });	
-}
-
-
-void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color)
-{
-	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x + m_llife, y, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
-
-	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });
-}
-
-void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
-{
-	RECT FontPos = { x, y, x + 120, y + 16 };
-	char buf[1024] = { '\0' };
-	va_list va_alist;
-
-	va_start(va_alist, fmt);
-	vsprintf_s(buf, fmt, va_alist);
-	va_end(va_alist);
-	g_pFont->DrawText(NULL, buf, -1, &FontPos, DT_NOCLIP, color);
-}
-
-float pixToShit(float pix)
-{
-	return 797 * pix / 1440 - 1;
-}
-
 void D3DHook::textHud()
 {
+	RECT container = {0, 0, 0, 0};
 	std::ostringstream life, lvl, item;
 
 	life << std::fixed << std::setprecision(0) << m_life << "/" << m_mlife;
@@ -193,24 +167,15 @@ void D3DHook::textHud()
 	item << std::fixed << m_item << " ITEMS";
 
 	//LIFE & OUTLINE
-	DrawTextString(5, 100 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
-	DrawTextString(9, 100 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
-	DrawTextString(7, 98 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
-	DrawTextString(7, 102 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
+	DrawOutline(7.0f, 100.0f + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER, container);
 	DrawTextString(7.0f, 100.0f + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life.str().c_str(), m_pFont, DT_CENTER);
 
 
-	DrawTextString(6, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
-	DrawTextString(10, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);	
-	DrawTextString(8, 98 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
-	DrawTextString(8, 102 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawOutline(8, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT, container);
 	DrawTextString(8, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
 
 
-	DrawTextString(39*m_width/100 - 2, 90.3*m_height/100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
-	DrawTextString(39 * m_width / 100 + 2, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
-	DrawTextString(39 * m_width / 100, 90.3*m_height / 100 - 2, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
-	DrawTextString(39 * m_width / 100, 90.3*m_height / 100 + 2, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawOutline(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, container);
 	DrawTextString(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 192, 192, 192), item.str().c_str(), m_pFontSmall, DT_LEFT);
 
 	int yoff = 1;
@@ -238,6 +203,33 @@ void D3DHook::textHud()
 	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
 }
 
+void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align)
+{
+	// set container of text
+	RECT container = { x, y, x + w, y + h };
+	// Output the text, center aligned
+	pfont->DrawText(NULL, str, -1, &container, align, color);
+}
+
+void D3DHook::DrawOutline(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, RECT container)
+{
+	// set container of text
+	container = { x, y, x + w, y + h };
+	pfont->DrawText(NULL, str, -1, &container, align, color);
+
+	container = { x - 2, y, x + w, y + h };
+	pfont->DrawText(NULL, str, -1, &container, align, color);
+
+	container = { x + 2, y, x + w, y + h };
+	pfont->DrawText(NULL, str, -1, &container, align, color);
+
+	container = { x, y - 2, x + w, y + h };
+	pfont->DrawText(NULL, str, -1, &container, align, color);
+
+	container = { x, y + 2, x + w, y + h };
+	pfont->DrawText(NULL, str, -1, &container, align, color);
+}
+
 void D3DHook::error()
 {
 	RECT Rect = { 10, m_height - 20,0,0 };
@@ -254,7 +246,22 @@ void D3DHook::info()
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
 }
 
-/*CUSTOMVERTEX vertices[] =
+/*
+void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
+{
+	RECT FontPos = { x, y, x + 120, y + 16 };
+	char buf[1024] = { '\0' };
+	va_list va_alist;
+
+	va_start(va_alist, fmt);
+	vsprintf_s(buf, fmt, va_alist);
+	va_end(va_alist);
+	g_pFont->DrawText(NULL, buf, -1, &FontPos, DT_NOCLIP, color);
+}
+*/
+
+/*
+CUSTOMVERTEX vertices[] =
 {
 	//FIRST OUTLINE
 	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
@@ -303,7 +310,8 @@ void D3DHook::info()
 	{ 10.0f + m_llife, 100.0f + WIDTH - 2 * WIDTH / 16 , 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
 	{ 10.0f + 2 * WIDTH / 16, 100.0f + WIDTH - 2 * WIDTH / 16, 0.0f, 0.0f, D3DCOLOR_XRGB(136, 211, 103) },
 
-};*/
+};
+*/
 
 /*
 void D3DHook::ipBox(const char *str)
@@ -320,12 +328,6 @@ m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
 m_ipvertices.push_back({ x + l, y, 0.0f, 0.0f, color });
 m_ipvertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
 m_ipvertices.push_back({ x, y + w, 0.0f, 0.0f, color });
-
-
-
-
-
-
 
 
 // create a vertex buffer interface called m_vbuffer

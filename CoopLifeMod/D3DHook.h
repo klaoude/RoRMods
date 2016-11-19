@@ -16,29 +16,28 @@ class D3DHook
 {
 public:
 	D3DHook(int width, int height) { m_width = width; m_height = height; WIDTH = height / 40.0f; LENGHT = WIDTH * 5.0f; }
-
-	void initD3D(HWND hWnd);
-
-	void setlmlife() {m_lmlife = LENGHT - 2.5 * WIDTH / 8; }
-
+	
 	void render();
+	void initD3D(HWND hWnd);
+	
+	void initFont();
+	
 
-	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align);
+	void vHUD();
 	void addRect(float x, float y, float l, float w, D3DCOLOR color);
 	void addLifeRect(float x, float y, float w, D3DCOLOR color);
 	void refreshLife();
-	void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
-	void textHud();
+
 	
+
+	void textHud();
+	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align);
+	void DrawOutline(int x, int y, int h, int w, DWORD color, const char * str, LPD3DXFONT pfont, int align, RECT container);
 	void error();
 	void info();
+	//void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
 
-	//void ipBox(const char *str);
-	//void setIp(char const* str) { m_ip = str; }
 
-	void initFont();
-	void vHUD();
-	
 	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
 	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }	
 
@@ -52,6 +51,24 @@ public:
 
 	void setlife(float life) { m_life = life; }
 	void setmlife(float mlife) { m_mlife = mlife; }
+
+	void setlmlife() {m_lmlife = LENGHT - 2.5 * WIDTH / 8; }
+
+
+	
+
+
+
+	
+
+
+	//void ipBox(const char *str);
+	//void setIp(char const* str) { m_ip = str; }
+
+	
+	
+	
+	
 
 
 private:
