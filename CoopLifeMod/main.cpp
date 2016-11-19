@@ -42,7 +42,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = false;
+	bool isConnect = true;
 
 	Net net(&hook);
 
@@ -101,14 +101,18 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			health = net.recvDouble();
 			maxHealth = net.recvDouble();
 
-			s.str("");
 			if (health >= 1 && health < 10000)
 			{
-				s << health << "/" << maxHealth;
+				hook.setlife(health);
+				hook.setmlife(maxHealth);
+
 				stableHealth = health;
 			}
 			else
-				s << stableHealth << "/" << maxHealth;					
+			{
+				hook.setlife(stableHealth);
+				hook.setmlife(maxHealth);
+			}
 		}
 		else
 		{
@@ -119,6 +123,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}				
 			if (GetAsyncKeyState(VK_F2))
 			{
+				hook.setErr("swag overflow", 60);
 				ip = mem.getChar(ipOffsets, 15);
 				ipstr = std::string(ip);				
 				ipstr.resize(15);
@@ -127,11 +132,11 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}	
 		}
 		
-		hook.setErr("swag overflow", 60);
+		
 
 		if (frame >= fps)
 		{
-			hook.render((char *)s.str().c_str(), health, maxHealth);
+			hook.render();
 			frame = 0;
 		}
 

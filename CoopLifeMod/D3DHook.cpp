@@ -34,9 +34,9 @@ void D3DHook::initD3D(HWND hWnd)
 	//ipBox("");
 }
 
-void D3DHook::render(char* str, int life, int mlife)
+void D3DHook::render()
 {
-	m_llife = life * m_lmlife / mlife;
+	m_llife = m_life * m_lmlife / m_mlife;
 
 	refreshLife();
 	// clear the window alpha
@@ -53,7 +53,7 @@ void D3DHook::render(char* str, int life, int mlife)
 	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size()/3);
 
 	if (true) //draw howto if...
-		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefaultSmall, DT_CENTER);
+		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefault, DT_CENTER);
 		
 	int shit;
 
@@ -69,7 +69,7 @@ void D3DHook::render(char* str, int life, int mlife)
 		m_info_life--;
 	}
 
-	textHud(str);
+	textHud();
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
@@ -82,11 +82,11 @@ void D3DHook::initFont()
 	AddFontResourceEx("Resources/RiskofRainFont.ttf", FR_PRIVATE, 0);
 
 	D3DXCreateFont(m_d3ddev, 18, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
-	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
-	D3DXCreateFont(m_d3ddev, 10, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontStat);
+	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
+	D3DXCreateFont(m_d3ddev, 22, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontStat);
 
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefaultSmall);
-	D3DXCreateFont(m_d3ddev, 15, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
+	D3DXCreateFont(m_d3ddev, 17, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align)
@@ -99,12 +99,12 @@ void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char
 
 void D3DHook::vHUD()
 {	
-	addRect(10.0f, 60.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
-	addRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, LENGHT - 2.5 * WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+	addRect(7.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
+	addRect(7.0f + WIDTH / 14, 100.0f + WIDTH / 14, LENGHT - 2 * WIDTH / 14, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 64, 65, 87));
+	addRect(7.0f + 2 * WIDTH / 14, 100.0f + 2 * WIDTH / 14, LENGHT - 4 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 	
-	addLifeRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
+	addLifeRect(7.0f + 2 * WIDTH / 14, 100.0f + 2 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 	
-	addRect(100, m_height / 5, 100, 9.8, D3DCOLOR_ARGB(255, 0, 0, 0));
 	
 	// create a vertex buffer interface called m_vbuffer
 	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
@@ -182,27 +182,60 @@ float pixToShit(float pix)
 	return 797 * pix / 1440 - 1;
 }
 
-void D3DHook::textHud(char * str)
+void D3DHook::textHud()
 {
+	std::ostringstream life, lvl, item;
+
+	life << std::fixed << std::setprecision(0) << m_life << "/" << m_mlife;
+
+	lvl << "LV. " << std::fixed << m_lvl;
+
+	item << std::fixed << m_item << " ITEMS";
+
 	//LIFE & OUTLINE
-	DrawTextString(9, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(11, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(10, 59 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(10, 61 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
-	DrawTextString(10, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), str, m_pFontSmall, DT_CENTER);
+	DrawTextString(5, 100 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
+	DrawTextString(9, 100 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
+	DrawTextString(7, 98 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
+	DrawTextString(7, 102 + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER);
+	DrawTextString(7.0f, 100.0f + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life.str().c_str(), m_pFont, DT_CENTER);
+
+
+	DrawTextString(6, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawTextString(10, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);	
+	DrawTextString(8, 98 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawTextString(8, 102 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawTextString(8, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
+
+
+	DrawTextString(39*m_width/100 - 2, 90.3*m_height/100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawTextString(39 * m_width / 100 + 2, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawTextString(39 * m_width / 100, 90.3*m_height / 100 - 2, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawTextString(39 * m_width / 100, 90.3*m_height / 100 + 2, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255,26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawTextString(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 192, 192, 192), item.str().c_str(), m_pFontSmall, DT_LEFT);
 
 	int yoff = 1;
-	float height = 9.8;
+	float height = 18;
 
-	DrawTextString( 76*m_width/100, m_height/10 + 18 + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo",  m_pFontStat, DT_RIGHT);
+	
+	std::ostringstream dmg, rate, crit, regen, strength;
+
+	dmg << "DMG:  " << std::setprecision(2) << m_dmg;
+	rate << "FIRERATE:  " << std::setprecision(2) << m_firerate;
+	crit << "CRIT:  " << std::setprecision(2) << m_crit;
+	regen << "REGEN:  " << std::setprecision(2) << m_regen;
+	strength << "STRENGTH:  " << std::setprecision(2) << m_strength;
+
+	
+
+	DrawTextString(75.75 * m_width/100, m_height/10 + 22 + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
-	yoff+=2;
-	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
+	yoff++;
+	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
 }
 
 void D3DHook::error()
