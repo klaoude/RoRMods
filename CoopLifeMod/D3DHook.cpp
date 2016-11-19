@@ -71,7 +71,6 @@ void D3DHook::render(char* str, int life, int mlife)
 
 	textHud(str);
 
-
 	m_d3ddev->EndScene();    // ends the 3D scene
 
 	m_d3ddev->Present(NULL, NULL, NULL, NULL);   // displays the created frame on the screen
@@ -88,7 +87,6 @@ void D3DHook::initFont()
 
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefaultSmall);
 	D3DXCreateFont(m_d3ddev, 15, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
-
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align)
@@ -103,15 +101,11 @@ void D3DHook::vHUD()
 {	
 	addRect(10.0f, 60.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
 	addRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, LENGHT - 2.5 * WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
-
-
-
+	
 	addLifeRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
-
-
+	
 	addRect(100, m_height / 5, 100, 9.8, D3DCOLOR_ARGB(255, 0, 0, 0));
-
-
+	
 	// create a vertex buffer interface called m_vbuffer
 	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
 
@@ -126,23 +120,16 @@ void D3DHook::vHUD()
 	m_vbuffer->Unlock();
 }
 
-
-
-
-
-
 void D3DHook::refreshLife()
 {
 	for (int i = 0; i < 6; i++)
 		m_vertices.pop_back();
-
 
 	addLifeRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 	// create a vertex buffer interface called m_vbuffer
 	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
 
 	VOID* pVoid;    // a void pointer
-
 
 	int size = m_vertices.size();
 
@@ -163,8 +150,7 @@ void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
 
 	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });
 	m_vertices.push_back({ x + l, y + w, 0.0f, 0.0f, color });
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });
-	
+	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });	
 }
 
 
@@ -191,15 +177,13 @@ void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const ch
 	g_pFont->DrawText(NULL, buf, -1, &FontPos, DT_NOCLIP, color);
 }
 
-
 float pixToShit(float pix)
 {
 	return 797 * pix / 1440 - 1;
 }
+
 void D3DHook::textHud(char * str)
 {
-
-
 	//LIFE & OUTLINE
 	DrawTextString(9, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
 	DrawTextString(11, 60 + 0.5 + WIDTH / 8, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), str, m_pFontSmall, DT_CENTER);
@@ -219,12 +203,10 @@ void D3DHook::textHud(char * str)
 	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
 	yoff++;
 	DrawTextString(76 * m_width / 100, m_height / 10 + 18 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), "Yolo", m_pFontStat, DT_RIGHT);
-
 }
 
 void D3DHook::error()
 {
-
 	RECT Rect = { 10, m_height - 20,0,0 };
 
 	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_CALCRECT, 0);
@@ -233,16 +215,11 @@ void D3DHook::error()
 
 void D3DHook::info()
 {
-
 	RECT Rect = { 10, m_height - 20,0,0 };
 
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_CALCRECT, 0);
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
 }
-
-
-
-
 
 /*CUSTOMVERTEX vertices[] =
 {
@@ -252,12 +229,10 @@ void D3DHook::info()
 	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 
-
 	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 	{ 10.0f, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 	{ 10.0f + LENGHT, 100.0f + WIDTH, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
-
 
 	{ 10.0f, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
 	{ 10.0f + LENGHT, 100.0f, 0.0f, 0.0f, D3DCOLOR_XRGB(51, 43, 60) },
