@@ -100,6 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			health = net.recvDouble();
 			maxHealth = net.recvDouble();*/
 
+			hook.setInfo("setting stat", 10);
 			setStat(&hook, 0, 0);
 
 			
@@ -122,11 +123,10 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}	
 		}	
 
-		if (frame >= fps)
-		{
+
 			hook.render();
 			frame = 0;
-		}
+	
 
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 

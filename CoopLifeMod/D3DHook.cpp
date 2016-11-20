@@ -241,7 +241,6 @@ void D3DHook::error()
 	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_CALCRECT, 0);
 	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 0, 0));
 
-	render();
 }
 
 void D3DHook::info()
@@ -251,7 +250,6 @@ void D3DHook::info()
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_CALCRECT, 0);
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
 
-	render();
 }
 
 /*
