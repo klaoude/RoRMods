@@ -147,5 +147,5 @@ std::vector<LPVOID> pause_offsets =
 	(LPVOID)0xC,
 	(LPVOID)0xC,
 	(LPVOID)0x4,
-	(LPVOID)960
+	(LPVOID)0x960
 };
