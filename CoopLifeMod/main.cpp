@@ -7,8 +7,6 @@
 
 typedef std::map<int, int> CounterMap;
 
-
-
 int s_width = 800;
 int s_height = 600;
 HWND hWnd;
@@ -21,19 +19,15 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 void setStat(D3DHook *hook);
 
-
-
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
 	D3DHook hook(s_width, s_height);
-
-
+	
 	hook.initD3D(hWnd);
 	MSG msg;
-
-
+	
 	mem.Open(value);
 
 	int health = 0, maxHealth = 0;	
@@ -62,8 +56,6 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{			
 		if (isConnect)
 		{
-
-
 			if (maxHealths.size() > 20)
 				maxHealths.erase(maxHealths.begin());
 
@@ -108,9 +100,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			health = net.recvDouble();
 			maxHealth = net.recvDouble();*/
 
-			setStat(&hook);
-
-			
+			setStat(&hook);			
 		}
 		else
 		{
@@ -241,7 +231,6 @@ void setStat(D3DHook *hook)
 		hook->setlife(stableHealth);
 		hook->setmlife(maxHealth);
 	}
-
 
 	hook->setdmg(mem.GetDouble(damage_offsets));
 	hook->setrate(mem.GetDouble(attackSpeed_offsets));

@@ -20,7 +20,7 @@ void Net::create(int port)
 	int iResult = ioctlsocket(m_server.socket, FIONBIO, &iMode);
 
 	m_hook->setInfo("Waiting for conn...", 60);
-	m_hook->render();
+	//m_hook->render();
 	bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
 	listen(m_server.socket, 0);
 
