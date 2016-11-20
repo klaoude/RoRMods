@@ -156,5 +156,5 @@ std::vector<LPVOID> scale_offsets =
 	(LPVOID)0x0,
 	(LPVOID)0x0,
 	(LPVOID)0x4,
-	(LPVOID)0x460
+	(LPVOID)0xA60
 };

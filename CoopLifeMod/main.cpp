@@ -44,7 +44,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = true;
+	bool isConnect = false;
 
 	Net net(&hook);
 
@@ -54,6 +54,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int swag = 0;
 	while (TRUE)
 	{			
+		bool f1 = false;
 		if (isConnect)
 		{
 			if (maxHealths.size() > 20)
@@ -100,19 +101,19 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			health = net.recvDouble();
 			maxHealth = net.recvDouble();*/
 
-			hook.setInfo("setting stat", 10);
-			setStat(&hook, 0, 0);
-
-			
+			setStat(&hook, 0, 0);			
 		}
 		else
 		{
-			if (GetAsyncKeyState(VK_F1))
+			if(f1)
+				net.create(mem.GetDouble(portServerOffsets) + 1);
+			else if (GetAsyncKeyState(VK_F1))
 			{
 				net.create(mem.GetDouble(portServerOffsets) + 1);
-				isConnect = true;
+				f1 = true;
+				//isConnect = true;
 			}				
-			if (GetAsyncKeyState(VK_F2))
+			else if (GetAsyncKeyState(VK_F2))
 			{
 				ip = mem.getChar(ipOffsets, 15);
 				ipstr = std::string(ip);				
@@ -122,10 +123,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}	
 		}	
 
-
-			hook.render();
-			frame = 0;
-	
+		hook.render();	
 
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
