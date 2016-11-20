@@ -111,7 +111,6 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}				
 			if (GetAsyncKeyState(VK_F2))
 			{
-				hook.setErr("swag overflow", 60);
 				ip = mem.getChar(ipOffsets, 15);
 				ipstr = std::string(ip);				
 				ipstr.resize(15);

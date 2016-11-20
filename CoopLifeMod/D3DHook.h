@@ -39,7 +39,7 @@ public:
 
 
 	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
-	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }	
+	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }
 
 	void setdmg(float dmg) { m_dmg = dmg;  }
 	void setrate(float firerate) { m_firerate = firerate; }

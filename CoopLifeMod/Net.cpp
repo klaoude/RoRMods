@@ -19,18 +19,16 @@ void Net::create(int port)
 	unsigned long iMode = 1;
 	int iResult = ioctlsocket(m_server.socket, FIONBIO, &iMode);
 
-	m_hook->setInfo("Waiting for conn...", 60);
-	//m_hook->render();
+	m_hook->setErr("Waiting for conn...", 60);
 	bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
 	listen(m_server.socket, 0);
 
 	int sizeof_csin = sizeof(m_client.addr);
 
 	m_client.socket = accept(m_server.socket, (SOCKADDR*)&m_client.addr, &sizeof_csin);
-	if (m_client.socket != NULL)
+	if (m_client.socket != INVALID_SOCKET)
 	{
-		m_hook->setInfo("Client Connected...", 60);
-		m_hook->render();
+		m_hook->setInfo("Client Connected !", 60);
 	}
 
 	iMode = 0;
@@ -61,9 +59,8 @@ void Net::conn(std::string ip, int port)
 	m_server.addr.sin_addr.s_addr = inet_addr(ip.c_str());
 	m_server.addr.sin_port = htons(port);
 
-	connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
-	m_hook->setErr("Connect failed !", 60);
-	m_hook->render();
+	if(connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr)) == SOCKET_ERROR)
+		m_hook->setErr("Connect failed !", 60);
 
 	m_isServer = false;
 }
