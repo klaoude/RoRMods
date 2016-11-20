@@ -52,6 +52,8 @@ public:
 	void setlife(float life) { m_life = life; }
 	void setmlife(float mlife) { m_mlife = mlife; }
 
+	void setpause(int pause) { m_pause = pause; }
+
 	void setlmlife() {m_lmlife = LENGHT - 2.5 * WIDTH / 8; }
 
 
@@ -84,7 +86,7 @@ private:
 	float m_llife;
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
-	int m_item;
+	int m_item, m_pause;
 	const char* m_error, *m_info, *m_ip;
 
 	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices;

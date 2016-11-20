@@ -17,7 +17,7 @@ Memory mem;
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-void setStat(D3DHook *hook);
+void setStat(D3DHook *hook, int health, int maxHealth);
 
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -44,7 +44,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = false;
+	bool isConnect = true;
 
 	Net net(&hook);
 
@@ -100,7 +100,10 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			health = net.recvDouble();
 			maxHealth = net.recvDouble();*/
 
-			setStat(&hook);			
+			hook.setInfo("setting stat", 10);
+			setStat(&hook, 0, 0);
+
+			
 		}
 		else
 		{
@@ -119,11 +122,10 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}	
 		}	
 
-		if (frame >= fps)
-		{
+
 			hook.render();
 			frame = 0;
-		}
+	
 
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
@@ -211,12 +213,9 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 }
 
 
-void setStat(D3DHook *hook)
+void setStat(D3DHook *hook, int health, int maxHealth)
 {
 	int stableHealth = 1;
-
-	int health = (int)mem.GetDouble(health_offsets);
-	int maxHealth = (int)mem.GetDouble(max_health_offsets);
 
 	if (health >= 1 && health < 10000)
 	{
@@ -240,4 +239,6 @@ void setStat(D3DHook *hook)
 
 	hook->setcrit(13.37);
 	hook->setitem(69);
+
+	hook->setpause(mem.GetDouble(pause_offsets));
 }
