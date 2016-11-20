@@ -42,7 +42,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = true;
+	bool isConnect = false;
 
 	Net net(&hook);
 

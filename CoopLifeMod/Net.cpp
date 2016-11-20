@@ -16,20 +16,40 @@ void Net::create(int port)
 	m_server.addr.sin_port = htons(port);
 	m_isServer = true;
 
-	m_hook->setErr("Server Created", 60);
+	unsigned long iMode = 1;
+	int iResult = ioctlsocket(m_server.socket, FIONBIO, &iMode);
+
+	m_hook->setInfo("Waiting for conn...", 60);
+	m_hook->render();
 	bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
 	listen(m_server.socket, 0);
 
 	int sizeof_csin = sizeof(m_client.addr);
 
 	m_client.socket = accept(m_server.socket, (SOCKADDR*)&m_client.addr, &sizeof_csin);
-	Beep(600, 100);
+	if (m_client.socket != NULL)
+	{
+		m_hook->setInfo("Client Connected...", 60);
+		m_hook->render();
+	}
+
+	iMode = 0;
+	iResult = ioctlsocket(m_server.socket, FIONBIO, &iMode);
+	fd_set Write, Err;
+	FD_ZERO(&Write);
+	FD_ZERO(&Err);
+	FD_SET(m_server.socket, &Write);
+	FD_SET(m_server.socket, &Err);
 }
 
 void Net::conn(std::string ip, int port)
 {
 	WSADATA WSAData;
 	WSAStartup(MAKEWORD(2, 0), &WSAData);
+
+	TIMEVAL Timeout;
+	Timeout.tv_sec = 5;
+	Timeout.tv_usec = 0;
 
 	m_client.server = gethostbyname(ip.c_str());
 	m_server.socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -42,6 +62,9 @@ void Net::conn(std::string ip, int port)
 	m_server.addr.sin_port = htons(port);
 
 	connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
+	m_hook->setErr("Connect failed !", 60);
+	m_hook->render();
+
 	m_isServer = false;
 }
 

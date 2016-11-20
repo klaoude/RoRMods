@@ -62,10 +62,10 @@ std::vector<LPVOID> flyingCoeff_offsets =
 	(LPVOID)0x0,
 	(LPVOID)0x0,
 	(LPVOID)0x4,
-	(LPVOID)0xC30
+	(LPVOID)0xC20
 };
 
-std::vector<LPVOID> flyingCoeff_offsets =
+std::vector<LPVOID> fallingSpeed_offsets =
 {
 	(LPVOID)0x005AE468,
 	(LPVOID)0x0,
@@ -110,7 +110,6 @@ std::vector<LPVOID> level_offsets =
 	(LPVOID)0x1B0
 };
 
-
 std::vector<LPVOID> portClientOffsets = 
 {
 	(LPVOID)0x0034E464,
@@ -141,3 +140,12 @@ std::vector<LPVOID> ipOffsets =
 	(LPVOID)-0x3DE3E54
 };
 
+std::vector<LPVOID> pause_offsets =
+{
+	(LPVOID)0x0034E464,
+	(LPVOID)0x26C,
+	(LPVOID)0xC,
+	(LPVOID)0xC,
+	(LPVOID)0x4,
+	(LPVOID)960
+};
