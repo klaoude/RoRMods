@@ -62,10 +62,10 @@ std::vector<LPVOID> flyingCoeff_offsets =
 	(LPVOID)0x0,
 	(LPVOID)0x0,
 	(LPVOID)0x4,
-	(LPVOID)0xC30
+	(LPVOID)0xC20
 };
 
-std::vector<LPVOID> flyingCoeff_offsets =
+std::vector<LPVOID> fallingSpeed_offsets =
 {
 	(LPVOID)0x005AE468,
 	(LPVOID)0x0,
@@ -83,7 +83,7 @@ std::vector<LPVOID> numItem1_offsets =
 	(LPVOID)0xC40
 };
 
-std::vector<LPVOID> resistence_offsets =
+std::vector<LPVOID> resistance_offsets =
 {
 	(LPVOID)0x005AE468,
 	(LPVOID)0x0,

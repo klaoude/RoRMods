@@ -91,11 +91,11 @@ void D3DHook::initFont()
 
 void D3DHook::vHUD()
 {	
-	addRect(7.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
-	addRect(7.0f + WIDTH / 14, 100.0f + WIDTH / 14, LENGHT - 2 * WIDTH / 14, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 64, 65, 87));
-	addRect(7.0f + 2 * WIDTH / 14, 100.0f + 2 * WIDTH / 14, LENGHT - 4 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+	addRect(7.0f, 60.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
+	addRect(7.0f + WIDTH / 14, 60.0f + WIDTH / 14, LENGHT - 2 * WIDTH / 14, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 64, 65, 87));
+	addRect(7.0f + 2 * WIDTH / 14, 60.0f + 2 * WIDTH / 14, LENGHT - 4 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 	
-	addLifeRect(7.0f + 2 * WIDTH / 14, 100.0f + 2 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
+	addLifeRect(7.0f + 2 * WIDTH / 14, 60.0f + 2 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 	
 	
 	// create a vertex buffer interface called m_vbuffer

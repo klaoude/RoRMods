@@ -7,25 +7,31 @@
 
 typedef std::map<int, int> CounterMap;
 
+
+
 int s_width = 800;
 int s_height = 600;
 HWND hWnd;
 const MARGINS  margin = { 0,0,s_width,s_height };
 const char* value = "Risk of Rain";
 
+D3DHook hook(s_width, s_height);
+Memory mem;
+
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+void setStat();
+
 
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
-	D3DHook hook(s_width, s_height);
 
 	hook.initD3D(hWnd);
 	MSG msg;
 
-	Memory mem;
+
 	mem.Open(value);
 
 	int health = 0, maxHealth = 0;	
@@ -54,8 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{			
 		if (isConnect)
 		{
-			health = (int)mem.GetDouble(health_offsets);
-			maxHealth = (int)mem.GetDouble(max_health_offsets);
+
 
 			if (maxHealths.size() > 20)
 				maxHealths.erase(maxHealths.begin());
@@ -96,23 +101,14 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				maxHealth = it->first;
 			}
 
-			net.sendDouble(health);
+			/*net.sendDouble(health);
 			net.sendDouble(maxHealth);
 			health = net.recvDouble();
-			maxHealth = net.recvDouble();
+			maxHealth = net.recvDouble();*/
 
-			if (health >= 1 && health < 10000)
-			{
-				hook.setlife(health);
-				hook.setmlife(maxHealth);
+			setStat();
 
-				stableHealth = health;
-			}
-			else
-			{
-				hook.setlife(stableHealth);
-				hook.setmlife(maxHealth);
-			}
+			
 		}
 		else
 		{
@@ -221,4 +217,37 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 	ShowWindow(hWnd, nCmdShow);
 
 	::SetWindowPos(FindWindow(NULL, value), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+}
+
+
+void setStat()
+{
+	int stableHealth = 1;
+
+	int health = (int)mem.GetDouble(health_offsets);
+	int maxHealth = (int)mem.GetDouble(max_health_offsets);
+
+	if (health >= 1 && health < 10000)
+	{
+		hook.setlife(health);
+		hook.setmlife(maxHealth);
+
+		stableHealth = health;
+	}
+	else
+	{
+		hook.setlife(stableHealth);
+		hook.setmlife(maxHealth);
+	}
+
+
+	hook.setdmg(mem.GetDouble(damage_offsets));
+	hook.setrate(mem.GetDouble(attackSpeed_offsets));
+	hook.setstrength(mem.GetDouble(resistance_offsets));
+	hook.setregen(mem.GetDouble(regeneration_offsets));
+	hook.setdmg(mem.GetDouble(damage_offsets));
+	hook.setlvl(mem.GetDouble(level_offsets));
+
+	hook.setcrit(13.37);
+	hook.setitem(69);
 }
