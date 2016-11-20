@@ -83,7 +83,7 @@ std::vector<LPVOID> numItem1_offsets =
 	(LPVOID)0xC40
 };
 
-std::vector<LPVOID> resistence_offsets =
+std::vector<LPVOID> resistance_offsets =
 {
 	(LPVOID)0x005AE468,
 	(LPVOID)0x0,
