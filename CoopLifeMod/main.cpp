@@ -15,17 +15,19 @@ HWND hWnd;
 const MARGINS  margin = { 0,0,s_width,s_height };
 const char* value = "Risk of Rain";
 
-D3DHook hook(s_width, s_height);
 Memory mem;
 
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-void setStat();
+void setStat(D3DHook *hook);
+
 
 
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+
+	D3DHook hook(s_width, s_height);
 
 
 	hook.initD3D(hWnd);
@@ -106,7 +108,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			health = net.recvDouble();
 			maxHealth = net.recvDouble();*/
 
-			setStat();
+			setStat(&hook);
 
 			
 		}
@@ -220,7 +222,7 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 }
 
 
-void setStat()
+void setStat(D3DHook *hook)
 {
 	int stableHealth = 1;
 
@@ -229,25 +231,25 @@ void setStat()
 
 	if (health >= 1 && health < 10000)
 	{
-		hook.setlife(health);
-		hook.setmlife(maxHealth);
+		hook->setlife(health);
+		hook->setmlife(maxHealth);
 
 		stableHealth = health;
 	}
 	else
 	{
-		hook.setlife(stableHealth);
-		hook.setmlife(maxHealth);
+		hook->setlife(stableHealth);
+		hook->setmlife(maxHealth);
 	}
 
 
-	hook.setdmg(mem.GetDouble(damage_offsets));
-	hook.setrate(mem.GetDouble(attackSpeed_offsets));
-	hook.setstrength(mem.GetDouble(resistance_offsets));
-	hook.setregen(mem.GetDouble(regeneration_offsets));
-	hook.setdmg(mem.GetDouble(damage_offsets));
-	hook.setlvl(mem.GetDouble(level_offsets));
+	hook->setdmg(mem.GetDouble(damage_offsets));
+	hook->setrate(mem.GetDouble(attackSpeed_offsets));
+	hook->setstrength(mem.GetDouble(resistance_offsets));
+	hook->setregen(mem.GetDouble(regeneration_offsets));
+	hook->setdmg(mem.GetDouble(damage_offsets));
+	hook->setlvl(mem.GetDouble(level_offsets));
 
-	hook.setcrit(13.37);
-	hook.setitem(69);
+	hook->setcrit(13.37);
+	hook->setitem(69);
 }

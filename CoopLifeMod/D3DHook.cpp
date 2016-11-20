@@ -17,7 +17,7 @@ void D3DHook::render()
 	// select the vertex buffer to display
 	m_d3ddev->SetStreamSource(0, m_vbuffer, 0, sizeof(CUSTOMVERTEX));
 	// copy the vertex buffer to the back buffer
-	m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size()/3);
+	
 
 	if (true) //draw howto if...
 		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefault, DT_CENTER);
@@ -36,7 +36,11 @@ void D3DHook::render()
 		m_info_life--;
 	}
 
-	textHud();
+	if (m_dmg > 0 && m_firerate > 0)
+	{
+		m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
+		textHud();
+	}
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
@@ -91,11 +95,11 @@ void D3DHook::initFont()
 
 void D3DHook::vHUD()
 {	
-	addRect(7.0f, 60.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
-	addRect(7.0f + WIDTH / 14, 60.0f + WIDTH / 14, LENGHT - 2 * WIDTH / 14, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 64, 65, 87));
-	addRect(7.0f + 2 * WIDTH / 14, 60.0f + 2 * WIDTH / 14, LENGHT - 4 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+	addRect(7.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 51, 43, 60)); //EXTERNAL OUTLINE
+	addRect(7.0f + WIDTH / 14, 100.0f + WIDTH / 14, LENGHT - 2 * WIDTH / 14, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 64, 65, 87));
+	addRect(7.0f + 2 * WIDTH / 14, 100.0f + 2 * WIDTH / 14, LENGHT - 4 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 	
-	addLifeRect(7.0f + 2 * WIDTH / 14, 60.0f + 2 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
+	addLifeRect(7.0f + 2 * WIDTH / 14, 100.0f + 2 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 	
 	
 	// create a vertex buffer interface called m_vbuffer
@@ -139,7 +143,7 @@ void D3DHook::refreshLife()
 	for (int i = 0; i < 6; i++)
 		m_vertices.pop_back();
 
-	addLifeRect(10.0f + WIDTH / 8, 60.0f + WIDTH / 8, WIDTH - 2.5 * WIDTH / 8, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
+	addLifeRect(7.0f + 2 * WIDTH / 14, 100.0f + 2 * WIDTH / 14, WIDTH - 4 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
 	// create a vertex buffer interface called m_vbuffer
 	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
 
@@ -162,7 +166,7 @@ void D3DHook::textHud()
 
 	life << std::fixed << std::setprecision(0) << m_life << "/" << m_mlife;
 
-	lvl << "LV. " << std::fixed << m_lvl;
+	lvl << "LV. " << std::fixed << std::setprecision(0) << m_lvl;
 
 	item << std::fixed << m_item << " ITEMS";
 
@@ -236,6 +240,8 @@ void D3DHook::error()
 
 	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_CALCRECT, 0);
 	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 0, 0));
+
+	render();
 }
 
 void D3DHook::info()
@@ -244,6 +250,8 @@ void D3DHook::info()
 
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_CALCRECT, 0);
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));
+
+	render();
 }
 
 /*
