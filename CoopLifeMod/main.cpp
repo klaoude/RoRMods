@@ -130,9 +130,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				net.conn(ipstr, mem.GetDouble(portClientOffsets) + 1);
 				isConnect = true;
 			}	
-		}
-		
-		
+		}	
 
 		if (frame >= fps)
 		{
