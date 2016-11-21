@@ -43,7 +43,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = true;
+	bool isConnect = false;
 
 	Net net(&hook);
 
@@ -107,20 +107,17 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 		else
 		{
-			if(f1)
-				net.create(mem.GetDouble(portServerOffsets) + 1);
-			else if (GetAsyncKeyState(VK_F1))
+			if (GetAsyncKeyState(VK_F1))
 			{
 				net.create(mem.GetDouble(portServerOffsets) + 1);
-				f1 = true;
-				//isConnect = true;
+				isConnect = true;
 			}				
 			else if (GetAsyncKeyState(VK_F2))
 			{
 				ip = mem.getChar(ipOffsets, 15);
 				ipstr = std::string(ip);				
 				ipstr.resize(15);
-				net.conn(mem.getChar(ipOffsets, 15), mem.GetDouble(portClientOffsets) + 1);
+				net.conn(ip, mem.GetDouble(portClientOffsets) + 1);
 				isConnect = true;
 			}	
 		}	
