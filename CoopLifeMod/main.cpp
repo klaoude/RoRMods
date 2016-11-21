@@ -119,7 +119,12 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				ipstr.resize(15);
 				net.conn(ip, mem.GetDouble(portClientOffsets) + 1);
 				isConnect = true;
-			}	
+			}
+
+			if (GetAsyncKeyState(VK_PRIOR)) 
+				hook.setpSel((hook.getpSel() - 1) % hook.getnbP()); //select next player
+			if (GetAsyncKeyState(VK_NEXT))
+				hook.setpSel((hook.getpSel() + 1) % hook.getnbP());	//select previous player
 		}	
 
 		hook.render();	

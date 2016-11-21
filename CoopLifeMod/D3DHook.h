@@ -58,6 +58,11 @@ public:
 
 	void setlmlife() {m_lmlife = LENGHT - 2.5 * WIDTH / 8; }
 
+	void setpSel(int psel) { m_pSel = psel; }
+	int getpSel() { return m_pSel; }
+	void setnbP(int nbp) { m_nbP = nbp; }
+	int getnbP() { return m_nbP; }
+
 
 	
 
@@ -86,6 +91,9 @@ private:
 	float WIDTH, LENGHT; //width & lenght of lifebar (outline not health value)
 	float m_lmlife; //max lenght of health value
 	float m_llife; //lenght of current health value
+
+	int m_pSel;
+	int m_nbP = 1;
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
 	int m_item, m_pause, m_scale;
