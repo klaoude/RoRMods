@@ -100,8 +100,8 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			net.sendDouble(health);
 			net.sendDouble(maxHealth);
-			/*health = net.recvDouble();
-			maxHealth = net.recvDouble();*/
+			health = net.recvDouble();
+			maxHealth = net.recvDouble();
 
 			setStat(&hook, health, maxHealth);			
 		}
@@ -120,7 +120,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				ip = mem.getChar(ipOffsets, 15);
 				ipstr = std::string(ip);				
 				ipstr.resize(15);
-				net.conn("127.0.0.1", 1337);
+				net.conn(mem.getChar(ipOffsets, 15), mem.GetDouble(portClientOffsets) + 1);
 				isConnect = true;
 			}	
 		}	

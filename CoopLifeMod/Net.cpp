@@ -26,6 +26,7 @@ void Net::create(int port)
 	if (m_client.socket != INVALID_SOCKET)
 	{
 		m_hook->setInfo("Client Connected !", 60);
+		Beep(500, 500);
 	}
 }
 
@@ -50,6 +51,8 @@ void Net::conn(std::string ip, int port)
 
 	if(connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr)) == SOCKET_ERROR)
 		m_hook->setErr("Connect failed !", 60);
+
+	Beep(500, 500);
 
 	m_isServer = false;
 }
