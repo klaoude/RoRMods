@@ -117,7 +117,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				ip = mem.getChar(ipOffsets, 15);
 				ipstr = std::string(ip);				
 				ipstr.resize(15);
-				net.conn(ip, mem.GetDouble(portClientOffsets) + 1);
+				net.conn("90.4.94.161", mem.GetDouble(portClientOffsets) + 1);
 				isConnect = true;
 			}
 
