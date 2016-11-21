@@ -211,7 +211,7 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 }
 
 
-void setStat(D3DHook *hook, int health, int maxHealth)
+void setStat(D3DHook *hook, int health, int maxHealth) //refresh all stats
 {
 	int stableHealth = 1;
 
@@ -222,7 +222,7 @@ void setStat(D3DHook *hook, int health, int maxHealth)
 
 		stableHealth = health;
 	}
-	else
+	else //WUT
 	{
 		hook->setlife(stableHealth);
 		hook->setmlife(maxHealth);
@@ -239,4 +239,5 @@ void setStat(D3DHook *hook, int health, int maxHealth)
 	hook->setitem(69);
 
 	hook->setpause(mem.GetDouble(pause_offsets));
+	hook->setscale(mem.GetDouble(scale_offsets));
 }

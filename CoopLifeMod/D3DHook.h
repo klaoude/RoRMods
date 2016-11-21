@@ -9,7 +9,7 @@
 #include <sstream>
 #include <iomanip>
 
-struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; };
+struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; }; //Vertex structure for rectangles
 #define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
 
 class D3DHook
@@ -17,25 +17,26 @@ class D3DHook
 public:
 	D3DHook(int width, int height) { m_width = width; m_height = height; WIDTH = height / 40.0f; LENGHT = WIDTH * 5.0f; }
 	
-	void render();
+	void render(); //draw everything
 	void initD3D(HWND hWnd);
 	
-	void initFont();
+	void initFont(); //create fonts
 	
 
-	void vHUD();
-	void addRect(float x, float y, float l, float w, D3DCOLOR color);
-	void addLifeRect(float x, float y, float w, D3DCOLOR color);
-	void refreshLife();
+	void vHUD(); //draw rectangles
+	void addRect(float x, float y, float l, float w, D3DCOLOR color); //ad rectangle to draw
+	void addLifeRect(float x, float y, float w, D3DCOLOR color); //add lifebar
+	void refreshLife(); //refresh lifebar lenght
 
 	
 
-	void textHud();
-	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align);
-	void DrawOutline(int x, int y, int h, int w, DWORD color, const char * str, LPD3DXFONT pfont, int align, RECT container);
-	void error();
-	void info();
-	//void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
+	void textHud(); //draw all texts
+	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align); //draw text
+	void DrawOutline(int x, int y, int h, int w, DWORD color, const char * str, LPD3DXFONT pfont, int align, RECT container); //draw outline of a text
+	void error(); //draw error text
+	void info(); //draw info text
+
+
 
 
 	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
@@ -53,6 +54,7 @@ public:
 	void setmlife(float mlife) { m_mlife = mlife; }
 
 	void setpause(int pause) { m_pause = pause; }
+	void setscale(int scale) { m_scale = scale; }
 
 	void setlmlife() {m_lmlife = LENGHT - 2.5 * WIDTH / 8; }
 
@@ -63,7 +65,7 @@ public:
 
 	
 
-
+	//void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
 	//void ipBox(const char *str);
 	//void setIp(char const* str) { m_ip = str; }
 
@@ -75,20 +77,20 @@ public:
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
-	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall;
+	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall;	//fonts
 	LPDIRECT3D9 m_d3d;
-	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL, m_ipvbuffer = NULL;
-	int m_width, m_height;
+	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL; //vertex buffer
+	int m_width, m_height; //height & width of window
 
 	int m_err_life, m_info_life;
-	float WIDTH, LENGHT;
-	float m_lmlife;
-	float m_llife;
+	float WIDTH, LENGHT; //width & lenght of lifebar (outline not health value)
+	float m_lmlife; //max lenght of health value
+	float m_llife; //lenght of current health value
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
-	int m_item, m_pause;
+	int m_item, m_pause, m_scale;
 	const char* m_error, *m_info, *m_ip;
 
-	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices;
+	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices; //vertices' vector
 };
 
