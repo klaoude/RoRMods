@@ -11,10 +11,18 @@
 
 const int BUFFER_LENGHT = 256;
 
-struct Player
+struct Player //send les float avec 2 decimales mini please, thx.
 {
-	int health;
-	int maxHealth;
+	float health;
+	float maxHealth;
+
+	float dmg;
+	float rate;
+	float crit;
+	float regen;
+	float strength;
+
+	int level; //je sais plus si tu l'a get celle là, si oui tant mieux.
 };
 
 struct Data

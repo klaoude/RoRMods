@@ -100,5 +100,7 @@ private:
 	const char* m_error, *m_info, *m_ip;
 
 	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices; //vertices' vector
+
+
 };
 
