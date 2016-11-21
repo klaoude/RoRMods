@@ -207,15 +207,15 @@ void D3DHook::textHud()
 	regen << "REGEN:  " << std::setprecision(2) << m_regen;
 	strength << "STRENGTH:  " << std::setprecision(2) << m_strength;	
 
-	DrawTextString(75.75 * m_width/100, m_height/10 + 22 + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width/100, 14.0f*m_height / 100  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++
-	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(75.75 * m_width / 100, m_height / 10 + 22 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align)
