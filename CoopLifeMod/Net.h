@@ -11,6 +11,17 @@
 
 const int BUFFER_LENGHT = 256;
 
+struct Player
+{
+	int health;
+	int maxHealth;
+};
+
+struct Data
+{
+	std::vector<Player> vec;
+};
+
 struct Client
 {
 	sockaddr_in addr;
@@ -39,6 +50,9 @@ public:
 
 	void sendDouble(double val);
 	double recvDouble();
+
+	void sendData(Data data);
+	Data recvData();
 
 	void clear();
 

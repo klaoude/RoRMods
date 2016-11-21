@@ -87,6 +87,32 @@ double Net::recvDouble()
 	return atof(buffer);
 }
 
+//void Net::sendData(Data data)
+//{
+//	int sock;
+//	if (m_isServer)
+//		sock = m_client.socket;
+//	else
+//		sock = m_server.socket;
+//
+//	send(sock, data, sizeof(data), 0);
+//}
+//
+//double Net::recvDouble()
+//{
+//	char buffer[256];
+//
+//	int sock;
+//	if (m_isServer)
+//		sock = m_client.socket;
+//	else
+//		sock = m_server.socket;
+//
+//	recv(sock, buffer, sizeof(buffer), 0);
+//
+//	return atof(buffer);
+//}
+
 void Net::clear() 
 {
 	WSACleanup();

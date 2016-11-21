@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (maxHealths.size() > 20)
 				maxHealths.erase(maxHealths.begin());
 
-			//if (maxHealth > 0)
+			if (maxHealth > 0)
 				maxHealths.push_back(maxHealth);
 
 			if (maxHealths.size() > 19)
