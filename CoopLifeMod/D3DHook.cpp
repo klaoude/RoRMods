@@ -199,16 +199,13 @@ void D3DHook::textHud()
 	int yoff = 1; //index of stat
 	float height = 18; //space between two stats
 
-	
 	std::ostringstream dmg, rate, crit, regen, strength;
 
 	dmg << "DMG:  " << std::setprecision(2) << m_dmg;
 	rate << "FIRERATE:  " << std::setprecision(2) << m_firerate;
 	crit << "CRIT:  " << std::setprecision(2) << m_crit;
 	regen << "REGEN:  " << std::setprecision(2) << m_regen;
-	strength << "STRENGTH:  " << std::setprecision(2) << m_strength;
-
-	
+	strength << "STRENGTH:  " << std::setprecision(2) << m_strength;	
 
 	DrawTextString(75.75 * m_width/100, m_height/10 + 22 + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++
@@ -230,8 +227,7 @@ void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char
 }
 
 void D3DHook::DrawOutline(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, RECT container)
-{
-	
+{	
 	container = { x - 2, y, x + w, y + h }; // set container of text
 	pfont->DrawText(NULL, str, -1, &container, align, color); //left outline
 

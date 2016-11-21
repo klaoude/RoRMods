@@ -12,6 +12,7 @@ int s_height = 600;
 HWND hWnd;
 const MARGINS  margin = { 0,0,s_width,s_height };
 const char* value = "Risk of Rain";
+int stableHealth = 1;
 
 Memory mem;
 
@@ -36,8 +37,6 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int fps = 10;
 	std::stringstream s;
 	std::string healthStr;
-	int stableHealth = 1;
-	int oldMax = 1;
 
 	std::vector<int> maxHealths;
 
@@ -57,6 +56,9 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		bool f1 = false;
 		if (isConnect)
 		{
+			health = (int)mem.GetDouble(health_offsets);
+			maxHealth = (int)mem.GetDouble(max_health_offsets);
+
 			if (maxHealths.size() > 20)
 				maxHealths.erase(maxHealths.begin());
 
@@ -96,12 +98,12 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				maxHealth = it->first;
 			}
 
-			/*net.sendDouble(health);
+			net.sendDouble(health);
 			net.sendDouble(maxHealth);
-			health = net.recvDouble();
+			/*health = net.recvDouble();
 			maxHealth = net.recvDouble();*/
 
-			setStat(&hook, 0, 0);			
+			setStat(&hook, health, maxHealth);			
 		}
 		else
 		{
@@ -118,7 +120,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				ip = mem.getChar(ipOffsets, 15);
 				ipstr = std::string(ip);				
 				ipstr.resize(15);
-				net.conn(ipstr, mem.GetDouble(portClientOffsets) + 1);
+				net.conn("127.0.0.1", 1337);
 				isConnect = true;
 			}	
 		}	
@@ -213,8 +215,6 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 
 void setStat(D3DHook *hook, int health, int maxHealth) //refresh all stats
 {
-	int stableHealth = 1;
-
 	if (health >= 1 && health < 10000)
 	{
 		hook->setlife(health);
