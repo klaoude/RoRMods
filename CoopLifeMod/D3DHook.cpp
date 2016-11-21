@@ -34,7 +34,7 @@ void D3DHook::render()
 		m_info_life--;
 	}
 
-	if (m_dmg > 0 && m_firerate > 0 && !m_pause) //Draw HUD only if we're in game and not paused
+	if (m_mlife > 0) //Draw HUD only if we're in game and not paused
 	{
 		m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
 		textHud();
