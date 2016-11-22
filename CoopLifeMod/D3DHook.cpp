@@ -2,8 +2,7 @@
 //#include "dhFastFont9.h"
 
 void D3DHook::render()
-{
-	
+{	
 	// clear the window alpha
 	m_d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 
