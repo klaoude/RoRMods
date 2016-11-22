@@ -11,19 +11,6 @@
 
 const int BUFFER_LENGHT = 256;
 
-
-/*
-J'ai eu une idée, on sait jamais ça peut ptet t'aider:
--un player reçoit un tableau (size max 4) contenant les structures player des autres joueurs.
--le joueur qui reçoit ça rajoute ses propres stat (dans une structure), dans la case suivante du tableau (forcement vide du coup)
-
-si t'arrive pas a faire ça osef, tant qu'a la fin j'ai un tableau de structures Player ça me va.
-
-PS: jpense que ça compile pas parce que D3DHook doit pas connaitre la struct Player
-*/
-
-
-
 struct Client
 {
 	sockaddr_in addr;
