@@ -32,7 +32,7 @@ struct Player //send les float avec 2 decimales mini please, thx.
 
 struct Data
 {
-	std::vector<Player> vec;
+	std::vector<Player> players;
 };
 
 
