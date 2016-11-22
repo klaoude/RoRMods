@@ -93,18 +93,22 @@ void D3DHook::initFont()
 
 void D3DHook::vHUD()
 {	
+
+	float yoff = WIDTH + 15.0f;
+
 	switch (m_scale) //set rect. pos. depending to scale
 	{
-		case 2:
-			addRect(7.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
-			addRect(7.0f + WIDTH / 14.0f, 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
-			addLifeRect(7.0f + WIDTH / 14.0f, 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
-			break;
-		
 		default: //TODO: set pos for each scale
-			addRect(7.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
-			addRect(7.0f + WIDTH / 14.0f, 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
-			addLifeRect(7.0f + WIDTH / 14.0f, 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
+
+			for (int i=0; i < stats.vec.size(); i++) //add as many lifebars outlines & backgrounds as needed
+			{
+				addRect(7.0f, i * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
+				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+			}
+
+			for (int i=1; i <= stats.vec.size(); i++) //add as many lifebars outlines as needed
+				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
+
 			break;
 	}
 
@@ -135,27 +139,33 @@ void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
 	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });	//bottom left
 }
 
-void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color)
+void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color, int player)
 {
 	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });	//top left
-	m_vertices.push_back({ x + m_llife, y, 0.0f, 0.0f, color });	//top right
-	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });	//bottom right
+	m_vertices.push_back({ x + m_llives[player], y, 0.0f, 0.0f, color });	//top right
+	m_vertices.push_back({ x + m_llives[player], y + w, 0.0f, 0.0f, color });	//bottom right
 
-	m_vertices.push_back({ x + m_llife, y + w, 0.0f, 0.0f, color });	//bottom right
+	m_vertices.push_back({ x + m_llives[player], y + w, 0.0f, 0.0f, color });	//bottom right
 	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color }); //bottom left
 	m_vertices.push_back({ x, y, 0.0f, 0.0f, color }); //top left
 }
 
 void D3DHook::refreshLife()
 {
+	int yoff = WIDTH + 15.0f; //y-axis offset
 
 	m_llife = m_life * m_lmlife / m_mlife; //calc lenght of lifebar
 
-	for (int i = 0; i < 6; i++) //remove old bar from vertices
+
+	for (int i=0; i < stats.vec.size(); i++) //calc all lenghts of player's lifebars
+		m_llives[i] = stats.vec[i].health * m_lmlife / stats.vec[i].maxHealth;
+
+	for (int i = 0; i < 6*stats.vec.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
 		m_vertices.pop_back();
 
 	//TODO: dependence on m_scale
-	addLifeRect(7.0f + WIDTH / 14, 100.0f + WIDTH / 14, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //ADD NEW HEALTH
+	for (int i=0; i < stats.vec.size(); i++) //add as many lifebars outlines as needed
+		addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
 
 
 
@@ -174,23 +184,28 @@ void D3DHook::refreshLife()
 
 void D3DHook::textHud()
 {
-	RECT container = {0, 0, 0, 0}; //container for outline
+	int lifeyoff = WIDTH +15.0f;
 
-	std::ostringstream life, lvl, item;
+	RECT container = { 0, 0, 0, 0 }; //container for outline
 
-	life << std::fixed << std::setprecision(0) << m_life << "/" << m_mlife;
+	std::ostringstream life[4], lvl[4], item;
 
-	lvl << "LV. " << std::fixed << std::setprecision(0) << m_lvl;
-
+	for (int i = 0; i < stats.vec.size(); i++) //create array containing life strings to draw
+	{
+		life[i] << std::fixed << std::setprecision(0) << stats.vec[i].health << "/" << stats.vec[i].maxHealth;
+		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << stats.vec[i].level;
+	}
 	item << std::fixed << m_item << " ITEMS";
 
 	//LIFE & OUTLINE
-	DrawOutline(7.0f, 100.0f + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER, container);
-	DrawTextString(7.0f, 100.0f + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life.str().c_str(), m_pFont, DT_CENTER);
+	for (int i = 0; i < stats.vec.size(); i++) //draw life and level of each existing player
+	{
+		DrawOutline(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
+		DrawTextString(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
 
-	//LEVEL & OUTLINE
-	DrawOutline(8, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT, container);
-	DrawTextString(8, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
+		DrawOutline(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
+		DrawTextString(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+	}
 
 	//ITEMS & OUTLINE
 	DrawOutline(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, container);
@@ -201,11 +216,11 @@ void D3DHook::textHud()
 
 	std::ostringstream dmg, rate, crit, regen, strength;
 
-	dmg << "DMG:  " << std::setprecision(2) << m_dmg;
-	rate << "FIRERATE:  " << std::setprecision(2) << m_firerate;
-	crit << "CRIT:  " << std::setprecision(2) << m_crit;
-	regen << "REGEN:  " << std::setprecision(2) << m_regen;
-	strength << "STRENGTH:  " << std::setprecision(2) << m_strength;	
+	dmg << "DMG:  " << std::setprecision(2) << stats.vec[m_pSel].dmg;
+	rate << "FIRERATE:  " << std::setprecision(2) << stats.vec[m_pSel].rate;
+	crit << "CRIT:  " << std::setprecision(2) << stats.vec[m_pSel].crit;
+	regen << "REGEN:  " << std::setprecision(2) << stats.vec[m_pSel].regen;
+	strength << "STRENGTH:  " << std::setprecision(2) << stats.vec[m_pSel].strength;
 
 	DrawTextString(75.75 * m_width/100, 14.0f*m_height / 100  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++

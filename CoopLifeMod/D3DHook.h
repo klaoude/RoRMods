@@ -9,8 +9,32 @@
 #include <sstream>
 #include <iomanip>
 
+
 struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; }; //Vertex structure for rectangles
 #define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
+
+struct Player //send les float avec 2 decimales mini please, thx.
+{
+	bool isConnected;
+	std::string pseudo;
+
+	float health;
+	float maxHealth;
+
+	float dmg;
+	float rate;
+	float crit;
+	float regen;
+	float strength;
+
+	int level; //je sais plus si tu l'a get celle là, si oui tant mieux.
+};
+
+struct Data
+{
+	std::vector<Player> vec;
+};
+
 
 class D3DHook
 {
@@ -25,7 +49,7 @@ public:
 
 	void vHUD(); //draw rectangles
 	void addRect(float x, float y, float l, float w, D3DCOLOR color); //ad rectangle to draw
-	void addLifeRect(float x, float y, float w, D3DCOLOR color); //add lifebar
+	void addLifeRect(float x, float y, float w, D3DCOLOR color, int player); //add lifebar
 	void refreshLife(); //refresh lifebar lenght
 
 	
@@ -60,10 +84,9 @@ public:
 
 	void setpSel(int psel) { m_pSel = psel; }
 	int getpSel() { return m_pSel; }
-	void setnbP(int nbp) { m_nbP = nbp; }
-	int getnbP() { return m_nbP; }
 
-
+	void setStats(Data stat) { stats = stat;  }
+	Data getStats() { return stats; }
 	
 
 
@@ -92,8 +115,7 @@ private:
 	float m_lmlife; //max lenght of health value
 	float m_llife; //lenght of current health value
 
-	int m_pSel;
-	int m_nbP = 1;
+	int m_pSel; //player currently selected (from which stats will be drawn
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
 	int m_item, m_pause, m_scale;
@@ -101,6 +123,9 @@ private:
 
 	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices; //vertices' vector
 
+	std::vector<float> m_llives; //array of the lenght of every player's lifebars
+
+	Data stats; //structure of every stats
+
 
 };
-

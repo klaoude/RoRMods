@@ -11,27 +11,23 @@
 
 const int BUFFER_LENGHT = 256;
 
-struct Player //send les float avec 2 decimales mini please, thx.
-{
-	bool isConnected = false;
 
-	float health;
-	float maxHealth;
+/*
+J'ai eu une idée, on sait jamais ça peut ptet t'aider:
+-un player reçoit un tableau (size max 4) contenant les structures player des autres joueurs.
+-le joueur qui reçoit ça rajoute ses propres stat (dans une structure), dans la case suivante du tableau (forcement vide du coup)
 
-	float dmg;
-	float rate;
-	float crit;
-	float regen;
-	float strength;
+si t'arrive pas a faire ça osef, tant qu'a la fin j'ai un tableau de structures Player ça me va.
+
+PS: jpense que ça compile pas parce que D3DHook doit pas connaitre la struct Player
+*/
 
 	int level; //je sais plus si tu l'a get celle là, si oui tant mieux.
-
-	std::string pseudo;
 };
 
 struct Data
 {
-	std::vector<Player> players;
+	std::vector<Player> vec;
 };
 
 struct Client
