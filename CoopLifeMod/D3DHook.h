@@ -101,6 +101,8 @@ private:
 
 	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices; //vertices' vector
 
+	std::vector<float> m_llives;
+
 	Player stats[4];
 
 

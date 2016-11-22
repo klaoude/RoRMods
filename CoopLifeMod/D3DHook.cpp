@@ -93,18 +93,22 @@ void D3DHook::initFont()
 
 void D3DHook::vHUD()
 {	
+
+	float yoff = WIDTH + 15.0f;
+
 	switch (m_scale) //set rect. pos. depending to scale
 	{
-		case 2:
-			addRect(7.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
-			addRect(7.0f + WIDTH / 14.0f, 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
-			addLifeRect(7.0f + WIDTH / 14.0f, 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
-			break;
-		
 		default: //TODO: set pos for each scale
-			addRect(7.0f, 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
-			addRect(7.0f + WIDTH / 14.0f, 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
-			addLifeRect(7.0f + WIDTH / 14.0f, 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103)); //HEALTH
+
+			for (int i=1; i <= m_nbP; i++) //add as many lifebars outlines & backgrounds as needed
+			{
+				addRect(7.0f, i * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
+				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+			}
+
+			for (int i=1; i <= m_nbP; i++) //add as many lifebars outlines as needed
+				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
+
 			break;
 	}
 
@@ -151,11 +155,16 @@ void D3DHook::refreshLife()
 
 	m_llife = m_life * m_lmlife / m_mlife; //calc lenght of lifebar
 
-	for (int i = 0; i < 6; i++) //remove old bar from vertices
+
+	for (int i=0; i < m_nbP; i++) //calc all llf
+		lives[i] = stats[i].health * m_lmlife / stats[i].maxHealth;
+
+	for (int i = 0; i < 6*m_nbP; i++) //remove 6 vertices for each players (=> remove all lifebars)
 		m_vertices.pop_back();
 
 	//TODO: dependence on m_scale
-	addLifeRect(7.0f + WIDTH / 14, 100.0f + WIDTH / 14, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 136, 211, 103)); //ADD NEW HEALTH
+	for (int i=1; i <= m_nbP; i++) //add as many lifebars outlines as needed
+		addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
 
 
 
@@ -188,7 +197,7 @@ void D3DHook::textHud()
 	DrawOutline(7.0f, 100.0f + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life.str().c_str(), m_pFont, DT_CENTER, container);
 	DrawTextString(7.0f, 100.0f + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life.str().c_str(), m_pFont, DT_CENTER);
 
-	//LEVEL & OUTLINE
+	//LEVEL & OUTLINE TODO: support of multiple players (like lifebar)
 	DrawOutline(8, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl.str().c_str(), m_pFontSmall, DT_LEFT, container);
 	DrawTextString(8, 100 + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl.str().c_str(), m_pFontSmall, DT_LEFT);
 
