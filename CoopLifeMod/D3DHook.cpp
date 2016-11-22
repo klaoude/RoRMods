@@ -100,13 +100,13 @@ void D3DHook::vHUD()
 	{
 		default: //TODO: set pos for each scale
 
-			for (int i=0; i < stats.vec.size(); i++) //add as many lifebars outlines & backgrounds as needed
+			for (int i=0; i < m_stats.vec.size(); i++) //add as many lifebars outlines & backgrounds as needed
 			{
 				addRect(7.0f, i * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
 				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 			}
 
-			for (int i=1; i <= stats.vec.size(); i++) //add as many lifebars outlines as needed
+			for (int i=1; i <= m_stats.vec.size(); i++) //add as many lifebars outlines as needed
 				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
 
 			break;
@@ -157,14 +157,14 @@ void D3DHook::refreshLife()
 	m_llife = m_life * m_lmlife / m_mlife; //calc lenght of lifebar
 
 
-	for (int i=0; i < stats.vec.size(); i++) //calc all lenghts of player's lifebars
-		m_llives[i] = stats.vec[i].health * m_lmlife / stats.vec[i].maxHealth;
+	for (int i=0; i < m_stats.vec.size(); i++) //calc all lenghts of player's lifebars
+		m_llives[i] = m_stats.vec[i].health * m_lmlife / m_stats.vec[i].maxHealth;
 
-	for (int i = 0; i < 6*stats.vec.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
+	for (int i = 0; i < 6*m_stats.vec.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
 		m_vertices.pop_back();
 
 	//TODO: dependence on m_scale
-	for (int i=0; i < stats.vec.size(); i++) //add as many lifebars outlines as needed
+	for (int i=0; i < m_stats.vec.size(); i++) //add as many lifebars outlines as needed
 		addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
 
 
@@ -190,15 +190,15 @@ void D3DHook::textHud()
 
 	std::ostringstream life[4], lvl[4], item;
 
-	for (int i = 0; i < stats.vec.size(); i++) //create array containing life strings to draw
+	for (int i = 0; i < m_stats.vec.size(); i++) //create array containing life strings to draw
 	{
-		life[i] << std::fixed << std::setprecision(0) << stats.vec[i].health << "/" << stats.vec[i].maxHealth;
-		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << stats.vec[i].level;
+		life[i] << std::fixed << std::setprecision(0) << m_stats.vec[i].health << "/" << m_stats.vec[i].maxHealth;
+		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.vec[i].level;
 	}
 	item << std::fixed << m_item << " ITEMS";
 
 	//LIFE & OUTLINE
-	for (int i = 0; i < stats.vec.size(); i++) //draw life and level of each existing player
+	for (int i = 0; i < m_stats.vec.size(); i++) //draw life and level of each existing player
 	{
 		DrawOutline(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
 		DrawTextString(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
@@ -216,11 +216,11 @@ void D3DHook::textHud()
 
 	std::ostringstream dmg, rate, crit, regen, strength;
 
-	dmg << "DMG:  " << std::setprecision(2) << stats.vec[m_pSel].dmg;
-	rate << "FIRERATE:  " << std::setprecision(2) << stats.vec[m_pSel].rate;
-	crit << "CRIT:  " << std::setprecision(2) << stats.vec[m_pSel].crit;
-	regen << "REGEN:  " << std::setprecision(2) << stats.vec[m_pSel].regen;
-	strength << "STRENGTH:  " << std::setprecision(2) << stats.vec[m_pSel].strength;
+	dmg << "DMG:  " << std::setprecision(2) << m_stats.vec[m_pSel].dmg;
+	rate << "FIRERATE:  " << std::setprecision(2) << m_stats.vec[m_pSel].rate;
+	crit << "CRIT:  " << std::setprecision(2) << m_stats.vec[m_pSel].crit;
+	regen << "REGEN:  " << std::setprecision(2) << m_stats.vec[m_pSel].regen;
+	strength << "STRENGTH:  " << std::setprecision(2) << m_stats.vec[m_pSel].strength;
 
 	DrawTextString(75.75 * m_width/100, 14.0f*m_height / 100  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++

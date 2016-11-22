@@ -85,8 +85,8 @@ public:
 	void setpSel(int psel) { m_pSel = psel; }
 	int getpSel() { return m_pSel; }
 
-	void setStats(Data stat) { stats = stat;  }
-	Data getStats() { return stats; }
+	void setStats(Data stats) { m_stats = stats;  }
+	Data getStats() { return m_stats; }
 	
 
 
@@ -125,7 +125,7 @@ private:
 
 	std::vector<float> m_llives; //array of the lenght of every player's lifebars
 
-	Data stats; //structure of every stats
+	Data m_stats; //structure of every stats
 
 
 };
