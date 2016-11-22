@@ -178,9 +178,9 @@ void D3DHook::textHud()
 
 	std::ostringstream life, lvl, item;
 
-	life << std::fixed << std::setprecision(0) << m_life << "/" << m_mlife;
+	life << std::fixed << std::setprecision(0) << stats[p_Sel].health << "/" << stats[p_Sel].maxHealth;
 
-	lvl << "LV. " << std::fixed << std::setprecision(0) << m_lvl;
+	lvl << "LV. " << std::fixed << std::setprecision(0) << stats[p_Sel].lvl;
 
 	item << std::fixed << m_item << " ITEMS";
 
@@ -201,11 +201,11 @@ void D3DHook::textHud()
 
 	std::ostringstream dmg, rate, crit, regen, strength;
 
-	dmg << "DMG:  " << std::setprecision(2) << m_dmg;
-	rate << "FIRERATE:  " << std::setprecision(2) << m_firerate;
-	crit << "CRIT:  " << std::setprecision(2) << m_crit;
-	regen << "REGEN:  " << std::setprecision(2) << m_regen;
-	strength << "STRENGTH:  " << std::setprecision(2) << m_strength;	
+	dmg << "DMG:  " << std::setprecision(2) << stats[p_Sel].dmg;
+	rate << "FIRERATE:  " << std::setprecision(2) << stats[p_Sel].rate;
+	crit << "CRIT:  " << std::setprecision(2) << stats[p_Sel].crit;
+	regen << "REGEN:  " << std::setprecision(2) << stats[p_Sel].regen;
+	strength << "STRENGTH:  " << std::setprecision(2) << stats[p_Sel].strength;	
 
 	DrawTextString(75.75 * m_width/100, 14.0f*m_height / 100  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++
