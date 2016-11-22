@@ -22,27 +22,7 @@ si t'arrive pas a faire ça osef, tant qu'a la fin j'ai un tableau de structures 
 PS: jpense que ça compile pas parce que D3DHook doit pas connaitre la struct Player
 */
 
-struct Player //send les float avec 2 decimales mini please, thx.
-{
-	bool isConnected;
-	std::string pseudo;
 
-	float health;
-	float maxHealth;
-
-	float dmg;
-	float rate;
-	float crit;
-	float regen;
-	float strength;
-
-	int level; //je sais plus si tu l'a get celle là, si oui tant mieux.
-};
-
-struct Data
-{
-	std::vector<Player> vec;
-};
 
 struct Client
 {

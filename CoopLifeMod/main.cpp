@@ -122,9 +122,9 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 
 			if (GetAsyncKeyState(VK_PRIOR)) 
-				hook.setpSel((hook.getpSel() - 1) % hook.getnbP()); //select next player
+				hook.setpSel((hook.getpSel() - 1) % hook.getStats().vec.size()); //select next player
 			if (GetAsyncKeyState(VK_NEXT))
-				hook.setpSel((hook.getpSel() + 1) % hook.getnbP());	//select previous player
+				hook.setpSel((hook.getpSel() + 1) % hook.getStats().vec.size());	//select previous player
 		}	
 
 		hook.render();	
