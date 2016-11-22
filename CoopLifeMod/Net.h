@@ -13,6 +13,8 @@ const int BUFFER_LENGHT = 256;
 
 struct Player //send les float avec 2 decimales mini please, thx.
 {
+	bool isConnected = false;
+
 	float health;
 	float maxHealth;
 
@@ -23,11 +25,13 @@ struct Player //send les float avec 2 decimales mini please, thx.
 	float strength;
 
 	int level; //je sais plus si tu l'a get celle là, si oui tant mieux.
+
+	std::string pseudo;
 };
 
 struct Data
 {
-	std::vector<Player> vec;
+	std::vector<Player> players;
 };
 
 struct Client
