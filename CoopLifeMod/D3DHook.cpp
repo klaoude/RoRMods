@@ -9,6 +9,13 @@ void D3DHook::render()
 
 	m_d3ddev->BeginScene();    // begins the 3D scene
 
+	if (!m_Draw) //toggle mod
+	{
+		m_d3ddev->EndScene();    // ends the 3D scene
+		m_d3ddev->Present(NULL, NULL, NULL, NULL);
+		return;
+	}
+
 	// select which vertex format we are using
 	m_d3ddev->SetFVF(CUSTOMFVF);
 
@@ -106,7 +113,7 @@ void D3DHook::vHUD()
 				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 			}
 
-			for (int i=1; i <= m_stats.players.size(); i++) //add as many lifebars outlines as needed
+			for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines as needed
 				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
 
 			break;

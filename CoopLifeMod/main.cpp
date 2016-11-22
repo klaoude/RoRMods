@@ -26,6 +26,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	D3DHook hook(s_width, s_height);
 	
+	setStat(&hook, 0, 0);
 	hook.initD3D(hWnd);
 	MSG msg;
 	
@@ -43,7 +44,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CounterMap counts;
 	CounterMap::iterator it;
 
-	bool isConnect = false;
+	bool isConnect = true;
 
 	Net net(&hook);
 
@@ -110,7 +111,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			p.maxHealth = maxHealth;
 			data.players.push_back(p);
 
-			net.sendData(data);
+			//net.sendData(data);
 			//data = net.recvData();
 
 			setStat(&hook, health, maxHealth);			
@@ -132,12 +133,15 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				isConnect = true;
 			}
 
-			if (GetAsyncKeyState(VK_PRIOR)) 
+			if (GetAsyncKeyState(VK_PRIOR)) //select previous player
 				hook.setpSel((hook.getpSel() - 1) % hook.getStats().players.size()); //select next player
-			if (GetAsyncKeyState(VK_NEXT))
+			if (GetAsyncKeyState(VK_NEXT)) //select next player
 				hook.setpSel((hook.getpSel() + 1) % hook.getStats().players.size());	//select previous player
+			if (GetAsyncKeyState(VK_F8)) //toggle mod on/off
+				hook.getDraw() ? hook.setDraw(0) : hook.setDraw(1);
 		}	
 
+		setStat(&hook, health, maxHealth);
 		hook.render();	
 
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
@@ -228,6 +232,29 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 
 void setStat(D3DHook *hook, int health, int maxHealth) //refresh all stats
 {
+	//WORKAROUND UNTIL SERVER SENDS STRUCTURE, SO IT DOESN'T INSTANT CRASH
+	//See line 143. (je sais pas pourquoi mais on passe plus dans render()
+	Player swag
+	{
+		1,
+		"ElOne",
+		health,
+		maxHealth,
+
+		mem.GetDouble(damage_offsets),
+		mem.GetDouble(attackSpeed_offsets),
+		15,
+		mem.GetDouble(regeneration_offsets),
+		mem.GetDouble(resistance_offsets),
+		1
+	};
+	std::vector<Player> moreSwag;
+	moreSwag.push_back(swag);
+
+	Data swagOverflow{ moreSwag };
+	hook->setStats(swagOverflow);
+	//END OF WORKAROUND
+
 	if (health >= 1 && health < 10000)
 	{
 		hook->setlife(health);
