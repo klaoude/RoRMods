@@ -1,4 +1,6 @@
 #pragma once
+
+#include <winsock2.h>
 #include <windows.h>
 #include <d3d9.h>
 #include <iostream>
@@ -9,9 +11,23 @@
 #include <sstream>
 #include <iomanip>
 
-
 struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; }; //Vertex structure for rectangles
 #define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
+
+struct Stats
+{
+	int health;
+	int maxHealth;
+
+	double damage;
+	double attackSpeed;
+	double strength;
+	double regeneration;
+	double critical;
+
+	int level;
+	int item;
+};
 
 struct Player //send les float avec 2 decimales mini please, thx.
 {
@@ -39,6 +55,7 @@ struct Data
 class D3DHook
 {
 public:
+	D3DHook();
 	D3DHook(int width, int height) { m_width = width; m_height = height; WIDTH = height / 40.0f; LENGHT = WIDTH * 5.0f; }
 	
 	void render(); //draw everything
@@ -65,6 +82,8 @@ public:
 
 	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
 	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }
+
+	void setStat(Stats stats);
 
 	void setdmg(float dmg) { m_dmg = dmg;  }
 	void setrate(float firerate) { m_firerate = firerate; }
