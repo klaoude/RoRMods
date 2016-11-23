@@ -27,7 +27,7 @@ struct Server
 class Net
 {
 public:
-	Net();
+	Net();	
 	Net(D3DHook* hook) { m_hook = hook; }
 	void create(int port);
 	void conn(std::string ip, int port);

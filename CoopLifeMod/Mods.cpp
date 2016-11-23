@@ -60,6 +60,12 @@ void Mods::Loop()
 	m_hook->render();
 }
 
+void Mods::Stop()
+{
+	delete m_net;
+	delete m_hook;
+}
+
 void Mods::ShowHUD()
 {
 	GetStats();

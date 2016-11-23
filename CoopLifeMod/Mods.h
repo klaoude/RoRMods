@@ -17,6 +17,8 @@ public:
 
 	void Loop();
 
+	void Stop();
+
 private:
 	void ShowHUD();
 	void GetStats();
