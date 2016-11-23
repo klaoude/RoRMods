@@ -8,7 +8,7 @@ void D3DHook::render()
 
 	m_d3ddev->BeginScene();    // begins the 3D scene
 
-	if (!m_Draw) //toggle mod
+	if (!m_Draw || m_stats.players.size() == 0) //toggle mod
 	{
 		m_d3ddev->EndScene();    // ends the 3D scene
 		m_d3ddev->Present(NULL, NULL, NULL, NULL);
@@ -99,6 +99,11 @@ void D3DHook::initFont()
 
 void D3DHook::vHUD()
 {	
+	if (m_stats.players.size() == 0)
+	{
+		return;
+	}
+
 
 	float yoff = WIDTH + 15.0f;
 

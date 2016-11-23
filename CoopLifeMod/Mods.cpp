@@ -38,7 +38,7 @@ void Mods::Loop()
 			//net->conn("90.4.94.161", mem.GetDouble(portClientOffsets) + 1);
 			m_net->conn("127.0.0.1", 1337);
 			m_isConnect = true;
-		}		
+		}
 	}
 
 	m_hook->render();
