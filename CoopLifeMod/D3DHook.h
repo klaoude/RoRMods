@@ -107,7 +107,8 @@ public:
 	void setStats(Data stats) { m_stats = stats;  }
 	Data getStats() { return m_stats; }
 	
-
+	void setDraw(bool val) { m_Draw = val; }
+	bool getDraw() { return m_Draw; }
 
 
 	
@@ -146,5 +147,6 @@ private:
 
 	Data m_stats; //structure of every stats
 
+	bool m_Draw;
 
 };
