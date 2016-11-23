@@ -100,6 +100,8 @@ public:
 	
 	void setDraw(bool val) { m_Draw = val; }
 	bool getDraw() { return m_Draw; }
+	void setSolo(bool val) { m_solo = val; }
+	bool getSolo() { return m_solo; }
 
 
 	
@@ -138,6 +140,6 @@ private:
 
 	Data m_stats; //structure of every stats
 
-	bool m_Draw;
+	bool m_Draw, m_solo;
 
 };
