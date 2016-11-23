@@ -34,16 +34,7 @@ struct Player //send les float avec 2 decimales mini please, thx.
 	bool isConnected;
 	std::string pseudo;
 
-	float health;
-	float maxHealth;
-
-	float dmg;
-	float rate;
-	float crit;
-	float regen;
-	float strength;
-
-	int level; //je sais plus si tu l'a get celle là, si oui tant mieux.
+	Stats stats;
 };
 
 struct Data

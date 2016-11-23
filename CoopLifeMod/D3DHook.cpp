@@ -121,7 +121,7 @@ void D3DHook::vHUD()
 			}
 
 			for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
-				m_llives.push_back(m_stats.players[i].health * m_lmlife / m_stats.players[i].maxHealth);
+				m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
 
 			for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines as needed
 				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
@@ -175,7 +175,7 @@ void D3DHook::refreshLife()
 
 
 	for (int i=0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
-		m_llives.push_back(m_stats.players[i].health * m_lmlife / m_stats.players[i].maxHealth);
+		m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
 
 	for (int i = 0; i < 6*m_stats.players.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
 		m_vertices.pop_back();
@@ -212,8 +212,8 @@ void D3DHook::textHud()
 
 	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life strings to draw
 	{
-		life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].health << "/" << m_stats.players[i].maxHealth;
-		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].level;
+		life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
+		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].stats.level;
 	}
 	item << std::fixed << m_item << " ITEMS";
 
@@ -236,11 +236,11 @@ void D3DHook::textHud()
 
 	std::ostringstream dmg, rate, crit, regen, strength;
 
-	dmg << "DMG:  " << std::setprecision(2) << m_stats.players[m_pSel].dmg;
-	rate << "FIRERATE:  " << std::setprecision(2) << m_stats.players[m_pSel].rate;
-	crit << "CRIT:  " << std::setprecision(2) << m_stats.players[m_pSel].crit;
-	regen << "REGEN:  " << std::setprecision(2) << m_stats.players[m_pSel].regen;
-	strength << "STRENGTH:  " << std::setprecision(2) << m_stats.players[m_pSel].strength;
+	dmg << "DMG:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.damage;
+	rate << "FIRERATE:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.attackSpeed;
+	crit << "CRIT:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.critical;
+	regen << "REGEN:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.regeneration;
+	strength << "STRENGTH:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.strength;
 
 	DrawTextString(75.75 * m_width/100, 14.0f*m_height / 100  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++

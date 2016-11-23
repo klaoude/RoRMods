@@ -1,16 +1,16 @@
 #include "Net.h"
 
-void split(const std::string &s, char delim, std::vector<std::string> &elems) {
+void split(const std::string &s, char delim, std::vector<std::string> &elems) 
+{
 	std::stringstream ss;
 	ss.str(s);
 	std::string item;
-	while (std::getline(ss, item, delim)) {
+	while (std::getline(ss, item, delim)) 
 		elems.push_back(item);
-	}
 }
 
-
-std::vector<std::string> split(const std::string &s, char delim) {
+std::vector<std::string> split(const std::string &s, char delim) 
+{
 	std::vector<std::string> elems;
 	split(s, delim, elems);
 	return elems;
@@ -121,19 +121,19 @@ void Net::sendData(Data data)
 		ss << ">";
 		ss << i.isConnected;
 		ss << "|";
-		ss << i.health;
+		ss << i.stats.health;
 		ss << "|";
-		ss << i.maxHealth;
+		ss << i.stats.maxHealth;
 		ss << "|";
-		ss << i.dmg;
+		ss << i.stats.damage;
 		ss << "|";
-		ss << i.rate;
+		ss << i.stats.attackSpeed;
 		ss << "|";
-		ss << i.crit;
+		ss << i.stats.critical;
 		ss << "|";
-		ss << i.strength;
+		ss << i.stats.strength;
 		ss << "|";
-		ss << i.level;
+		ss << i.stats.level;
 		ss << "|";
 		ss << i.pseudo;
 	}
@@ -167,14 +167,14 @@ Data Net::recvData()
 		Player player;
 		std::vector<std::string> infoSplited = split(splited[i], '|');
 		player.isConnected = true ? infoSplited[0] == "1" : false;
-		player.health = atof(infoSplited[1].c_str());
-		player.maxHealth = atof(infoSplited[2].c_str());
-		player.dmg = atof(infoSplited[3].c_str());
-		player.rate = atof(infoSplited[4].c_str());
-		player.crit = atof(infoSplited[5].c_str());
-		player.regen = atof(infoSplited[6].c_str());
-		player.strength = atof(infoSplited[7].c_str());
-		player.level = atof(infoSplited[8].c_str());
+		player.stats.health = atof(infoSplited[1].c_str());
+		player.stats.maxHealth = atof(infoSplited[2].c_str());
+		player.stats.damage = atof(infoSplited[3].c_str());
+		player.stats.attackSpeed = atof(infoSplited[4].c_str());
+		player.stats.critical = atof(infoSplited[5].c_str());
+		player.stats.regeneration = atof(infoSplited[6].c_str());
+		player.stats.strength = atof(infoSplited[7].c_str());
+		player.stats.level = atof(infoSplited[8].c_str());
 		player.pseudo = infoSplited[9];
 		data.players.push_back(player);
 	}	

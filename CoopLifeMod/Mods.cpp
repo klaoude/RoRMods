@@ -6,23 +6,14 @@ Mods::Mods(HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(
 
 void Mods::Init()
 {
-	Player swag{
-		true,
-		"Yolo",
-		13,
-		37,
-		42,
-		69,
-		15,
-		1,
-		1,
-		1
-	};
+	Player swag;
+	Stats stat;
 
 	std::vector<Player> moreSwag;
 	moreSwag.push_back(swag);
 	Data swagOverflow = { moreSwag };
 	m_hook->setStats(swagOverflow);
+
 	m_hook->initD3D(m_hWnd);
 	m_net = new Net(m_hook);
 
@@ -33,17 +24,19 @@ void Mods::Loop()
 {
 	if (m_isConnect)
 	{
-		
-	
-
+		Player p;
+		std::vector<Player> ps;
 		ShowHUD();
+		p.stats = m_stats;
+		ps.push_back(p);
+		Data dt = { ps };
+		m_hook->setStats(dt);
 
 		if (GetAsyncKeyState(VK_PRIOR))
 			m_hook->setpSel((m_hook->getpSel() - 1) % m_hook->getStats().players.size()); //select next player
 		if (GetAsyncKeyState(VK_NEXT))
 			m_hook->setpSel((m_hook->getpSel() + 1) % m_hook->getStats().players.size());	//select previous player
 	}
-
 	else
 	{
 		if (GetAsyncKeyState(VK_F1))
@@ -105,7 +98,7 @@ void Mods::fixHealth()
 		m_stats.health = m_stableHealth;
 }
 
-void Mods::fixStat(std::vector<double> vector, double stats)
+void Mods::fixStat(std::vector<double>& vector, double stats)
 {
 	if (vector.size() > 20)
 		vector.erase(vector.begin());
