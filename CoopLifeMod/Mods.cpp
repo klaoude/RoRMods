@@ -6,6 +6,23 @@ Mods::Mods(HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(
 
 void Mods::Init()
 {
+	Player swag{
+		true,
+		"Yolo",
+		13,
+		37,
+		42,
+		69,
+		15,
+		1,
+		1,
+		1
+	};
+
+	std::vector<Player> moreSwag;
+	moreSwag.push_back(swag);
+	Data swagOverflow = { moreSwag };
+	m_hook->setStats(swagOverflow);
 	m_hook->initD3D(m_hWnd);
 	m_net = new Net(m_hook);
 
@@ -16,6 +33,9 @@ void Mods::Loop()
 {
 	if (m_isConnect)
 	{
+		
+	
+
 		ShowHUD();
 
 		if (GetAsyncKeyState(VK_PRIOR))
@@ -23,6 +43,7 @@ void Mods::Loop()
 		if (GetAsyncKeyState(VK_NEXT))
 			m_hook->setpSel((m_hook->getpSel() + 1) % m_hook->getStats().players.size());	//select previous player
 	}
+
 	else
 	{
 		if (GetAsyncKeyState(VK_F1))

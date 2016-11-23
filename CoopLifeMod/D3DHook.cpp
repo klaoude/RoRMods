@@ -76,8 +76,11 @@ void D3DHook::initD3D(HWND hWnd)
 		&d3dpp,
 		&m_d3ddev);
 
+	m_lmlife = LENGHT - 2* LENGHT /14;
+
 	vHUD();    // call the function to initialize the lifebar
 	
+
 	initFont(); //init font	
 	setlmlife();
 
@@ -117,8 +120,11 @@ void D3DHook::vHUD()
 				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 			}
 
+			for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
+				m_llives.push_back(m_stats.players[i].health * m_lmlife / m_stats.players[i].maxHealth);
+
 			for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines as needed
-				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
+				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
 
 			break;
 	}
@@ -169,14 +175,14 @@ void D3DHook::refreshLife()
 
 
 	for (int i=0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
-		m_llives[i] = m_stats.players[i].health * m_lmlife / m_stats.players[i].maxHealth;
+		m_llives.push_back(m_stats.players[i].health * m_lmlife / m_stats.players[i].maxHealth);
 
 	for (int i = 0; i < 6*m_stats.players.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
 		m_vertices.pop_back();
 
 	//TODO: dependence on m_scale
 	for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines as needed
-		addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i - 1); //HEALTH
+		addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
 
 
 
@@ -195,6 +201,9 @@ void D3DHook::refreshLife()
 
 void D3DHook::textHud()
 {
+	m_pSel = 0;
+
+
 	int lifeyoff = WIDTH +15.0f;
 
 	RECT container = { 0, 0, 0, 0 }; //container for outline

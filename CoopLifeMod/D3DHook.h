@@ -135,7 +135,7 @@ private:
 	float m_lmlife; //max lenght of health value
 	float m_llife; //lenght of current health value
 
-	int m_pSel; //player currently selected (from which stats will be drawn
+	int m_pSel = 0; //player currently selected (from which stats will be drawn
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
 	int m_item, m_pause, m_scale;
