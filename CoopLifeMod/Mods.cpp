@@ -98,7 +98,7 @@ void Mods::fixHealth()
 		m_stats.health = m_stableHealth;
 }
 
-void Mods::fixStat(std::vector<double>& vector, double stats)
+void Mods::fixStat(std::vector<double>& vector, double& stats)
 {
 	if (vector.size() > 20)
 		vector.erase(vector.begin());
