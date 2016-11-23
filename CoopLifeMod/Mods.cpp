@@ -23,7 +23,8 @@ void Mods::Init()
 void Mods::Loop()
 {
 	if (m_isConnect)
-	{
+	{	
+		int pause = m_mem.GetDouble(pause_offsets);
 		Player p;
 		std::vector<Player> ps;
 		ShowHUD();
@@ -31,6 +32,7 @@ void Mods::Loop()
 		ps.push_back(p);
 		Data dt = { ps };
 		m_hook->setStats(dt);
+		m_hook->setpause(pause);
 
 		if (GetAsyncKeyState(VK_PRIOR))
 			m_hook->setpSel((m_hook->getpSel() - 1) % m_hook->getStats().players.size()); //select next player
