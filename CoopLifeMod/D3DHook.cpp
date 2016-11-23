@@ -24,7 +24,7 @@ void D3DHook::render()
 	
 
 	if (!m_solo ) //draw howto if...
-		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect | F3 to dismiss", m_pFontDefault, DT_CENTER);
+		DrawTextString(m_width / 2 - 150, m_height / 15, 100, 300, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect | F3 to dismiss", m_pFontDefault, DT_CENTER);
 		
 	refreshLife(); //Refresh lenght of lifebar according to current health
 
@@ -45,6 +45,7 @@ void D3DHook::render()
 		if (!m_solo) m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
 		textHud();
 	}
+
 
 	m_d3ddev->EndScene();    // ends the 3D scene
 
@@ -204,7 +205,7 @@ void D3DHook::textHud()
 	m_pSel = 0;
 
 
-	int lifeyoff = WIDTH +15.0f;
+	int yoff = WIDTH +15.0f;
 
 	RECT container = { 0, 0, 0, 0 }; //container for outline
 
@@ -222,11 +223,11 @@ void D3DHook::textHud()
 	{
 		for (int i = 0; i < m_stats.players.size(); i++) //draw life and level of each existing player
 		{
-			DrawOutline(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
-			DrawTextString(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
+			DrawOutline(7.0f, 100.0f + i * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
+			DrawTextString(7.0f, 100.0f + i * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
 
-			DrawOutline(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
-			DrawTextString(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+			DrawOutline(8, 100 + i * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
+			DrawTextString(8, 100 + i * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
 		}
 	}
 
@@ -234,7 +235,7 @@ void D3DHook::textHud()
 	DrawOutline(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, container);
 	DrawTextString(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 192, 192, 192), item.str().c_str(), m_pFontSmall, DT_LEFT);
 
-	int yoff = 1; //index of stat
+	yoff = 1; //index of stat
 	float height = 18; //space between two stats
 
 	std::ostringstream dmg, rate, crit, regen, strength;
@@ -256,12 +257,19 @@ void D3DHook::textHud()
 	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
 }
 
-void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align)
+void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc/* = false*/)
 {
-	// set container of text
-	RECT container = { x, y, x + w, y + h };
-	// Output the text, center aligned
-	pfont->DrawText(NULL, str, -1, &container, align, color);
+	if (!calc)
+	{
+		RECT container = { x, y, x + w, y + h };
+		pfont->DrawText(NULL, str, -1, &container, align, color); //Output the text
+		return;
+	}
+
+	RECT container = { x, y, 0, 0 };
+	pfont->DrawText(NULL, str, -1, &container, DT_CALCRECT, 0);
+	pfont->DrawText(NULL, str, -1, &container, align, color); //Output the text
+	
 }
 
 void D3DHook::DrawOutline(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, RECT container)

@@ -16,8 +16,8 @@ struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; }; //Vertex structure for
 
 struct Stats
 {
-	int health;
-	int maxHealth;
+	float health;
+	float maxHealth;
 
 	double damage;
 	double attackSpeed;
@@ -63,7 +63,7 @@ public:
 	
 
 	void textHud(); //draw all texts
-	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align); //draw text
+	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc = false); //draw text
 	void DrawOutline(int x, int y, int h, int w, DWORD color, const char * str, LPD3DXFONT pfont, int align, RECT container); //draw outline of a text
 	void error(); //draw error text
 	void info(); //draw info text
