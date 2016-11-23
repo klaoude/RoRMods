@@ -40,7 +40,7 @@ void D3DHook::render()
 		m_info_life--;
 	}
 
-	if (m_mlife > 0) //Draw HUD only if we're in game and not paused
+	if (m_mlife >= 0 && !m_pause) //Draw HUD only if we're in game and not paused
 	{
 		m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
 		textHud();
@@ -116,8 +116,8 @@ void D3DHook::vHUD()
 
 			for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines & backgrounds as needed
 			{
-				addRect(7.0f, i * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 41, 43, 60)); //EXTERNAL OUTLINE
-				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.5f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+				addRect(7.0f, i * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 64, 65, 87)); //EXTERNAL OUTLINE
+				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 			}
 
 			for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
