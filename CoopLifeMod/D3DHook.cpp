@@ -23,8 +23,8 @@ void D3DHook::render()
 	// copy the vertex buffer to the back buffer
 	
 
-	if (true) //draw howto if...
-		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect", m_pFontDefault, DT_CENTER);
+	if (!m_solo ) //draw howto if...
+		DrawTextString(m_width / 2 - 100, m_height / 15, 100, 200, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect | F3 to dismiss", m_pFontDefault, DT_CENTER);
 		
 	refreshLife(); //Refresh lenght of lifebar according to current health
 
@@ -42,7 +42,7 @@ void D3DHook::render()
 
 	if (m_mlife >= 0 && !m_pause) //Draw HUD only if we're in game and not paused
 	{
-		m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
+		if (!m_solo) m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
 		textHud();
 	}
 
@@ -210,7 +210,7 @@ void D3DHook::textHud()
 
 	std::ostringstream life[4], lvl[4], item;
 
-	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life strings to draw
+	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life and level strings to draw
 	{
 		life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
 		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].stats.level;
@@ -218,13 +218,16 @@ void D3DHook::textHud()
 	item << std::fixed << m_item << " ITEMS";
 
 	//LIFE & OUTLINE
-	for (int i = 0; i < m_stats.players.size(); i++) //draw life and level of each existing player
+	if (!m_solo)
 	{
-		DrawOutline(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
-		DrawTextString(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
+		for (int i = 0; i < m_stats.players.size(); i++) //draw life and level of each existing player
+		{
+			DrawOutline(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
+			DrawTextString(7.0f, 100.0f + i * lifeyoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
 
-		DrawOutline(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
-		DrawTextString(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+			DrawOutline(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
+			DrawTextString(8, 100 + i * lifeyoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+		}
 	}
 
 	//ITEMS & OUTLINE

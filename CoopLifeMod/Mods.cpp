@@ -6,6 +6,8 @@ Mods::Mods(HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(
 
 void Mods::Init()
 {
+	m_hook->setSolo(false);
+	
 	Player swag;
 	Stats stat;
 
@@ -45,6 +47,7 @@ void Mods::Loop()
 		{
 			m_net->create(m_mem.GetDouble(portServerOffsets) + 1);
 			m_isConnect = true;
+			m_hook->setSolo(false);
 		}
 		else if (GetAsyncKeyState(VK_F2))
 		{
@@ -54,9 +57,15 @@ void Mods::Loop()
 			//net->conn("90.4.94.161", mem.GetDouble(portClientOffsets) + 1);
 			m_net->conn("127.0.0.1", 1337);
 			m_isConnect = true;
+			m_hook->setSolo(false);
 		}
+		
 	}
 
+	if (GetAsyncKeyState(VK_F3))
+	{
+		m_hook->setSolo(true);
+	}
 	m_hook->render();
 }
 
