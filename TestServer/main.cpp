@@ -10,10 +10,10 @@ int main(int argc, char** argv)
 	stat.attackSpeed = 1;
 	stat.critical = 2;
 	stat.damage = 3;
-	stat.health = 4;
+	stat.health = 1000;
 	stat.item = 5;
 	stat.level = 6;
-	stat.maxHealth = 7;
+	stat.maxHealth = 1000;
 	stat.regeneration = 8;
 	stat.strength = 9;
 

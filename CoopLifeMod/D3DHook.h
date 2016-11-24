@@ -63,7 +63,7 @@ public:
 
 	void textHud(); //draw all texts
 	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc = false); //draw text
-	void DrawOutline(int x, int y, int h, int w, DWORD color, const char * str, LPD3DXFONT pfont, int align, RECT container); //draw outline of a text
+	void DrawOutline(int x, int y, int h, int w, DWORD color, const char * str, LPD3DXFONT pfont, int align, RECT *container, int size = 2); //draw outline of a text
 	void error(); //draw error text
 	void info(); //draw info text
 
@@ -118,7 +118,7 @@ public:
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
-	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall;	//fonts
+	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall, m_pFontNick;	//fonts
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL; //vertex buffer
 	int m_width, m_height; //height & width of window

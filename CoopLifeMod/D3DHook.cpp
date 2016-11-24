@@ -78,8 +78,9 @@ void D3DHook::initD3D(HWND hWnd)
 		&d3dpp,
 		&m_d3ddev);
 
-	m_lmlife = LENGHT - 2* LENGHT /14;
+	m_lmlife = LENGHT - 8*LENGHT /14;
 
+	m_pSel = 0;
 	vHUD();    // call the function to initialize the lifebar
 	
 	setPseudo("ElOne");
@@ -97,6 +98,7 @@ void D3DHook::initFont()
 	D3DXCreateFont(m_d3ddev, 18, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
 	D3DXCreateFont(m_d3ddev, 22, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontStat);
+	D3DXCreateFont(m_d3ddev, 14, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontNick);
 
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefaultSmall);
 	D3DXCreateFont(m_d3ddev, 17, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
@@ -112,6 +114,7 @@ void D3DHook::vHUD()
 	m_llives.clear();
 	m_vertices.clear();
 
+	m_lmlife = LENGHT - 2.5 * WIDTH / 14.0f;
 	addRect(0, 0, 0, 0, D3DCOLOR_ARGB(0, 0, 0, 0));
 
 	float yoff = WIDTH + 15.0f;
@@ -127,7 +130,7 @@ void D3DHook::vHUD()
 				if (m_stats.players[i].pseudo == m_pseudo) continue;
 
 				addRect(7.0f, j * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 64, 65, 87)); //EXTERNAL OUTLINE
-				addRect(7.0f + WIDTH / 14.0f, j * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+				addRect(7.0f + WIDTH / 14.0f, j * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2.5 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 				j++;
 			}
 
@@ -224,20 +227,21 @@ void D3DHook::refreshLife()
 
 void D3DHook::textHud()
 {
-	m_pSel = 0;
 
 
 	int yoff = WIDTH +15.0f;
 
 	RECT container = { 0, 0, 0, 0 }; //container for outline
 
-	std::ostringstream life[4], lvl[4], item;
+	std::ostringstream life[4], lvl[4], pseudo[4], item;
 
 	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life and level strings to draw
 	{
 		life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
 		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].stats.level;
+		pseudo[i] << m_stats.players[i].pseudo;
 	}
+
 	item << std::fixed << m_item << " ITEMS";
 
 	int j = 0;
@@ -249,17 +253,26 @@ void D3DHook::textHud()
 		{
 			if (m_stats.players[i].pseudo == m_pseudo) continue;
 
-			DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
+			DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, &container, 1);
 			DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
 
-			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
-			DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, &container, 1);
+			if (pseudo[i].str() == m_stats.players[m_pSel].pseudo)
+				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, true);
+			else
+				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, true);
+
+			DrawOutline(11 + LENGHT  , 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, &container, 1);
+			if (pseudo[i].str() == m_stats.players[m_pSel].pseudo)
+				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+			else
+				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
 			j++;
 		}
 	}
 
 	//ITEMS & OUTLINE
-	DrawOutline(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, container);
+	DrawOutline(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, &container);
 	DrawTextString(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 192, 192, 192), item.str().c_str(), m_pFontSmall, DT_LEFT);
 
 	yoff = 1; //index of stat
@@ -299,19 +312,19 @@ void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char
 	
 }
 
-void D3DHook::DrawOutline(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, RECT container)
+void D3DHook::DrawOutline(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, RECT *container, int size)
 {	
-	container = { x - 2, y, x + w, y + h }; // set container of text
-	pfont->DrawText(NULL, str, -1, &container, align, color); //left outline
+	*container = { x - size, y, x + w, y + h }; // set container of text
+	pfont->DrawText(NULL, str, -1, container, align, color); //left outline
 
-	container = { x + 2, y, x + w, y + h };	// set container of text
-	pfont->DrawText(NULL, str, -1, &container, align, color);	//right outline
+	*container = { x + size, y, x + w, y + h };	// set container of text
+	pfont->DrawText(NULL, str, -1, container, align, color);	//right outline
 
-	container = { x, y - 2, x + w, y + h };	// set container of text
-	pfont->DrawText(NULL, str, -1, &container, align, color);	//top outline
+	*container = { x, y - size, x + w, y + h };	// set container of text
+	pfont->DrawText(NULL, str, -1, container, align, color);	//top outline
 
-	container = { x, y + 2, x + w, y + h };	// set container of text
-	pfont->DrawText(NULL, str, -1, &container, align, color); //bottom outline
+	*container = { x, y + size, x + w, y + h };	// set container of text
+	pfont->DrawText(NULL, str, -1, container, align, color); //bottom outline
 }
 
 void D3DHook::error()
