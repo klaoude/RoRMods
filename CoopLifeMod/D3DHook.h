@@ -110,8 +110,8 @@ public:
 	//void ipBox(const char *str);
 	//void setIp(char const* str) { m_ip = str; }
 
-	
-	
+	void setIsCon(bool isConnect) { m_isConnect = isConnect; }
+	bool getIsCon() { return m_isConnect; }
 	
 	
 
@@ -143,5 +143,7 @@ private:
 	bool m_Draw, m_solo;
 
 	std::string m_pseudo = "Swag";
+
+	bool m_isConnect;
 
 };

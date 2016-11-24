@@ -61,6 +61,7 @@ void Mods::Loop()
 		{
 			m_net->create(1338);
 			m_isConnect = true;
+			m_hook->setIsCon(m_isConnect);
 			m_hook->setSolo(false);
 			m_isServer = true;
 		}
@@ -72,6 +73,7 @@ void Mods::Loop()
 			m_net->conn("90.4.94.161", m_mem.GetDouble(portClientOffsets) + 1);
 			//m_net->conn("127.0.0.1", 1337);
 			m_isConnect = true;
+			m_hook->setIsCon(m_isConnect);
 			m_hook->setSolo(false);
 		}		
 	}
