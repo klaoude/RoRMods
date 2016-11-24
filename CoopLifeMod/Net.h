@@ -40,6 +40,8 @@ public:
 	void broadcastData();
 	void addInfo(Player p);
 
+	Data getData() { return m_data; }
+
 	void clear();
 
 private:

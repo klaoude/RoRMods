@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 		s = true;
 	}
 	else if(argc == 2 && std::string(argv[1]) == "c")
-		net.conn("127.0.0.1", 1337);
+		net.conn("90.4.94.161", 1338);
 
 	Stats stat;
 	stat.attackSpeed = 1;
@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 	Player p;
 	p.stats = stat;
 	p.isConnected = true;
-	p.pseudo = "ElOne";
+	p.pseudo = "Bots qui nique des méres";
 
 	while (1)
 	{

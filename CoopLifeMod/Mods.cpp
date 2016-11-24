@@ -46,8 +46,8 @@ void Mods::Loop()
 			m_net->recvAllInfo();
 			m_net->addInfo(p);
 			m_net->broadcastData();
-		}
-		
+			m_hook->setStats(m_net->getData());
+		}		
 
 		if (GetAsyncKeyState(VK_PRIOR))
 			m_hook->setpSel((m_hook->getpSel() - 1) % m_hook->getStats().players.size()); //select next player
@@ -58,7 +58,7 @@ void Mods::Loop()
 	{
 		if (GetAsyncKeyState(VK_F1))
 		{
-			m_net->create(1337);
+			m_net->create(1338);
 			m_isConnect = true;
 			m_hook->setSolo(false);
 			m_isServer = true;
@@ -68,8 +68,8 @@ void Mods::Loop()
 			char* ip = m_mem.getChar(ipOffsets, 15);
 			std::string ipStr = std::string(ip);
 			ipStr.resize(15);
-			//net->conn("90.4.94.161", mem.GetDouble(portClientOffsets) + 1);
-			m_net->conn("127.0.0.1", 1337);
+			m_net->conn("90.4.94.161", m_mem.GetDouble(portClientOffsets) + 1);
+			//m_net->conn("127.0.0.1", 1337);
 			m_isConnect = true;
 			m_hook->setSolo(false);
 		}		
