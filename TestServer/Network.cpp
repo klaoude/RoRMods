@@ -1,4 +1,4 @@
-#include "Net.h"
+#include "Network.h"
 
 void split(const std::string &s, char delim, std::vector<std::string> &elems) {
 	std::stringstream ss;
@@ -48,8 +48,8 @@ void Net::ServerThread()
 		{
 			printf("Client Connected !\n");
 			m_clients.push_back(cl);
-		}
-	}
+		}			
+	}	
 }
 
 void Net::conn(std::string ip, int port)
@@ -79,7 +79,7 @@ void Net::sendInfo(Player p)
 
 	std::string dataStr;
 	std::stringstream ss;
-
+		
 	ss << p.isConnected;
 	ss << "|";
 	ss << p.stats.health;
@@ -187,7 +187,7 @@ void Net::broadcastData()
 
 	strcpy(buffer, dataStr.c_str());
 
-	for (auto c : m_clients)
+	for(auto c : m_clients)
 		send(c.socket, buffer, sizeof(buffer), 0);
 }
 
@@ -220,16 +220,4 @@ Data Net::recvData()
 	}
 
 	return data;
-}
-
-void Net::addInfo(Player p)
-{
-	m_data.players.push_back(p);
-}
-
-void Net::clear() 
-{
-	WSACleanup();
-	for (auto &t : m_threads)
-		t.join();
 }

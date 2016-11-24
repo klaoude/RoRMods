@@ -5,7 +5,6 @@
 #include "Net.h"
 #include "Memory.h"
 
-
 typedef std::map<double, int> CounterMap;
 
 class Mods
@@ -46,6 +45,7 @@ private:
 	CounterMap::iterator m_it;
 
 	int m_stableHealth = 1;
-	bool m_isConnect = true;
+	bool m_isConnect = false;
+	bool m_isServer = false;
 };
 

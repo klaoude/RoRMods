@@ -30,6 +30,15 @@ std::vector<LPVOID> damage_offsets =
 	(LPVOID)0x90
 };
 
+std::vector<LPVOID> item_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0x6D0
+};
+
 std::vector<LPVOID> jumpHeight_offsets =
 {
 	(LPVOID)0x005AE468,

@@ -27,14 +27,27 @@ void Mods::Loop()
 	if (m_isConnect)
 	{	
 		int pause = m_mem.GetDouble(pause_offsets);
-		Player p;
-		std::vector<Player> ps;
+		
 		ShowHUD();
+
+		Player p;
 		p.stats = m_stats;
-		ps.push_back(p);
-		Data dt = { ps };
-		m_hook->setStats(dt);
-		m_hook->setpause(pause);
+		p.pseudo = "klaoude";
+
+		if (!m_isServer)
+		{			
+			m_net->sendInfo(p);
+			Data dt = m_net->recvData();
+			m_hook->setStats(dt);
+			m_hook->setpause(pause);
+		}
+		else
+		{
+			m_net->recvAllInfo();
+			m_net->addInfo(p);
+			m_net->broadcastData();
+		}
+		
 
 		if (GetAsyncKeyState(VK_PRIOR))
 			m_hook->setpSel((m_hook->getpSel() - 1) % m_hook->getStats().players.size()); //select next player
@@ -45,9 +58,10 @@ void Mods::Loop()
 	{
 		if (GetAsyncKeyState(VK_F1))
 		{
-			m_net->create(m_mem.GetDouble(portServerOffsets) + 1);
+			m_net->create(1337);
 			m_isConnect = true;
 			m_hook->setSolo(false);
+			m_isServer = true;
 		}
 		else if (GetAsyncKeyState(VK_F2))
 		{
@@ -58,8 +72,7 @@ void Mods::Loop()
 			m_net->conn("127.0.0.1", 1337);
 			m_isConnect = true;
 			m_hook->setSolo(false);
-		}
-		
+		}		
 	}
 
 	if (GetAsyncKeyState(VK_F3))

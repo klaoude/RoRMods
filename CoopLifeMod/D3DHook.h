@@ -42,7 +42,6 @@ struct Data
 	std::vector<Player> players;
 };
 
-
 class D3DHook
 {
 public:
