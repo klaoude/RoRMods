@@ -115,10 +115,10 @@ void Mods::GetStats()
 	m_stats.attackSpeed = m_mem.GetDouble(attackSpeed_offsets);
 	m_stats.strength = m_mem.GetDouble(resistance_offsets);
 	m_stats.regeneration = m_mem.GetDouble(regeneration_offsets);
-	m_stats.critical = 13.37;
-	
-	m_stats.item = 69;
-	m_stats.level = 1337;
+	m_stats.critical = m_mem.GetDouble(crit_offsets);
+
+	m_stats.item = m_mem.GetDouble(item_offsets);
+	m_stats.level = m_mem.GetDouble(level_offsets);
 }
 
 void Mods::fixHealth()

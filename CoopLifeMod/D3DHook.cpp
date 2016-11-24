@@ -110,6 +110,11 @@ void D3DHook::vHUD()
 	{
 		return;
 	}
+	
+
+	for (int i = 0; i < m_stats.players.size(); i++)
+		if (m_stats.players[i].stats.health > m_stats.players[i].stats.maxHealth)
+			m_stats.players[i].stats.health = m_stats.players[i].stats.maxHealth;
 
 	m_llives.clear();
 	m_vertices.clear();
