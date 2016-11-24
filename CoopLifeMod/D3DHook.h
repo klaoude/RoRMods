@@ -102,7 +102,8 @@ public:
 	void setSolo(bool val) { m_solo = val; }
 	bool getSolo() { return m_solo; }
 
-
+	void setPseudo(std::string val) { m_pseudo = val; }
+	std::string getPseudo() { return m_pseudo; }
 	
 
 	//void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
@@ -140,5 +141,7 @@ private:
 	Data m_stats; //structure of every stats
 
 	bool m_Draw, m_solo;
+
+	std::string m_pseudo = "Swag";
 
 };

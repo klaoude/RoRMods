@@ -41,7 +41,7 @@ void D3DHook::render()
 		m_info_life--;
 	}
 
-	if (m_mlife >= 0 && !m_pause) //Draw HUD only if we're in game and not paused
+	if (m_mlife >= 0) //Draw HUD only if we're in game and not paused
 	{
 		if (!m_solo) m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
 		textHud();
@@ -82,7 +82,7 @@ void D3DHook::initD3D(HWND hWnd)
 
 	vHUD();    // call the function to initialize the lifebar
 	
-
+	setPseudo("ElOne");
 	initFont(); //init font	
 	setlmlife();
 
@@ -109,26 +109,40 @@ void D3DHook::vHUD()
 		return;
 	}
 
+	m_llives.clear();
 	m_vertices.clear();
 
-	float yoff = WIDTH + 15.0f;
+	addRect(0, 0, 0, 0, D3DCOLOR_ARGB(0, 0, 0, 0));
 
+	float yoff = WIDTH + 15.0f;
+	int j = 0;
 	switch (m_scale) //set rect. pos. depending to scale
 	{
-		default: //TODO: set pos for each scale
+	
 
+		default: //TODO: set pos for each scale
+	
 			for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines & backgrounds as needed
 			{
-				addRect(7.0f, i * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 64, 65, 87)); //EXTERNAL OUTLINE
-				addRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+				if (m_stats.players[i].pseudo == m_pseudo) continue;
+
+				addRect(7.0f, j * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 64, 65, 87)); //EXTERNAL OUTLINE
+				addRect(7.0f + WIDTH / 14.0f, j * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+				j++;
 			}
 
+			j = 0;
 			for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
-				m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
-
-			for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines as needed
+			{
+				if (m_stats.players[i].pseudo == m_pseudo) continue;
+				m_llives.push_back(m_stats.players[j].stats.health * m_lmlife / m_stats.players[j].stats.maxHealth);
+				j++;
+			}
+			j = 0;
+			for (int i = 0; i < m_llives.size(); i++) //add as many lifebars outlines as needed
+			{
 				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
-
+			}
 			break;
 	}
 
@@ -161,6 +175,7 @@ void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
 
 void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color, int player)
 {
+	if (m_llives.size() == 0) return;
 	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });	//top left
 	m_vertices.push_back({ x + m_llives[player], y, 0.0f, 0.0f, color });	//top right
 	m_vertices.push_back({ x + m_llives[player], y + w, 0.0f, 0.0f, color });	//bottom right
@@ -177,14 +192,19 @@ void D3DHook::refreshLife()
 	m_llife = m_life * m_lmlife / m_mlife; //calc lenght of lifebar
 
 	m_llives.clear();
-	for (int i=0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
-		m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
+	int j = 0;
+	for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
+	{
+		if (m_stats.players[i].pseudo == m_pseudo) continue;
+		m_llives.push_back(m_stats.players[j].stats.health * m_lmlife / m_stats.players[j].stats.maxHealth);
+		j++;
+	}
 
-	for (int i = 0; i < 6*m_stats.players.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
+	for (int i = 0; i < 6*m_llives.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
 		m_vertices.pop_back();
 
 	//TODO: dependence on m_scale
-	for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines as needed
+	for (int i = 0; i < m_llives.size(); i++) //add as many lifebars as needed
 		addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
 
 
@@ -220,16 +240,21 @@ void D3DHook::textHud()
 	}
 	item << std::fixed << m_item << " ITEMS";
 
+	int j = 0;
+
 	//LIFE & OUTLINE
 	if (!m_solo)
 	{
 		for (int i = 0; i < m_stats.players.size(); i++) //draw life and level of each existing player
 		{
-			DrawOutline(7.0f, 100.0f + i * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
-			DrawTextString(7.0f, 100.0f + i * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
+			if (m_stats.players[i].pseudo == m_pseudo) continue;
 
-			DrawOutline(8, 100 + i * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
-			DrawTextString(8, 100 + i * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+			DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, container);
+			DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
+
+			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, container);
+			DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
+			j++;
 		}
 	}
 

@@ -32,7 +32,7 @@ void Mods::Loop()
 
 		Player p;
 		p.stats = m_stats;
-		p.pseudo = "klaoude";
+		p.pseudo = "ElOne";
 
 		if (!m_isServer)
 		{			
