@@ -265,11 +265,11 @@ void D3DHook::textHud()
 			DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, &container, 1);
 			DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
 
-			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, &container, 1);
+			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].c_str(), m_pFontNick, DT_LEFT, &container, 1);
 			if (pseudo[i] == m_stats.players[m_pSel].pseudo)
-				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, true);
+				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), pseudo[i].c_str(), m_pFontNick, DT_LEFT, true);
 			else
-				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, true);
+				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), pseudo[i].c_str(), m_pFontNick, DT_LEFT, true);
 
 			DrawOutline(11 + LENGHT  , 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, &container, 1);
 			if (pseudo[i] == m_stats.players[m_pSel].pseudo)
