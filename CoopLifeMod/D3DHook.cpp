@@ -239,13 +239,16 @@ void D3DHook::textHud()
 
 	RECT container = { 0, 0, 0, 0 }; //container for outline
 
-	std::ostringstream life[4], lvl[4], pseudo[4], item;
+	std::ostringstream life[4], lvl[4], item;
+
+	std::vector<std::string> pseudo;
+
 
 	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life and level strings to draw
 	{
 		life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
 		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].stats.level;
-		pseudo[i] << m_stats.players[i].pseudo;
+		pseudo.push_back(m_stats.players[i].pseudo);
 	}
 
 	item << std::fixed << m_item << " ITEMS";
@@ -263,13 +266,13 @@ void D3DHook::textHud()
 			DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
 
 			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, &container, 1);
-			if (pseudo[i].str() == m_stats.players[m_pSel].pseudo)
+			if (pseudo[i] == m_stats.players[m_pSel].pseudo)
 				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, true);
 			else
 				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), pseudo[i].str().c_str(), m_pFontNick, DT_LEFT, true);
 
 			DrawOutline(11 + LENGHT  , 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, &container, 1);
-			if (pseudo[i].str() == m_stats.players[m_pSel].pseudo)
+			if (pseudo[i] == m_stats.players[m_pSel].pseudo)
 				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
 			else
 				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);

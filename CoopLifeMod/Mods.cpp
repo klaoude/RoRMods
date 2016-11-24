@@ -119,7 +119,7 @@ void Mods::GetStats()
 	m_stats.regeneration = m_mem.GetDouble(regeneration_offsets);
 	m_stats.critical = m_mem.GetDouble(crit_offsets);
 
-	m_stats.item = m_mem.GetDouble(item_offsets);
+	m_stats.item = m_mem.GetDouble(item_offsets)+1;
 	m_stats.level = m_mem.GetDouble(level_offsets);
 }
 
