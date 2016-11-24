@@ -176,25 +176,25 @@ void D3DHook::vHUD()
 
 void D3DHook::addRect(float x, float y, float l, float w, D3DCOLOR color)
 {
-	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });	// top left
-	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });	//top right
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });	//bottom right
+	m_vertices.push_back({ x, y, 0.0f, 1.0f, color });	// top left
+	m_vertices.push_back({ x + l, y, 0.0f, 1.0f, color });	//top right
+	m_vertices.push_back({ x, y + w, 0.0f, 1.0f, color });	//bottom right
 
-	m_vertices.push_back({ x + l, y, 0.0f, 0.0f, color });	// top right
-	m_vertices.push_back({ x + l, y + w, 0.0f, 0.0f, color }); //bottom right
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color });	//bottom left
+	m_vertices.push_back({ x + l, y, 0.0f, 1.0f, color });	// top right
+	m_vertices.push_back({ x + l, y + w, 0.0f, 1.0f, color }); //bottom right
+	m_vertices.push_back({ x, y + w, 0.0f, 1.0f, color });	//bottom left
 }
 
 void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color, int player)
 {
 	if (m_llives.size() == 0) return;
-	m_vertices.push_back({ x, y, 0.0f, 0.0f, color });	//top left
-	m_vertices.push_back({ x + m_llives[player], y, 0.0f, 0.0f, color });	//top right
-	m_vertices.push_back({ x + m_llives[player], y + w, 0.0f, 0.0f, color });	//bottom right
+	m_vertices.push_back({ x, y, 0.0f, 1.0f, color });	//top left
+	m_vertices.push_back({ x + m_llives[player], y, 0.0f, 1.0f, color });	//top right
+	m_vertices.push_back({ x + m_llives[player], y + w, 0.0f, 1.0f, color });	//bottom right
 
-	m_vertices.push_back({ x + m_llives[player], y + w, 0.0f, 0.0f, color });	//bottom right
-	m_vertices.push_back({ x, y + w, 0.0f, 0.0f, color }); //bottom left
-	m_vertices.push_back({ x, y, 0.0f, 0.0f, color }); //top left
+	m_vertices.push_back({ x + m_llives[player], y + w, 0.0f, 1.0f, color });	//bottom right
+	m_vertices.push_back({ x, y + w, 0.0f, 1.0f, color }); //bottom left
+	m_vertices.push_back({ x, y, 0.0f, 1.0f, color }); //top left
 }
 
 void D3DHook::refreshLife()
