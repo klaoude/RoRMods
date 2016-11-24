@@ -47,6 +47,7 @@ void Mods::Loop()
 			m_net->addInfo(p);
 			m_net->broadcastData();
 			m_hook->setStats(m_net->getData());
+			m_hook->setpause(pause);
 		}		
 
 		if (GetAsyncKeyState(VK_PRIOR))

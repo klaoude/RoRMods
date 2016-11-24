@@ -16,6 +16,7 @@ void D3DHook::render()
 	}
 
 	// select which vertex format we are using
+	vHUD();
 	m_d3ddev->SetFVF(CUSTOMFVF);
 
 	// select the vertex buffer to display
@@ -108,6 +109,7 @@ void D3DHook::vHUD()
 		return;
 	}
 
+	m_vertices.clear();
 
 	float yoff = WIDTH + 15.0f;
 
@@ -174,7 +176,7 @@ void D3DHook::refreshLife()
 
 	m_llife = m_life * m_lmlife / m_mlife; //calc lenght of lifebar
 
-
+	m_llives.clear();
 	for (int i=0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
 		m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
 

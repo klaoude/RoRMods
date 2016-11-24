@@ -4,13 +4,7 @@ int main(int argc, char** argv)
 {
 	Net net;
 	bool s = false;
-	if (argc == 1 )//&& std::string(argv[1]) == "s")
-	{
-		net.create(1337);
-		s = true;
-	}
-	else if(argc == 2 && std::string(argv[1]) == "c")
-		net.conn("90.4.94.161", 1338);
+		net.conn("127.0.0.1", 1338);
 
 	Stats stat;
 	stat.attackSpeed = 1;
