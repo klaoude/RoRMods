@@ -24,7 +24,7 @@ void D3DHook::render()
 	// copy the vertex buffer to the back buffer
 	
 
-	if (!m_solo ) //draw howto if...
+	if (!m_solo && !m_isConnect) //draw howto if...
 		DrawTextString(m_width / 2 - 150, m_height / 15, 100, 300, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect | F3 to dismiss", m_pFontDefault, DT_CENTER);
 		
 	refreshLife(); //Refresh lenght of lifebar according to current health
@@ -41,7 +41,7 @@ void D3DHook::render()
 		m_info_life--;
 	}
 
-	if (m_mlife >= 0) //Draw HUD only if we're in game and not paused
+	if (m_mlife >= 0 && !m_pause) //Draw HUD only if we're in game and not paused
 	{
 		if (!m_solo) m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
 		textHud();
@@ -55,6 +55,7 @@ void D3DHook::render()
 
 void D3DHook::initD3D(HWND hWnd)
 {
+	m_isConnect = false;
 	m_d3d = Direct3DCreate9(D3D_SDK_VERSION);    // create the Direct3D interface
 
 	D3DPRESENT_PARAMETERS d3dpp;    // create a struct to hold various device information
