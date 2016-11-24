@@ -87,7 +87,7 @@ void D3DHook::initD3D(HWND hWnd)
 	initFont(); //init font	
 	setlmlife();
 
-	//ipBox("");
+	////ipBox("");
 }
 
 void D3DHook::initFont()
