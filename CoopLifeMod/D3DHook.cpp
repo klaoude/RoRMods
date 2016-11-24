@@ -242,7 +242,7 @@ void D3DHook::textHud()
 	std::ostringstream life[4], lvl[4], item;
 
 	std::vector<std::string> pseudo;
-
+	pseudo.clear();
 
 	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life and level strings to draw
 	{
@@ -260,19 +260,19 @@ void D3DHook::textHud()
 	{
 		for (int i = 0; i < m_stats.players.size(); i++) //draw life and level of each existing player
 		{
-			if (m_stats.players[i].pseudo == m_pseudo) continue;
+			if (m_stats.players[i].pseudo == m_pseudo) continue; //if we're trying to draw our own health & shit
 
 			DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, &container, 1);
 			DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
 
 			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].c_str(), m_pFontNick, DT_LEFT, &container, 1);
-			if (pseudo[i] == m_stats.players[m_pSel].pseudo)
+			if (pseudo[i] == m_stats.players[m_pSel].pseudo) //if we're trying to draw the pseudo from the selected player
 				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), pseudo[i].c_str(), m_pFontNick, DT_LEFT, true);
 			else
 				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), pseudo[i].c_str(), m_pFontNick, DT_LEFT, true);
 
 			DrawOutline(11 + LENGHT  , 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT, &container, 1);
-			if (pseudo[i] == m_stats.players[m_pSel].pseudo)
+			if (pseudo[i] == m_stats.players[m_pSel].pseudo) //if we're trying to draw the level from the selected player
 				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
 			else
 				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
