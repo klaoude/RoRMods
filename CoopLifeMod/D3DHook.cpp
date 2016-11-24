@@ -116,7 +116,7 @@ void D3DHook::vHUD()
 	}
 	
 
-	for (int i = 0; i < m_stats.players.size(); i++)
+	for (int i = 0; i < m_stats.players.size(); i++) //fix life value somtimes going over maxhealth
 		if (m_stats.players[i].stats.health > m_stats.players[i].stats.maxHealth)
 			m_stats.players[i].stats.health = m_stats.players[i].stats.maxHealth;
 
@@ -124,7 +124,7 @@ void D3DHook::vHUD()
 	m_vertices.clear();
 
 	m_lmlife = LENGHT - 2.5 * WIDTH / 14.0f;
-	addRect(0, 0, 0, 0, D3DCOLOR_ARGB(0, 0, 0, 0));
+	addRect(0, 0, 0, 0, D3DCOLOR_ARGB(0, 0, 0, 0)); //do not remove or world will end
 
 	float yoff = WIDTH + 15.0f;
 	int j = 0;
@@ -284,8 +284,8 @@ void D3DHook::textHud()
 	}
 
 	//ITEMS & OUTLINE
-	DrawOutline(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, &container);
-	DrawTextString(39 * m_width / 100, 90.3*m_height / 100, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 192, 192, 192), item.str().c_str(), m_pFontSmall, DT_LEFT);
+	DrawOutline(m_width / 2 - 85 - 78, m_height - 64 - 27 , WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, &container, 1);
+	DrawTextString(m_width / 2 - 85 - 78, m_height - 64 - 27, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), item.str().c_str(), m_pFontSmall, DT_LEFT);
 
 	yoff = 1; //index of stat
 	float height = 18; //space between two stats
@@ -298,15 +298,15 @@ void D3DHook::textHud()
 	regen << "REGEN:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.regeneration;
 	strength << "STRENGTH:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.strength;
 
-	DrawTextString(75.75 * m_width/100, 14.0f*m_height / 100  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width/100, 116.0f  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++
-	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 116.0f + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 116.0f + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 116.0f + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
 	yoff++;
-	DrawTextString(75.75 * m_width / 100, 14.0f*m_height / 100 + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
+	DrawTextString(75.75 * m_width / 100, 116.0f + yoff * height, height, m_width / 5, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc/* = false*/)
