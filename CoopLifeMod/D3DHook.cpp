@@ -41,9 +41,12 @@ void D3DHook::render()
 		m_info_life--;
 	}
 
-	if (m_mlife >= 0 && !m_pause) //Draw HUD only if we're in game and not paused
+	if (m_mlife >= 0) //Draw HUD only if we're in game and not paused
 	{
-		if (!m_solo) m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
+		if (!m_solo)
+			m_d3ddev->DrawPrimitive(D3DPT_TRIANGLELIST, 0, m_vertices.size() / 3);
+		else
+			m_stats.players[0].stats = m_plStats;
 		textHud();
 	}
 

@@ -83,7 +83,12 @@ void Mods::Loop()
 	if (GetAsyncKeyState(VK_F3))
 	{
 		m_hook->setSolo(true);
+		GetStats();
 	}
+
+	if (m_hook->getSolo())
+		ShowHUD();
+
 	m_hook->render();
 }
 
@@ -108,6 +113,7 @@ void Mods::ShowHUD()
 	fixStat(m_items, (double&)m_stats.item);
 
 	m_hook->setStat(m_stats);
+	m_hook->setplStats(m_stats);
 }
 
 void Mods::GetStats()

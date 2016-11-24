@@ -113,7 +113,7 @@ public:
 	void setIsCon(bool isConnect) { m_isConnect = isConnect; }
 	bool getIsCon() { return m_isConnect; }
 	
-	
+	void setplStats(Stats stats) { m_plStats = stats; }
 
 
 private:
@@ -139,7 +139,7 @@ private:
 	std::vector<float> m_llives; //array of the lenght of every player's lifebars
 
 	Data m_stats; //structure of every stats
-
+	Stats m_plStats; //own stats;
 	bool m_Draw, m_solo;
 
 	std::string m_pseudo = "Swag";
