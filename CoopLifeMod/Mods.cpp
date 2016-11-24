@@ -20,6 +20,8 @@ void Mods::Init()
 	m_net = new Net(m_hook);
 
 	m_mem.Open("Risk of Rain");
+
+	m_hook->setPseudo(m_pseudo);
 }
 
 void Mods::Loop()
@@ -32,7 +34,7 @@ void Mods::Loop()
 
 		Player p;
 		p.stats = m_stats;
-		p.pseudo = "ElOne";
+		p.pseudo = m_pseudo;
 
 		if (!m_isServer)
 		{			
@@ -70,7 +72,7 @@ void Mods::Loop()
 			char* ip = m_mem.getChar(ipOffsets, 15);
 			std::string ipStr = std::string(ip);
 			ipStr.resize(15);
-			m_net->conn("90.4.94.161", m_mem.GetDouble(portClientOffsets) + 1);
+			m_net->conn(m_ipAddr, m_mem.GetDouble(portClientOffsets) + 1);
 			//m_net->conn("127.0.0.1", 1337);
 			m_isConnect = true;
 			m_hook->setIsCon(m_isConnect);

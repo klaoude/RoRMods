@@ -9,13 +9,31 @@ const char* value = "Risk of Rain";
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
+char* ReadString(char* szSection, char* szKey, const char* szDefaultValue)
+{
+	char* szResult = new char[255];
+	memset(szResult, 0x00, 255);
+	GetPrivateProfileString(szSection, szKey,
+		szDefaultValue, szResult, 255, "./Resources/config.ini");
+	return szResult;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
 	MSG msg;
-
 	Mods mod(hWnd, s_width, s_height);
+
+
+	std::string pseudo, ip;
+	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
+	ip = ReadString("options", "ip", "ip not defined"); //read ip from .ini
+	mod.setIP(ip);
+	mod.setPseudo(pseudo);
+	
+
+
 	mod.Init();
 
 	while (TRUE)

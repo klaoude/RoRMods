@@ -18,6 +18,9 @@ public:
 
 	void Stop();
 
+	void setIP(std::string val) { m_ipAddr = val; }
+	void setPseudo(std::string val) { m_pseudo = val; }
+
 private:
 	void ShowHUD();
 	void GetStats();
@@ -43,7 +46,7 @@ private:
 	std::vector<double> m_items;
 	CounterMap m_counts;
 	CounterMap::iterator m_it;
-
+	std::string m_ipAddr, m_pseudo;
 	int m_stableHealth = 1;
 	bool m_isConnect = false;
 	bool m_isServer = false;
