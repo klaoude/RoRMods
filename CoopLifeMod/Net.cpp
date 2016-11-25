@@ -98,6 +98,8 @@ void Net::sendInfo(Player p)
 	ss << "|";
 	ss << p.stats.level;
 	ss << "|";
+	ss << p.stats.item;
+	ss << "|",
 	ss << p.pseudo;
 
 	dataStr = ss.str();
@@ -146,7 +148,8 @@ Player Net::recvInfo(Client c)
 		player.stats.regeneration = atof(infoSplited[6].c_str());
 		player.stats.strength = atof(infoSplited[7].c_str());
 		player.stats.level = atof(infoSplited[8].c_str());
-		player.pseudo = infoSplited[9];
+		player.stats.item = atof(infoSplited[9].c_str());
+		player.pseudo = infoSplited[10];
 
 		return player;
 	}
@@ -179,6 +182,8 @@ void Net::broadcastData()
 		ss << i.stats.strength;
 		ss << "|";
 		ss << i.stats.level;
+		ss << "|";
+		ss << i.stats.item;
 		ss << "|";
 		ss << i.pseudo;
 	}
@@ -215,7 +220,8 @@ Data Net::recvData()
 		player.stats.regeneration = atof(infoSplited[6].c_str());
 		player.stats.strength = atof(infoSplited[7].c_str());
 		player.stats.level = atof(infoSplited[8].c_str());
-		player.pseudo = infoSplited[9];
+		player.stats.item = atof(infoSplited[9].c_str());
+		player.pseudo = infoSplited[10];
 		data.players.push_back(player);
 	}
 
