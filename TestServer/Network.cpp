@@ -220,7 +220,8 @@ Data Net::recvData()
 		player.stats.regeneration = atof(infoSplited[6].c_str());
 		player.stats.strength = atof(infoSplited[7].c_str());
 		player.stats.level = atof(infoSplited[8].c_str());
-		player.pseudo = infoSplited[9];
+		player.stats.item = atof(infoSplited[9].c_str());
+		player.pseudo = infoSplited[10];
 		data.players.push_back(player);
 	}
 
