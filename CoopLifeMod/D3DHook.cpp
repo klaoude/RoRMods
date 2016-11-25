@@ -147,7 +147,7 @@ void D3DHook::vHUD()
 			for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
 			{
 				if (m_stats.players[i].pseudo == m_pseudo) continue;
-				m_llives.push_back(m_stats.players[j].stats.health * m_lmlife / m_stats.players[j].stats.maxHealth);
+				m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
 				j++;
 			}
 			j = 0;

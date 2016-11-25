@@ -25,30 +25,17 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	MSG msg;
 	Mods mod(hWnd, s_width, s_height);
 
-
 	std::string pseudo, ip;
 	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
 	ip = ReadString("options", "ip", "ip not defined"); //read ip from .ini
 	mod.setIP(ip);
 	mod.setPseudo(pseudo);
 	
-
-
 	mod.Init();
 
 	while (TRUE)
 	{			
 		mod.Loop();
-
-		//	Data data;
-		//	Player p;
-		//	p.isConnected = true;
-		//	p.health = stableHealth;
-		//	p.maxHealth = maxHealth;
-		//	data.players.push_back(p);
-
-		//	net.sendData(data);
-		//	//data = net.recvData();
 
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
@@ -65,8 +52,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 			mod.Stop();
 			exit(0);
-		}
-			
+		}			
 
 		Sleep(10);
 	}
