@@ -284,9 +284,9 @@ void D3DHook::textHud()
 
 			DrawOutline(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT, &container, 1);
 			if (pseudo[i] == m_stats.players[m_pSel].pseudo) //if we're trying to draw the level from the selected player
-				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT);
+				DrawTextString(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT);
 			else
-				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT);
+				DrawTextString(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT);
 
 			j++;
 		}
