@@ -37,7 +37,12 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{			
 		mod.Loop();
 
-		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		RECT rc;
+		HWND wnd = FindWindow(NULL, value);
+		if (wnd != NULL)
+			GetWindowRect(wnd, &rc);
+
+		SetWindowPos(hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);
 
 		if (!FindWindow(NULL, value))
 			ExitProcess(1337);	

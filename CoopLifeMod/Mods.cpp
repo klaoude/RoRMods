@@ -24,6 +24,14 @@ void Mods::Init()
 	m_mem.Open("Risk of Rain");
 
 	m_hook->setPseudo(m_pseudo);
+
+	std::stringstream ss;
+	ss << m_mem.getChar(version_offsets, 6);
+	ss << " | ";
+	ss << m_hook->getHeight();
+	ss << " | ";
+	ss << m_hook->getWidth();
+	MessageBox(NULL, ss.str().c_str(), "Debug", NULL);
 }
 
 void Mods::Loop()

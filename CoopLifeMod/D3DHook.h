@@ -48,6 +48,9 @@ public:
 	D3DHook();
 	D3DHook(int width, int height) { m_width = width; m_height = height; WIDTH = height / 40.0f; LENGHT = WIDTH * 5.0f; }
 	
+	int getHeight() { return m_height; }
+	int getWidth() { return m_width; }
+
 	void render(); //draw everything
 	void initD3D(HWND hWnd);
 	
