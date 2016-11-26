@@ -60,7 +60,7 @@ public:
 	void vHUD(bool init = false); //draw rectangles
 	void addRect(float x, float y, float l, float w, D3DCOLOR color); //ad rectangle to draw
 	void addLifeRect(float x, float y, float w, D3DCOLOR color, int player); //add lifebar
-	void refreshLife(); //refresh lifebar lenght
+	void refreshLife(bool init); //refresh lifebar lenght
 
 	
 
