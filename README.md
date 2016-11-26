@@ -22,7 +22,7 @@ https://github.com/klaoude/RoRMods/releases
 ###REQUIREMENTS
 1. **Play in windowed mod**, our mod isn't working in fullscreen (we're working on it but it might never come, if someone knows how to properly hook Directx9, give us a call)
 
-2. Mod looks better with 16:9 aspect ratio (HUD will show at the right places), but you can use any other aspect ratio you want, just be prepared that the HUD might be slightly off in terms of position.
+2. Mod looks better with 16:9 aspect ratio (HUD will show at the right places), but you can use any other aspect ratio you want, just be prepared that the HUD might be slightly off in terms of position. (same thing for the scale, 2x scale is nice, other are working but placement isn't nice)
 
 3. **if you move the game's window, the mod doesn't move with it**, be careful with that. (we're working on that too)
 
