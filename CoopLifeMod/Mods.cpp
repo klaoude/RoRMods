@@ -15,6 +15,7 @@ void Mods::Init()
 	std::vector<Player> moreSwag;
 	moreSwag.push_back(swag);
 	Data swagOverflow = { moreSwag };
+	m_hook->setStat(stat);
 	m_hook->setStats(swagOverflow);
 	m_hook->setMod(1);
 	m_hook->initD3D(m_hWnd);
@@ -118,6 +119,7 @@ void Mods::ShowHUD()
 	fixStat(m_levels, m_stats.level);
 	fixStat(m_items, m_stats.item);
 
+	m_hook->setStat(m_stats);
 	m_hook->setplStats(m_stats);
 }
 
