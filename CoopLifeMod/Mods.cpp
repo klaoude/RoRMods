@@ -69,7 +69,7 @@ void Mods::Loop()
 	}
 	else
 	{
-		if (GetAsyncKeyState(VK_F1))
+		if (GetAsyncKeyState(0x31))
 		{
 			m_net->create(1338);
 			m_isConnect = true;
@@ -77,7 +77,7 @@ void Mods::Loop()
 			m_hook->setSolo(false);
 			m_isServer = true;
 		}
-		else if (GetAsyncKeyState(VK_F2))
+		else if (GetAsyncKeyState(0x32))
 		{
 			char* ip = m_mem.getChar(ipOffsets, 15);
 			std::string ipStr = std::string(ip);
@@ -90,13 +90,13 @@ void Mods::Loop()
 		}		
 	}
 
-	if (GetAsyncKeyState(VK_F3))
+	if (GetAsyncKeyState(0x33))
 	{
 		m_hook->setSolo(true);
 		GetStats();
 	}
 
-	if (GetAsyncKeyState(VK_F8))
+	if (GetAsyncKeyState(0x38))
 	{
 		m_hook->getMod() ? m_hook->setMod(0) : m_hook->setMod(1);
 	}
