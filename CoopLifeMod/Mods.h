@@ -20,6 +20,8 @@ public:
 
 	void setIP(std::string val) { m_ipAddr = val; }
 	void setPseudo(std::string val) { m_pseudo = val; }
+	int stk(std::string input); //string to key
+	void setkeys(int host, int join, int solo, int toggle, int statup, int statdown);
 
 private:
 	void ShowHUD();
@@ -29,6 +31,7 @@ private:
 	void fixStat(std::vector<double>& vector, double& stats);
 	void fixStat(std::vector<double>& vector, float& stats);
 	void fixStat(std::vector<double>& vector, int& stats);
+	
 
 	HWND m_hWnd;
 	D3DHook* m_hook;
@@ -52,5 +55,7 @@ private:
 	int m_stableHealth = 1;
 	bool m_isConnect = false;
 	bool m_isServer = false;
+
+	int m_host, m_join, m_solo, m_toggle, m_statup, m_statdown;
 };
 
