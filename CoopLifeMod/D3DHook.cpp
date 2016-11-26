@@ -217,7 +217,7 @@ void D3DHook::refreshLife()
 	for (int i = 0; i < m_llives.size(); i++) //add as many lifebars as needed
 	{
 		if (m_llives[i] < 0.25*m_lmlife)
-			addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 255, 255, 255), i); //HEALTH
+			addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 255, 0, 0), i); //HEALTH
 		else
 			addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
 	}
