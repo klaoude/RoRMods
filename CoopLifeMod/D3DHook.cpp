@@ -17,7 +17,6 @@ void D3DHook::render()
 
 	// select which vertex format we are using
 	vHUD();
-	refreshLife();
 	m_d3ddev->SetFVF(CUSTOMFVF);
 
 	// select the vertex buffer to display
@@ -86,7 +85,6 @@ void D3DHook::initD3D(HWND hWnd)
 	m_pSel = 0;
 
 	vHUD(true);    // call the function to initialize the lifebar
-	refreshLife();
 	
 	
 	initFont(); //init font	
@@ -141,7 +139,7 @@ void D3DHook::vHUD(bool init /*=false*/)
 			}
 
 			j = 0;
-			refreshLife();
+			refreshLife(init);
 	}
 
 	// create a vertex buffer interface called m_vbuffer
@@ -183,7 +181,7 @@ void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color, int player)
 	m_vertices.push_back({ x, y, 0.0f, 1.0f, color }); //top left
 }
 
-void D3DHook::refreshLife()
+void D3DHook::refreshLife(bool init)
 {
 
 	int yoff = WIDTH + 15.0f; //y-axis offset
