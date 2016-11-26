@@ -7,6 +7,13 @@ void D3DHook::render()
 	m_d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_ARGB(0, 0, 0, 0), 1.0f, 0);
 
 	m_d3ddev->BeginScene();    // begins the 3D scene
+	
+	if (!m_mod) //if mod is disabled
+	{
+		m_d3ddev->EndScene();    // ends the 3D scene
+		m_d3ddev->Present(NULL, NULL, NULL, NULL);
+		return;
+	}
 
 	if (!m_Draw || m_stats.players.size() == 0) //toggle mod
 	{
@@ -291,7 +298,7 @@ void D3DHook::textHud()
 
 	dmg << "DMG:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.damage;
 	rate << "FIRERATE:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.attackSpeed;
-	crit << "CRIT:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.critical;
+	crit << "CRIT:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.critical << "%";
 	regen << "REGEN:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.regeneration;
 	strength << "STRENGTH:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.strength;
 

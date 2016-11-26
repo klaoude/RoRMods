@@ -15,7 +15,7 @@ void Mods::Init()
 	moreSwag.push_back(swag);
 	Data swagOverflow = { moreSwag };
 	m_hook->setStats(swagOverflow);
-
+	m_hook->setMod(1);
 	m_hook->initD3D(m_hWnd);
 	m_net = new Net(m_hook);
 
@@ -84,6 +84,11 @@ void Mods::Loop()
 	{
 		m_hook->setSolo(true);
 		GetStats();
+	}
+
+	if (GetAsyncKeyState(VK_F8))
+	{
+		m_hook->getMod() ? m_hook->setMod(0) : m_hook->setMod(1);
 	}
 
 	if (m_hook->getSolo())

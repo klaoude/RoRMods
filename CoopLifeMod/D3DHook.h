@@ -115,6 +115,9 @@ public:
 	
 	void setplStats(Stats stats) { m_plStats = stats; }
 
+	void setMod(bool mod) { m_mod = mod; }
+	bool getMod() { return m_mod; }
+
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
@@ -144,7 +147,7 @@ private:
 
 	std::string m_pseudo = "Swag";
 
-	bool m_isConnect;
+	bool m_isConnect, m_mod;
 
 
 };
