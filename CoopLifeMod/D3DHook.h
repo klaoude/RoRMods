@@ -70,8 +70,15 @@ public:
 	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
 	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }
 
+	void setStat(Stats stats);
 
+	void setdmg(float dmg) { m_dmg = dmg;  }
+	void setrate(float firerate) { m_firerate = firerate; }
+	void setcrit(float crit) { m_crit = crit; }
+	void setregen(float regen) { m_regen = regen; }
+	void setstrength(float strength) { m_strength = strength; }
 	void setitem(int nb) { m_item = nb; }
+	void setlvl(float lvl) { m_lvl = lvl; }
 
 	void setlife(float life) { m_life = life; }
 	void setmlife(float mlife) { m_mlife = mlife; }
@@ -122,7 +129,7 @@ private:
 
 	int m_pSel = 0; //player currently selected (from which stats will be drawn
 
-	float m_life, m_mlife;
+	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
 	int m_item, m_pause, m_scale;
 	const char* m_error, *m_info, *m_ip;
 
