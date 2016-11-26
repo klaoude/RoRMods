@@ -14,6 +14,8 @@
 
 4. You can toggle off the mod so nothing on your screen is changed. (Teammates will still receive your stats)
 
+##DOWNLOAD
+https://github.com/klaoude/RoRMods/releases
 
 ##HOW TO USE
 
