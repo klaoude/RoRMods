@@ -26,7 +26,7 @@ https://github.com/klaoude/RoRMods/releases
 
 3. **if you move the game's window, the mod doesn't move with it**, be careful with that. (we're working on that too)
 
-4. Open the port succeeding RoR port you're playing on. (if you're using 1337 for RoR, open 1338 for our Mod)
+4. The host of the mod must open the port succeeding RoR port you're playing on. (if you're using 1337 for RoR, open 1338 for our Mod)
 
 ###config.ini
 The config file should look like this:
