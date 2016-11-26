@@ -15,13 +15,6 @@ void D3DHook::render()
 		return;
 	}
 
-	if (!m_Draw || m_stats.players.size() == 0) //toggle mod
-	{
-		m_d3ddev->EndScene();    // ends the 3D scene
-		m_d3ddev->Present(NULL, NULL, NULL, NULL);
-		return;
-	}
-
 	// select which vertex format we are using
 	vHUD();
 	refreshLife();

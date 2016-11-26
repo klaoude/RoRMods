@@ -1,6 +1,5 @@
 #include "Mods.h"
 #include "Offsets.h"
-#include <math.h>
 
 Mods::Mods(HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(width, height))
 {}
@@ -147,13 +146,10 @@ void Mods::fixHealth()
 
 void Mods::fixStat(std::vector<double>& vector, double& stats)
 {
-	if (isnan(stats))
-		return;
-
 	if (vector.size() > 20)
 		vector.erase(vector.begin());
 
-	if (stats > 0)
+	if (stats > 0.00000001)
 		vector.push_back(stats);
 
 	if (vector.size() > 19)
