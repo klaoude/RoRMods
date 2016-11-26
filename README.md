@@ -35,9 +35,9 @@ ip = theIpAddressUsedInRoR
 ```
 
 ###INSTRUCTIONS
-When you launch the mod, texts appears at the top of the game's window. Follow the instructions, press F1 to host the server of the mod, F2 to join a server, F3 do dismiss this text and play solo.  
+When you launch the mod, texts appears at the top of the game's window. Follow the instructions, press **F1 to host** the server of the mod, **F2 to join** a server, **F3 do dismiss** this text and play solo.  
 
-To toggle On/Off the mod, press F8.
+To **toggle** On/Off the mod, press **F8**.  
 
-
+To cycle through the stats of all the player, use **Page Up** and **Page Down** keys. The highlighted player (yellow nickname, items and lvl) is whom the stats are from. If no one is highlighted, the stats are yours. 
 
