@@ -63,7 +63,7 @@ void Mods::Loop()
 	{
 		if (GetAsyncKeyState(m_host))
 		{
-			m_net->create(1338);
+			m_net->create(m_mem.GetDouble(portServerOffsets) + 1);
 			m_isConnect = true;
 			m_hook->setIsCon(m_isConnect);
 			m_hook->setSolo(false);
@@ -75,7 +75,6 @@ void Mods::Loop()
 			std::string ipStr = std::string(ip);
 			ipStr.resize(15);
 			m_net->conn(m_ipAddr, m_mem.GetDouble(portClientOffsets) + 1);
-			//m_net->conn("127.0.0.1", 1337);
 			m_isConnect = true;
 			m_hook->setIsCon(m_isConnect);
 			m_hook->setSolo(false);
