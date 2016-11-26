@@ -149,7 +149,7 @@ void Mods::fixStat(std::vector<double>& vector, double& stats)
 	if (vector.size() > 20)
 		vector.erase(vector.begin());
 
-	if (stats > 0)
+	if (stats >= 0.00000001)
 		vector.push_back(stats);
 
 	if (vector.size() > 19)
