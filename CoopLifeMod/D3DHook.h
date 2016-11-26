@@ -54,7 +54,7 @@ public:
 	void initFont(); //create fonts
 	
 
-	void vHUD(); //draw rectangles
+	void vHUD(bool init = false); //draw rectangles
 	void addRect(float x, float y, float l, float w, D3DCOLOR color); //ad rectangle to draw
 	void addLifeRect(float x, float y, float w, D3DCOLOR color, int player); //add lifebar
 	void refreshLife(); //refresh lifebar lenght
@@ -145,5 +145,6 @@ private:
 	std::string m_pseudo = "Swag";
 
 	bool m_isConnect;
+
 
 };

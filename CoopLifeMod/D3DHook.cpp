@@ -17,6 +17,7 @@ void D3DHook::render()
 
 	// select which vertex format we are using
 	vHUD();
+	refreshLife();
 	m_d3ddev->SetFVF(CUSTOMFVF);
 
 	// select the vertex buffer to display
@@ -26,8 +27,6 @@ void D3DHook::render()
 
 	if (!m_solo && !m_isConnect) //draw howto if...
 		DrawTextString(m_width / 2 - 150, m_height / 15, 100, 300, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect | F3 to dismiss", m_pFontDefault, DT_CENTER);
-		
-	refreshLife(); //Refresh lenght of lifebar according to current health
 
 	if (m_err_life > 0) //Draw error if counter is still relevent
 	{
@@ -50,7 +49,7 @@ void D3DHook::render()
 		textHud();
 	}
 
-
+	m_vbuffer->Release();
 	m_d3ddev->EndScene();    // ends the 3D scene
 
 	m_d3ddev->Present(NULL, NULL, NULL, NULL);   // displays the created frame on the screen
@@ -85,7 +84,10 @@ void D3DHook::initD3D(HWND hWnd)
 	m_lmlife = LENGHT - 8*LENGHT /14;
 
 	m_pSel = 0;
-	vHUD();    // call the function to initialize the lifebar
+
+	vHUD(true);    // call the function to initialize the lifebar
+	refreshLife();
+	
 	
 	setPseudo("ElOne");
 	initFont(); //init font	
@@ -108,12 +110,10 @@ void D3DHook::initFont()
 	D3DXCreateFont(m_d3ddev, 17, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
 }
 
-void D3DHook::vHUD()
+void D3DHook::vHUD(bool init /*=false*/)
 {	
 	if (m_stats.players.size() == 0)
-	{
 		return;
-	}
 	
 
 	for (int i = 0; i < m_stats.players.size(); i++) //fix life value somtimes going over maxhealth
@@ -151,25 +151,23 @@ void D3DHook::vHUD()
 				j++;
 			}
 			j = 0;
-			for (int i = 0; i < m_llives.size(); i++) //add as many lifebars outlines as needed
-			{
-				addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
-			}
-			break;
+			refreshLife();
 	}
 
 
 
 	// create a vertex buffer interface called m_vbuffer
-	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
+	if (init)
+		m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
+
+
 
 	VOID* pVoid;	// a void pointer
 
 	CUSTOMVERTEX array[100];
 	std::copy(m_vertices.begin(), m_vertices.end(), array);	//creating array with content of m_vertices to ease cast in memcpy()
-
-	// lock m_vbuffer and load the vertices into it
-	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);
+	
+	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);	// lock m_vbuffer and load the vertices into it
 	memcpy(pVoid, array, 20*m_vertices.size());
 	m_vbuffer->Unlock();
 }
@@ -199,6 +197,7 @@ void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color, int player)
 
 void D3DHook::refreshLife()
 {
+
 	int yoff = WIDTH + 15.0f; //y-axis offset
 
 	m_llife = m_life * m_lmlife / m_mlife; //calc lenght of lifebar
@@ -221,17 +220,6 @@ void D3DHook::refreshLife()
 
 
 
-	// create a vertex buffer interface called m_vbuffer
-	m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
-
-	VOID* pVoid;    // a void pointer
-
-	CUSTOMVERTEX array[100];
-	std::copy(m_vertices.begin(), m_vertices.end(), array);
-	// lock m_vbuffer and load the vertices into it
-	m_vbuffer->Lock(0, 0, (void**)&pVoid, 0);
-	memcpy(pVoid, array, 20 * m_vertices.size());
-	m_vbuffer->Unlock();
 }
 
 void D3DHook::textHud()
