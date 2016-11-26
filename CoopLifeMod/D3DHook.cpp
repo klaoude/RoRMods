@@ -96,7 +96,6 @@ void D3DHook::initD3D(HWND hWnd)
 	refreshLife();
 	
 	
-	setPseudo("ElOne");
 	initFont(); //init font	
 	setlmlife();
 
@@ -150,13 +149,6 @@ void D3DHook::vHUD(bool init /*=false*/)
 				j++;
 			}
 
-			j = 0;
-			for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
-			{
-				if (m_stats.players[i].pseudo == m_pseudo) continue;
-				m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
-				j++;
-			}
 			j = 0;
 			refreshLife();
 	}
@@ -214,7 +206,7 @@ void D3DHook::refreshLife()
 	for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
 	{
 		if (m_stats.players[i].pseudo == m_pseudo) continue;
-		m_llives.push_back(m_stats.players[j].stats.health * m_lmlife / m_stats.players[j].stats.maxHealth);
+		m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
 		j++;
 	}
 
@@ -223,8 +215,12 @@ void D3DHook::refreshLife()
 
 	//TODO: dependence on m_scale
 	for (int i = 0; i < m_llives.size(); i++) //add as many lifebars as needed
-		addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
-
+	{
+		if (m_llives[i] < 0.25*m_lmlife)
+			addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 255, 255, 255), i); //HEALTH
+		else
+			addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
+	}
 
 
 }
