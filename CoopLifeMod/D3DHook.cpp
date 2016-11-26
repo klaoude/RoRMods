@@ -344,19 +344,6 @@ void D3DHook::info()
 	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));	//draw text
 }
 
-void D3DHook::setStat(Stats stats)
-{
-	setdmg(stats.damage);
-	setrate(stats.attackSpeed);
-	setcrit(stats.critical);
-	setregen(stats.regeneration);
-	setstrength(stats.strength);
-	setitem(stats.item);
-	setlvl(stats.level);
-	setlife(stats.health);
-	setmlife(stats.maxHealth);
-}
-
 /*
 void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)
 {
