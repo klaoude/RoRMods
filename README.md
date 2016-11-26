@@ -33,7 +33,7 @@ The config file should look like this:
 ```
 [options]
 nickname = YourNickNameHere
-ip = theIpAddressUsedInRoR
+ip = theIpAddressofTheGuyHosting
 ```
 
 ###INSTRUCTIONS
