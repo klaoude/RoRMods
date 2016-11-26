@@ -115,38 +115,34 @@ void D3DHook::vHUD(bool init /*=false*/)
 		return;
 	
 
-	for (int i = 0; i < m_stats.players.size(); i++) //fix life value somtimes going over maxhealth
+	for (auto i = 0; i < m_stats.players.size(); i++) //fix life value somtimes going over maxhealth
 		if (m_stats.players[i].stats.health > m_stats.players[i].stats.maxHealth)
 			m_stats.players[i].stats.health = m_stats.players[i].stats.maxHealth;
 
 	m_llives.clear();
 	m_vertices.clear();
 
-	m_lmlife = LENGHT - 2.5 * WIDTH / 14.0f;
+	m_lmlife = LENGHT - 2.5f * WIDTH / 14.0f;
 	addRect(0, 0, 0, 0, D3DCOLOR_ARGB(0, 0, 0, 0)); //do not remove or world will end
 
 	float yoff = WIDTH + 15.0f;
 	int j = 0;
 	switch (m_scale) //set rect. pos. depending to scale
 	{
-	
-
 		default: //TODO: set pos for each scale
 	
-			for (int i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines & backgrounds as needed
+			for (auto i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines & backgrounds as needed
 			{
 				if (m_stats.players[i].pseudo == m_pseudo) continue;
 
 				addRect(7.0f, j * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 64, 65, 87)); //EXTERNAL OUTLINE
-				addRect(7.0f + WIDTH / 14.0f, j * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2.5 * WIDTH / 14.0f, WIDTH - 2 * WIDTH / 14, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
+				addRect(7.0f + WIDTH / 14.0f, j * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2.5f * WIDTH / 14.0f, WIDTH - 2.f * WIDTH / 14.f, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 				j++;
 			}
 
 			j = 0;
 			refreshLife();
 	}
-
-
 
 	// create a vertex buffer interface called m_vbuffer
 	if (init)
@@ -196,14 +192,14 @@ void D3DHook::refreshLife()
 
 	m_llives.clear();
 	int j = 0;
-	for (int i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
+	for (auto i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
 	{
 		if (m_stats.players[i].pseudo == m_pseudo) continue;
 		m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
 		j++;
 	}
 
-	for (int i = 0; i < 6*m_llives.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
+	for (auto i = 0; i < 6*m_llives.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
 		m_vertices.pop_back();
 
 	//TODO: dependence on m_scale

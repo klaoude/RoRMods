@@ -27,6 +27,8 @@ private:
 
 	void fixHealth();
 	void fixStat(std::vector<double>& vector, double& stats);
+	void fixStat(std::vector<double>& vector, float& stats);
+	void fixStat(std::vector<double>& vector, int& stats);
 
 	HWND m_hWnd;
 	D3DHook* m_hook;

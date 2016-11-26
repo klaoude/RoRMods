@@ -67,9 +67,6 @@ public:
 	void error(); //draw error text
 	void info(); //draw info text
 
-
-
-
 	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
 	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }
 
@@ -81,7 +78,7 @@ public:
 	void setregen(float regen) { m_regen = regen; }
 	void setstrength(float strength) { m_strength = strength; }
 	void setitem(int nb) { m_item = nb; }
-	void setlvl(int lvl) { m_lvl = lvl; }
+	void setlvl(float lvl) { m_lvl = lvl; }
 
 	void setlife(float life) { m_life = life; }
 	void setmlife(float mlife) { m_mlife = mlife; }
@@ -89,7 +86,7 @@ public:
 	void setpause(int pause) { m_pause = pause; }
 	void setscale(int scale) { m_scale = scale; }
 
-	void setlmlife() {m_lmlife = LENGHT - 2.5 * WIDTH / 8; }
+	void setlmlife() {m_lmlife = LENGHT - 2.5f * WIDTH / 8.f; }
 
 	void setpSel(int psel) { m_pSel = psel; }
 	int getpSel() { return m_pSel; }
@@ -103,8 +100,7 @@ public:
 	bool getSolo() { return m_solo; }
 
 	void setPseudo(std::string val) { m_pseudo = val; }
-	std::string getPseudo() { return m_pseudo; }
-	
+	std::string getPseudo() { return m_pseudo; }	
 
 	//void drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt);
 	//void ipBox(const char *str);

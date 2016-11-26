@@ -11,9 +11,11 @@ void Mods::Init()
 	Player swag;
 	Stats stat;
 
+	stat.maxHealth = -1;
 	std::vector<Player> moreSwag;
 	moreSwag.push_back(swag);
 	Data swagOverflow = { moreSwag };
+	m_hook->setStat(stat);
 	m_hook->setStats(swagOverflow);
 	m_hook->setMod(1);
 	m_hook->initD3D(m_hWnd);
@@ -108,14 +110,14 @@ void Mods::ShowHUD()
 	GetStats();
 
 	fixHealth();
-	fixStat(m_maxHealths, (double&)m_stats.maxHealth);
+	fixStat(m_maxHealths, m_stats.maxHealth);
 	fixStat(m_damages, m_stats.damage);
 	fixStat(m_regens, m_stats.regeneration);
 	fixStat(m_crits, m_stats.critical);
 	fixStat(m_attackSpeeds, m_stats.attackSpeed);
 	fixStat(m_strengths, m_stats.strength);
-	fixStat(m_levels, (double&)m_stats.level);
-	fixStat(m_items, (double&)m_stats.item);
+	fixStat(m_levels, m_stats.level);
+	fixStat(m_items, m_stats.item);
 
 	m_hook->setStat(m_stats);
 	m_hook->setplStats(m_stats);
@@ -149,7 +151,89 @@ void Mods::fixStat(std::vector<double>& vector, double& stats)
 	if (vector.size() > 20)
 		vector.erase(vector.begin());
 
-	if (stats > 0.00000001)
+	if (stats > 0)
+		vector.push_back(stats);
+
+	if (vector.size() > 19)
+	{
+		m_counts.clear();
+		for (int i = 0; i < vector.size(); ++i)
+		{
+			m_it = m_counts.find(vector[i]);
+
+			if (m_it != m_counts.end())
+				m_it->second++;
+			else
+				m_counts[vector[i]] = 1;
+		}
+
+		int max = 0;
+		int pos = 0;
+		int i = 0;
+		for (auto it = m_counts.begin(); it != m_counts.end(); it++)
+		{
+			if (it->second > max)
+			{
+				max = it->second;
+				pos = i;
+			}
+			i++;
+		}
+
+		m_it = m_counts.begin();
+		for (auto j = 0; j < pos; j++)
+			m_it++;
+		stats = m_it->first;
+	}
+}
+
+void Mods::fixStat(std::vector<double>& vector, float& stats)
+{
+	if (vector.size() > 20)
+		vector.erase(vector.begin());
+
+	if (stats > 0)
+		vector.push_back(stats);
+
+	if (vector.size() > 19)
+	{
+		m_counts.clear();
+		for (int i = 0; i < vector.size(); ++i)
+		{
+			m_it = m_counts.find(vector[i]);
+
+			if (m_it != m_counts.end())
+				m_it->second++;
+			else
+				m_counts[vector[i]] = 1;
+		}
+
+		int max = 0;
+		int pos = 0;
+		int i = 0;
+		for (auto it = m_counts.begin(); it != m_counts.end(); it++)
+		{
+			if (it->second > max)
+			{
+				max = it->second;
+				pos = i;
+			}
+			i++;
+		}
+
+		m_it = m_counts.begin();
+		for (auto j = 0; j < pos; j++)
+			m_it++;
+		stats = m_it->first;
+	}
+}
+
+void Mods::fixStat(std::vector<double>& vector, int& stats)
+{
+	if (vector.size() > 20)
+		vector.erase(vector.begin());
+
+	if (stats > 0)
 		vector.push_back(stats);
 
 	if (vector.size() > 19)
