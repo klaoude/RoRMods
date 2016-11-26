@@ -281,11 +281,11 @@ void D3DHook::textHud()
 
 	std::ostringstream dmg, rate, crit, regen, strength;
 
-	dmg << "DMG:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.damage;
-	rate << "FIRERATE:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.attackSpeed;
-	crit << "CRIT:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.critical << "%";
-	regen << "REGEN:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.regeneration;
-	strength << "STRENGTH:  " << std::setprecision(2) << m_stats.players[m_pSel].stats.strength;
+	dmg << "DMG:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.damage;
+	rate << "FIRERATE:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.attackSpeed;
+	crit << "CRIT:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.critical << "%";
+	regen << "REGEN:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.regeneration;
+	strength << "STRENGTH:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.strength;
 
 	DrawTextString(75.75 * m_width/100, 116.0f  + yoff * height, height, m_width/5, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++
