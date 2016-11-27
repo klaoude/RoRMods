@@ -138,6 +138,16 @@ std::vector<LPVOID> regeneration_offsets =
 	(LPVOID)0x12C0
 };
 
+std::vector<LPVOID> leaf_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)-0xBC6E00
+};
+
+
 std::vector<LPVOID> level_offsets =
 {
 	(LPVOID)0x005AE468,
