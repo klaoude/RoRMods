@@ -92,6 +92,9 @@ void Mods::Loop()
 		m_hook->getMod() ? m_hook->setMod(0) : m_hook->setMod(1);
 	}
 
+	if (GetAsyncKeyState(m_quit))
+		exit(0);
+
 	if (m_hook->getSolo())
 		ShowHUD();
 
@@ -284,7 +287,7 @@ void Mods::fixStat(std::vector<double>& vector, int& stats)
 }
 
 
-void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int statdown)
+void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int statdown, int quit)
 {
 	m_host = host;
 	m_join = join;
@@ -292,6 +295,7 @@ void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int sta
 	m_toggle = toggle;
 	m_statup = statup;
 	m_statdown = statdown;
+	m_quit = quit;
 }
 
 

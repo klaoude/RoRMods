@@ -35,13 +35,14 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
 	ip = ReadString("options", "ip", "ip not defined"); //read ip from .ini
 
-	std::string host = "", join = "", solo = "", toggle = "", statup = "", statdown = "";
+	std::string host = "", join = "", solo = "", toggle = "", statup = "", statdown = "", quit = "";
 	host = ReadString("keys", "host", "");
 	join = ReadString("keys", "join", "");
 	solo = ReadString("keys", "solo", "");
 	toggle = ReadString("keys", "toggle", "");
 	statup = ReadString("keys", "statup", "");
 	statdown = ReadString("keys", "statdown", "");
+	quit = ReadString("keys", "quit", "");
 
 	int decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf;
 	decdmg = ReadInt("decimals", "damage", 2);
@@ -62,7 +63,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	idleaf = ReadInt("index", "cloverChance", 0);
 
 
-	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown));
+	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown), mod.stk(quit));
 
 	mod.setDec(decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf);
 	mod.setId(iddmg, idrate, idcrit, idregen, idstrength, idspeed, idleaf);

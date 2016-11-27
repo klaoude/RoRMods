@@ -21,7 +21,7 @@ public:
 	void setIP(std::string val) { m_ipAddr = val; }
 	void setPseudo(std::string val) { m_pseudo = val; }
 	int stk(std::string input); //string to key
-	void setkeys(int host, int join, int solo, int toggle, int statup, int statdown);
+	void setkeys(int host, int join, int solo, int toggle, int statup, int statdown, int quit);
 	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
 	void setId(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
 
@@ -64,6 +64,6 @@ private:
 	bool m_isConnect = false;
 	bool m_isServer = false;
 
-	int m_host, m_join, m_solo, m_toggle, m_statup, m_statdown;
+	int m_host, m_join, m_solo, m_toggle, m_statup, m_statdown, m_quit;
 };
 
