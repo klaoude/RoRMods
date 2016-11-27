@@ -15,7 +15,6 @@ std::vector<std::string> split(const std::string &s, char delim) {
 	return elems;
 }
 
-
 void Packer(std::stringstream& ss, Player p)
 {
 	ss << p.isConnected;
@@ -45,7 +44,7 @@ void Packer(std::stringstream& ss, Player p)
 
 void dePackerize(Player& player, std::vector<std::string> infoSplited)
 {
-	player.isConnected = true ? infoSplited[0] == "1" : false;
+	player.isConnected = true ? infoSplited[0] == "204" : false;
 	player.stats.health = atof(infoSplited[1].c_str());
 	player.stats.maxHealth = atof(infoSplited[2].c_str());
 	player.stats.damage = atof(infoSplited[3].c_str());
