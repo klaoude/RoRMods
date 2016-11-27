@@ -122,6 +122,7 @@ void Mods::ShowHUD()
 
 	m_hook->setStat(m_stats);
 	m_hook->setplStats(m_stats);
+	m_hook->setleaf(m_leaf);
 }
 
 void Mods::GetStats()
