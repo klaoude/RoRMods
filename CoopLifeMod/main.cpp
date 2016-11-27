@@ -18,6 +18,8 @@ char* ReadString(char* szSection, char* szKey, const char* szDefaultValue)
 	return szResult;
 }
 
+
+
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
@@ -25,9 +27,21 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	MSG msg;
 	Mods mod(hWnd, s_width, s_height);
 
+	std::string host = "", join = "", solo = "", toggle = "", statup = "", statdown = "";
+
 	std::string pseudo, ip;
 	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
 	ip = ReadString("options", "ip", "ip not defined"); //read ip from .ini
+
+	host = ReadString("keys", "host", "");
+	join = ReadString("keys", "join", "");
+	solo = ReadString("keys", "solo", "");
+	toggle = ReadString("keys", "toggle", "");
+	statup = ReadString("keys", "statup", "");
+	statdown = ReadString("keys", "statdown", "");
+
+	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown));
+
 	mod.setIP(ip);
 	mod.setPseudo(pseudo);
 	

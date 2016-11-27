@@ -54,14 +54,14 @@ void Mods::Loop()
 			m_hook->setpause(pause);
 		}		
 
-		if (GetAsyncKeyState(VK_PRIOR))
+		if (GetAsyncKeyState(m_statup))
 			m_hook->setpSel((m_hook->getpSel() - 1) % m_hook->getStats().players.size()); //select next player
-		if (GetAsyncKeyState(VK_NEXT))
+		if (GetAsyncKeyState(m_statdown))
 			m_hook->setpSel((m_hook->getpSel() + 1) % m_hook->getStats().players.size());	//select previous player
 	}
 	else
 	{
-		if (GetAsyncKeyState(0x31))
+		if (GetAsyncKeyState(m_host))
 		{
 			m_net->create(m_mem.GetDouble(portServerOffsets) + 1);
 			m_isConnect = true;
@@ -69,7 +69,7 @@ void Mods::Loop()
 			m_hook->setSolo(false);
 			m_isServer = true;
 		}
-		else if (GetAsyncKeyState(0x32))
+		else if (GetAsyncKeyState(m_join))
 		{
 			char* ip = m_mem.getChar(ipOffsets, 15);
 			std::string ipStr = std::string(ip);
@@ -81,13 +81,13 @@ void Mods::Loop()
 		}		
 	}
 
-	if (GetAsyncKeyState(0x33))
+	if (GetAsyncKeyState(m_solo))
 	{
 		m_hook->setSolo(true);
 		GetStats();
 	}
 
-	if (GetAsyncKeyState(0x38))
+	if (GetAsyncKeyState(m_toggle))
 	{
 		m_hook->getMod() ? m_hook->setMod(0) : m_hook->setMod(1);
 	}
@@ -275,4 +275,79 @@ void Mods::fixStat(std::vector<double>& vector, int& stats)
 			m_it++;
 		stats = m_it->first;
 	}
+}
+
+
+void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int statdown)
+{
+	m_host = host;
+	m_join = join;
+	m_solo = solo;
+	m_toggle = toggle;
+	m_statup = statup;
+	m_statdown = statdown;
+}
+
+
+int Mods::stk(std::string input)
+{
+
+	if (input == "F1")
+		return VK_F1;
+
+
+	else if (input == "F2")
+		return VK_F2;
+
+
+	else if (input == "F3")
+		return VK_F3;
+
+
+	else if (input == "F4")
+		return VK_F4;
+
+
+	else if (input == "F5")
+		return VK_F5;
+
+
+	else if (input == "F6")
+		return VK_F6;
+
+
+	else if (input == "F7")
+		return VK_F7;
+
+
+	else if (input == "F8")
+		return VK_F8;
+
+
+	else if (input == "F9")
+		return VK_F9;
+
+
+	else if (input == "F10")
+		return VK_F10;
+
+
+	else if (input == "F11")
+		return VK_F11;
+
+
+	else if (input == "F12")
+		return VK_F12;
+
+
+	else if (input == "PGUP")
+		return VK_PRIOR;
+
+
+	else if (input == "PGDOWN")
+		return VK_NEXT;
+
+	else
+		return int(input[0]);
+
 }
