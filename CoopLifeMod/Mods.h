@@ -47,6 +47,7 @@ private:
 	std::vector<double> m_regens;
 	std::vector<double> m_strengths;
 	std::vector<double> m_crits;
+	std::vector<double> m_speeds;
 	std::vector<double> m_levels;
 	std::vector<double> m_items;
 	CounterMap m_counts;

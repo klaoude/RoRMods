@@ -15,6 +15,50 @@ std::vector<std::string> split(const std::string &s, char delim) {
 	return elems;
 }
 
+
+void Packer(std::stringstream& ss, Player p)
+{
+	ss << p.isConnected;
+	ss << "|";
+	ss << p.stats.health;
+	ss << "|";
+	ss << p.stats.maxHealth;
+	ss << "|";
+	ss << p.stats.damage;
+	ss << "|";
+	ss << p.stats.attackSpeed;
+	ss << "|";
+	ss << p.stats.critical;
+	ss << "|";
+	ss << p.stats.regeneration;
+	ss << "|";
+	ss << p.stats.strength;
+	ss << "|";
+	ss << p.stats.level;
+	ss << "|";
+	ss << p.stats.item;
+	ss << "|";
+	ss << p.pseudo;
+	ss << "|";
+	ss << p.stats.speed;
+}
+
+void dePackerize(Player& player, std::vector<std::string> infoSplited)
+{
+	player.isConnected = true ? infoSplited[0] == "1" : false;
+	player.stats.health = atof(infoSplited[1].c_str());
+	player.stats.maxHealth = atof(infoSplited[2].c_str());
+	player.stats.damage = atof(infoSplited[3].c_str());
+	player.stats.attackSpeed = atof(infoSplited[4].c_str());
+	player.stats.critical = atof(infoSplited[5].c_str());
+	player.stats.regeneration = atof(infoSplited[6].c_str());
+	player.stats.strength = atof(infoSplited[7].c_str());
+	player.stats.level = atof(infoSplited[8].c_str());
+	player.stats.item = atof(infoSplited[9].c_str());
+	player.pseudo = infoSplited[10];
+	player.stats.speed = atof(infoSplited[11].c_str());
+}
+
 void Net::create(int port)
 {
 	WSADATA WSAData;
@@ -188,47 +232,4 @@ void Net::clear()
 	WSACleanup();
 	for (auto &t : m_threads)
 		t.join();
-}
-
-void Packer(std::stringstream& ss, Player p)
-{
-	ss << p.isConnected;
-	ss << "|";
-	ss << p.stats.health;
-	ss << "|";
-	ss << p.stats.maxHealth;
-	ss << "|";
-	ss << p.stats.damage;
-	ss << "|";
-	ss << p.stats.attackSpeed;
-	ss << "|";
-	ss << p.stats.critical;
-	ss << "|";
-	ss << p.stats.regeneration;
-	ss << "|";
-	ss << p.stats.strength;
-	ss << "|";
-	ss << p.stats.level;
-	ss << "|";
-	ss << p.stats.item;
-	ss << "|";
-	ss << p.pseudo;
-	ss << "|";
-	ss << p.stats.speed;
-}
-
-void dePackerize(Player& player, std::vector<std::string> infoSplited)
-{
-	player.isConnected = true ? infoSplited[0] == "1" : false;
-	player.stats.health = atof(infoSplited[1].c_str());
-	player.stats.maxHealth = atof(infoSplited[2].c_str());
-	player.stats.damage = atof(infoSplited[3].c_str());
-	player.stats.attackSpeed = atof(infoSplited[4].c_str());
-	player.stats.critical = atof(infoSplited[5].c_str());
-	player.stats.regeneration = atof(infoSplited[6].c_str());
-	player.stats.strength = atof(infoSplited[7].c_str());
-	player.stats.level = atof(infoSplited[8].c_str());
-	player.stats.item = atof(infoSplited[9].c_str());
-	player.pseudo = infoSplited[10];
-	player.speed = atof(infoSplited[11].c_str());
 }
