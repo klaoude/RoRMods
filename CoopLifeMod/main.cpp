@@ -99,6 +99,9 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 	RECT rc;
 
 	HWND newhwnd = FindWindow(NULL, value);
+	char className[256];
+	GetClassName(newhwnd, className, 256);
+	MessageBox(NULL, className, "Debug", NULL);
 	if (newhwnd != NULL)
 	{
 		GetWindowRect(newhwnd, &rc);
@@ -138,5 +141,5 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 
 	ShowWindow(hWnd, nCmdShow);
 
-	::SetWindowPos(FindWindow(NULL, value), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+	::SetWindowPos(FindWindow("YYGameMakerYY", value), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 }
