@@ -44,6 +44,8 @@ private:
 
 	Stats m_stats;
 
+	int m_leaf;
+
 	//Fix
 	std::vector<double> m_maxHealths;
 	std::vector<double> m_attackSpeeds;
@@ -54,6 +56,7 @@ private:
 	std::vector<double> m_speeds;
 	std::vector<double> m_levels;
 	std::vector<double> m_items;
+	std::vector<double> m_leafs;
 	CounterMap m_counts;
 	CounterMap::iterator m_it;
 	std::string m_ipAddr, m_pseudo;

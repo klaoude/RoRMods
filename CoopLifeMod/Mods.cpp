@@ -118,6 +118,7 @@ void Mods::ShowHUD()
 	fixStat(m_levels, m_stats.level);
 	fixStat(m_items, m_stats.item);
 	fixStat(m_speeds, m_stats.speed);
+	fixStat(m_leafs, m_leaf);
 
 	m_hook->setStat(m_stats);
 	m_hook->setplStats(m_stats);
@@ -137,6 +138,8 @@ void Mods::GetStats()
 
 	m_stats.item = m_mem.GetDouble(item_offsets);
 	m_stats.level = m_mem.GetDouble(level_offsets);
+
+	m_leaf = m_mem.GetDouble(leaf_offsets);
 }
 
 void Mods::fixHealth()
