@@ -220,10 +220,9 @@ void D3DHook::textHud()
 
 	RECT container = { 0, 0, 0, 0 }; //container for outline
 
-	std::ostringstream life[4], lvl[4], item;
+	std::ostringstream life[4], lvl[4], item, oItem[4];
 
 	std::vector<std::string> pseudo;
-	std::vector<int> oItem;
 	pseudo.clear();
 
 	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life and level strings to draw
@@ -231,7 +230,8 @@ void D3DHook::textHud()
 		life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
 		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].stats.level;
 		pseudo.push_back(m_stats.players[i].pseudo);
-		oItem.push_back(m_stats.players[i].stats.item);
+		oItem[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.item << " Items";
+
 	}
 
 	item << std::fixed << m_item << " ITEMS";
@@ -260,11 +260,11 @@ void D3DHook::textHud()
 			else
 				DrawTextString(11 + LENGHT, 110 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), lvl[i].str().c_str(), m_pFontSmall, DT_LEFT);
 
-			DrawOutline(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT, &container, 1);
+			DrawOutline(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), oItem[i].str().c_str(), m_pFontSmall, DT_LEFT, &container, 1);
 			if (pseudo[i] == m_stats.players[m_pSel].pseudo) //if we're trying to draw the level from the selected player
-				DrawTextString(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT);
+				DrawTextString(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), oItem[i].str().c_str(), m_pFontSmall, DT_LEFT);
 			else
-				DrawTextString(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), std::to_string(oItem[i]).c_str(), m_pFontSmall, DT_LEFT);
+				DrawTextString(11 + LENGHT, 100 + j * yoff, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), oItem[i].str().c_str(), m_pFontSmall, DT_LEFT);
 
 			j++;
 		}
