@@ -18,8 +18,6 @@ char* ReadString(char* szSection, char* szKey, const char* szDefaultValue)
 	return szResult;
 }
 
-
-
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
