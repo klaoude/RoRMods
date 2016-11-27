@@ -347,6 +347,42 @@ int Mods::stk(std::string input)
 	else if (input == "PGDOWN")
 		return VK_NEXT;
 
+
+	else if (input == "NUM1")
+		return VK_NUMPAD1;
+
+	else if (input == "NUM2")
+		return VK_NUMPAD2;
+
+	else if (input == "NUM3")
+		return VK_NUMPAD3;
+
+	else if (input == "NUM4")
+		return VK_NUMPAD4;
+
+	else if (input == "NUM5")
+		return VK_NUMPAD5;
+
+	else if (input == "NUM6")
+		return VK_NUMPAD6;
+
+	else if (input == "NUM7")
+		return VK_NUMPAD7;
+
+	else if (input == "NUM8")
+		return VK_NUMPAD8;
+
+	else if (input == "NUM9")
+		return VK_NUMPAD9;
+
+	else if (input == "NUM0")
+		return VK_NUMPAD0;
+
+
+	else if (input == "TAB")
+		return VK_TAB;
+
+
 	else
 		return int(input[0]);
 

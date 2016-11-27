@@ -24,6 +24,7 @@ struct Stats
 	double strength;
 	double regeneration;
 	double critical;
+	double speed;
 
 	int level;
 	int item;
