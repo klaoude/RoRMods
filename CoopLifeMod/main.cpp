@@ -18,6 +18,12 @@ char* ReadString(char* szSection, char* szKey, const char* szDefaultValue)
 	return szResult;
 }
 
+int ReadInt(char* szSection, char* szKey, int iDefaultValue)
+{
+	int iResult = GetPrivateProfileInt(szSection, szKey, iDefaultValue, "./Resources/config.ini");
+	return iResult;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
@@ -25,12 +31,13 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	MSG msg;
 	Mods mod(hWnd, s_width, s_height);
 
-	std::string host = "", join = "", solo = "", toggle = "", statup = "", statdown = "";
+	
 
 	std::string pseudo, ip;
 	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
 	ip = ReadString("options", "ip", "ip not defined"); //read ip from .ini
 
+	std::string host = "", join = "", solo = "", toggle = "", statup = "", statdown = "";
 	host = ReadString("keys", "host", "");
 	join = ReadString("keys", "join", "");
 	solo = ReadString("keys", "solo", "");
@@ -38,7 +45,18 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	statup = ReadString("keys", "statup", "");
 	statdown = ReadString("keys", "statdown", "");
 
+	int decdmg, decrate, deccrit, decregen, decstrength, decspeed;
+	decdmg = ReadInt("decimals", "damage", 2);
+	decrate = ReadInt("decimals", "attackSpeed", 2);
+	deccrit = ReadInt("decimals", "crit", 2);
+	decregen = ReadInt("decimals", "regen", 2);
+	decstrength = ReadInt("decimals", "strength", 2);
+	decspeed = ReadInt("decimals", "speed", 2);
+
+	
 	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown));
+
+	mod.setDec(decdmg, decrate, deccrit, decregen, decstrength, decspeed);
 
 	mod.setIP(ip);
 	mod.setPseudo(pseudo);

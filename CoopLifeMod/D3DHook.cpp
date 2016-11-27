@@ -279,12 +279,12 @@ void D3DHook::textHud()
 
 	std::ostringstream dmg, rate, crit, regen, strength, speed;
 
-	dmg << "DMG:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.damage;
-	rate << "FIRERATE:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.attackSpeed;
-	crit << "CRIT:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.critical << "%";
-	regen << "REGEN:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.regeneration;
-	strength << "STRENGTH:  " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.strength;
-	speed << "SPEED: " << std::fixed << std::setprecision(2) << m_stats.players[m_pSel].stats.speed;
+	dmg << "DMG:  " << std::fixed << std::setprecision(d_dmg) << m_stats.players[m_pSel].stats.damage;
+	rate << "FIRERATE:  " << std::fixed << std::setprecision(d_rate) << m_stats.players[m_pSel].stats.attackSpeed;
+	crit << "CRIT:  " << std::fixed << std::setprecision(d_crit) << m_stats.players[m_pSel].stats.critical << "%";
+	regen << "REGEN:  " << std::fixed << std::setprecision(d_regen) << m_stats.players[m_pSel].stats.regeneration;
+	strength << "STRENGTH:  " << std::fixed << std::setprecision(d_strength) << m_stats.players[m_pSel].stats.strength;
+	speed << "SPEED: " << std::fixed << std::setprecision(d_speed) << m_stats.players[m_pSel].stats.speed;
 
 	DrawTextString(60.0f * m_width/100, 116.0f  + yoff * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
 	yoff++; //index++
@@ -357,6 +357,18 @@ void D3DHook::setStat(Stats stats)
 	setlife(stats.health);
 	setmlife(stats.maxHealth);
 }
+
+
+void D3DHook::setDec(int dmg, int rate, int crit, int regen, int strength, int speed)
+{
+	d_dmg = dmg;
+	d_rate = rate;
+	d_crit = crit;
+	d_regen = regen;
+	d_strength = strength;
+	d_speed = speed;
+}
+
 
 /*
 void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)

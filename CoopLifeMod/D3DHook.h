@@ -118,6 +118,8 @@ public:
 	void setMod(bool mod) { m_mod = mod; }
 	bool getMod() { return m_mod; }
 
+	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed);
+
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
@@ -134,6 +136,9 @@ private:
 	int m_pSel = 0; //player currently selected (from which stats will be drawn
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
+
+	int d_dmg, d_rate, d_crit, d_regen, d_strength, d_speed;
+
 	int m_item, m_pause, m_scale;
 	std::string m_error, m_info, *m_ip;
 
