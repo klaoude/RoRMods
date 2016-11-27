@@ -68,13 +68,13 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		mod.Loop();
 
 		RECT rc;
-		HWND wnd = FindWindow(NULL, value);
+		HWND wnd = FindWindow("YYGameMakerYY", value);
 		if (wnd != NULL)
 			GetWindowRect(wnd, &rc);
 
 		SetWindowPos(hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);
 
-		if (!FindWindow(NULL, value))
+		if (!FindWindow("YYGameMakerYY", value))
 			ExitProcess(1337);	
 		
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -116,10 +116,7 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 {
 	RECT rc;
 
-	HWND newhwnd = FindWindow(NULL, value);
-	char className[256];
-	GetClassName(newhwnd, className, 256);
-	MessageBox(NULL, className, "Debug", NULL);
+	HWND newhwnd = FindWindow("YYGameMakerYY", value);
 	if (newhwnd != NULL)
 	{
 		GetWindowRect(newhwnd, &rc);
