@@ -119,6 +119,7 @@ public:
 	bool getMod() { return m_mod; }
 
 	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed);
+	void setId(int dmg, int rate, int crit, int regen, int strength, int speed);
 
 	void setWidth(int width) { m_width = width; }
 	void setHeight(int height) { m_height = height; }
@@ -140,6 +141,7 @@ private:
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
 
 	int d_dmg, d_rate, d_crit, d_regen, d_strength, d_speed;
+	int m_iddmg, m_idrate, m_idcrit, m_idregen, m_idstrength, m_idspeed;
 
 	int m_item, m_pause, m_scale;
 	std::string m_error, m_info, *m_ip;

@@ -394,3 +394,8 @@ void Mods::setDec(int dmg, int rate, int crit, int regen, int strength, int spee
 {
 	m_hook->setDec(dmg, rate, crit, regen, strength, speed);
 }
+
+void Mods::setId(int dmg, int rate, int crit, int regen, int strength, int speed)
+{
+	m_hook->setId(dmg, rate, crit, regen, strength, speed);
+}

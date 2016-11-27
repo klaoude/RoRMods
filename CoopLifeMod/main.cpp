@@ -51,9 +51,18 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	decstrength = ReadInt("decimals", "strength", 2);
 	decspeed = ReadInt("decimals", "speed", 2);
 	
+	int iddmg, idrate, idcrit, idregen, idstrength, idspeed;
+	iddmg = ReadInt("index", "damage", 0);
+	idrate = ReadInt("index", "attackSpeed", 0);
+	idcrit = ReadInt("index", "crit", 0);
+	idregen = ReadInt("index", "regen", 0);
+	idstrength = ReadInt("index", "strength", 0);
+	idspeed = ReadInt("index", "speed", 0);
+
 	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown));
 
 	mod.setDec(decdmg, decrate, deccrit, decregen, decstrength, decspeed);
+	mod.setId(iddmg, idrate, idcrit, idregen, idstrength, idspeed);
 
 	mod.setIP(ip);
 	mod.setPseudo(pseudo);
@@ -69,8 +78,9 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (wnd != NULL)
 		{
 			GetWindowRect(wnd, &rc);
-			mod.getHook()->setHeight(s_height);
-			mod.getHook()->setWidth(s_width);
+			
+			mod.getHook()->setHeight(rc.bottom - rc.top);
+			mod.getHook()->setWidth(rc.right - rc.left);
 		}			
 
 		SetWindowPos(hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);

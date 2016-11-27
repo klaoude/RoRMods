@@ -23,6 +23,7 @@ public:
 	int stk(std::string input); //string to key
 	void setkeys(int host, int join, int solo, int toggle, int statup, int statdown);
 	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed);
+	void setId(int dmg, int rate, int crit, int regen, int strength, int speed);
 
 	D3DHook* getHook() { return m_hook; }
 
