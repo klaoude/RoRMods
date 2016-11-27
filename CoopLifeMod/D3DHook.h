@@ -70,8 +70,8 @@ public:
 	void error(); //draw error text
 	void info(); //draw info text
 
-	void setErr(const char* str, int val) { m_error = str; m_err_life = val; }
-	void setInfo(const char* str, int val) { m_info = str;  m_info_life = val; }
+	void setErr(std::string str, int val) { m_error = str; m_err_life = val; }
+	void setInfo(std::string str, int val) { m_info = str;  m_info_life = val; }
 
 	void setStat(Stats stats);
 
@@ -134,7 +134,7 @@ private:
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
 	int m_item, m_pause, m_scale;
-	const char* m_error, *m_info, *m_ip;
+	std::string m_error, m_info, *m_ip;
 
 	std::vector<CUSTOMVERTEX> m_vertices, m_ipvertices; //vertices' vector
 

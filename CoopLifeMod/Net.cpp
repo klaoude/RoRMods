@@ -26,7 +26,13 @@ void Net::create(int port)
 	m_server.addr.sin_port = htons(port);
 	m_isServer = true;
 
-	printf("Server created\n");
+	std::stringstream ss;
+	ss << "Server created ! (port:";
+	ss << port;
+	ss << ")";
+	std::string str = ss.str();
+	str.resize(29);
+	m_hook->setInfo(str.c_str(), 60);
 
 	m_threads.push_back(std::thread(&Net::ServerThread, this));
 }
@@ -46,7 +52,7 @@ void Net::ServerThread()
 		cl.socket = accept(m_server.socket, (SOCKADDR*)&cl.addr, &sizeof_csin);
 		if (cl.socket != INVALID_SOCKET)
 		{
-			printf("Client Connected !\n");
+			m_hook->setInfo("Client Connected !", 60);
 			m_clients.push_back(cl);
 		}
 	}
@@ -68,7 +74,11 @@ void Net::conn(std::string ip, int port)
 	m_server.addr.sin_port = htons(port);
 
 	if (connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr)) == SOCKET_ERROR)
-		printf("Connection failed\n");
+	{
+		m_hook->setErr("Connection Failed !", 60);
+		return;
+	}
+	m_hook->setInfo("Connection Establish !", 60);
 
 	m_isServer = false;
 }

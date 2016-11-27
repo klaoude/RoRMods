@@ -26,7 +26,7 @@ class Net
 {
 public:
 	Net() {}
-	Net(D3DHook* kook) {}
+	Net(D3DHook* hook) : m_hook(hook) {}
 
 	void create(int port);
 	void conn(std::string ip, int port);
@@ -48,6 +48,7 @@ private:
 	void ServerThread();
 	Player recvInfo(Client client);
 
+	D3DHook* m_hook;
 	Server m_server;
 
 	bool m_isServer;

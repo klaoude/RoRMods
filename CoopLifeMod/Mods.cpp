@@ -133,7 +133,7 @@ void Mods::GetStats()
 	m_stats.regeneration = m_mem.GetDouble(regeneration_offsets);
 	m_stats.critical = m_mem.GetDouble(crit_offsets);
 
-	m_stats.item = m_mem.GetDouble(item_offsets)+1;
+	m_stats.item = m_mem.GetDouble(item_offsets);
 	m_stats.level = m_mem.GetDouble(level_offsets);
 }
 
@@ -235,8 +235,14 @@ void Mods::fixStat(std::vector<double>& vector, int& stats)
 	if (vector.size() > 20)
 		vector.erase(vector.begin());
 
-	if (stats > 0)
-		vector.push_back(stats);
+	if (stats == m_stats.item)
+		if(stats >= -1 || stats >=1)
+			vector.push_back(stats+1);
+		else
+			vector.push_back(stats);
+	else
+		if (stats > 0)
+			vector.push_back(stats);
 
 	if (vector.size() > 19)
 	{

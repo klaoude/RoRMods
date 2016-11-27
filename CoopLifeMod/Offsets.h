@@ -93,6 +93,24 @@ std::vector<LPVOID> fallingSpeed_offsets =
 	(LPVOID)0xC30
 };
 
+std::vector<LPVOID> speed_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0xB60
+};
+
+std::vector<LPVOID> gold_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0x6F0
+};
+
 std::vector<LPVOID> numItem1_offsets =
 {
 	(LPVOID)0x005AE468,

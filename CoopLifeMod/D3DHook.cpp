@@ -330,16 +330,16 @@ void D3DHook::error()
 {
 	RECT Rect = { 10, m_height - 20,0,0 }; //set container pos
 
-	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_CALCRECT, 0); //calc container size based on text
-	m_pFontDefault->DrawText(NULL, m_error, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 0, 0)); //draw text
+	m_pFontDefault->DrawText(NULL, m_error.c_str(), -1, &Rect, DT_CALCRECT, 0); //calc container size based on text
+	m_pFontDefault->DrawText(NULL, m_error.c_str(), -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 255, 0, 0)); //draw text
 }
 
 void D3DHook::info()
 {
 	RECT Rect = { 10, m_height - 20,0,0 }; //set container pos
 
-	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_CALCRECT, 0);	//calc container size based on text
-	m_pFontDefault->DrawText(NULL, m_info, -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));	//draw text
+	m_pFontDefault->DrawText(NULL, m_info.c_str(), -1, &Rect, DT_CALCRECT, 0);	//calc container size based on text
+	m_pFontDefault->DrawText(NULL, m_info.c_str(), -1, &Rect, DT_LEFT, D3DCOLOR_ARGB(255, 0, 255, 255));	//draw text
 }
 
 void D3DHook::setStat(Stats stats)
