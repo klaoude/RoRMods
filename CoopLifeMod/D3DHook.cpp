@@ -299,7 +299,7 @@ void D3DHook::textHud()
 
 	if (m_idspeed > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), speed.str().c_str(), m_pFontStat, DT_RIGHT);
 
-	if (m_idleaf > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width / 100, D3DCOLOR_ARGB(255, 192, 192, 192), leaf.str().c_str(), m_pFontStat, DT_RIGHT);
+	if (m_idleaf > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idleaf * height, height, 35.75 * m_width / 100, D3DCOLOR_ARGB(255, 192, 192, 192), leaf.str().c_str(), m_pFontStat, DT_RIGHT);
 
 
 }
