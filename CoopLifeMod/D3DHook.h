@@ -120,6 +120,8 @@ public:
 
 	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed);
 
+	void setWidth(int width) { m_width = width; }
+	void setHeight(int height) { m_height = height; }
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 

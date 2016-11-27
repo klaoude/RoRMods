@@ -29,9 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
 	MSG msg;
-	Mods mod(hWnd, s_width, s_height);
-
-	
+	Mods mod(hWnd, s_width, s_height);	
 
 	std::string pseudo, ip;
 	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
@@ -52,7 +50,6 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	decregen = ReadInt("decimals", "regen", 2);
 	decstrength = ReadInt("decimals", "strength", 2);
 	decspeed = ReadInt("decimals", "speed", 2);
-
 	
 	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown));
 
@@ -70,7 +67,11 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		RECT rc;
 		HWND wnd = FindWindow("YYGameMakerYY", value);
 		if (wnd != NULL)
+		{
 			GetWindowRect(wnd, &rc);
+			mod.getHook()->setHeight(s_height);
+			mod.getHook()->setWidth(s_width);
+		}			
 
 		SetWindowPos(hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);
 
