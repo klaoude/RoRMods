@@ -83,6 +83,8 @@ public:
 	void setstrength(float strength) { m_strength = strength; }
 	void setitem(int nb) { m_item = nb; }
 	void setlvl(float lvl) { m_lvl = lvl; }
+	void setleaf(int val) { m_leaf = val; }
+
 
 	void setlife(float life) { m_life = life; }
 	void setmlife(float mlife) { m_mlife = mlife; }
@@ -118,8 +120,8 @@ public:
 	void setMod(bool mod) { m_mod = mod; }
 	bool getMod() { return m_mod; }
 
-	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed);
-	void setId(int dmg, int rate, int crit, int regen, int strength, int speed);
+	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
+	void setId(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
 
 	void setWidth(int width) { m_width = width; }
 	void setHeight(int height) { m_height = height; }
@@ -139,9 +141,9 @@ private:
 	int m_pSel = 0; //player currently selected (from which stats will be drawn
 
 	float m_dmg, m_firerate, m_crit, m_regen, m_strength, m_life, m_mlife, m_lvl;
-
-	int d_dmg, d_rate, d_crit, d_regen, d_strength, d_speed;
-	int m_iddmg, m_idrate, m_idcrit, m_idregen, m_idstrength, m_idspeed;
+	int m_leaf;
+	int d_dmg, d_rate, d_crit, d_regen, d_strength, d_speed, d_leaf;
+	int m_iddmg, m_idrate, m_idcrit, m_idregen, m_idstrength, m_idspeed, m_idleaf;
 
 	int m_item, m_pause, m_scale;
 	std::string m_error, m_info, *m_ip;

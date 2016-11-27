@@ -43,26 +43,29 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	statup = ReadString("keys", "statup", "");
 	statdown = ReadString("keys", "statdown", "");
 
-	int decdmg, decrate, deccrit, decregen, decstrength, decspeed;
+	int decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf;
 	decdmg = ReadInt("decimals", "damage", 2);
 	decrate = ReadInt("decimals", "attackSpeed", 2);
 	deccrit = ReadInt("decimals", "crit", 2);
 	decregen = ReadInt("decimals", "regen", 2);
 	decstrength = ReadInt("decimals", "strength", 2);
 	decspeed = ReadInt("decimals", "speed", 2);
-	
-	int iddmg, idrate, idcrit, idregen, idstrength, idspeed;
+	decleaf = ReadInt("decimals", "cloverChance", 2);
+
+	int iddmg, idrate, idcrit, idregen, idstrength, idspeed, idleaf;
 	iddmg = ReadInt("index", "damage", 0);
 	idrate = ReadInt("index", "attackSpeed", 0);
 	idcrit = ReadInt("index", "crit", 0);
 	idregen = ReadInt("index", "regen", 0);
 	idstrength = ReadInt("index", "strength", 0);
 	idspeed = ReadInt("index", "speed", 0);
+	idleaf = ReadInt("index", "cloverChance", 0);
+
 
 	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown));
 
-	mod.setDec(decdmg, decrate, deccrit, decregen, decstrength, decspeed);
-	mod.setId(iddmg, idrate, idcrit, idregen, idstrength, idspeed);
+	mod.setDec(decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf);
+	mod.setId(iddmg, idrate, idcrit, idregen, idstrength, idspeed, idleaf);
 
 	mod.setIP(ip);
 	mod.setPseudo(pseudo);

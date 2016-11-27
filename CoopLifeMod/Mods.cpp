@@ -390,12 +390,12 @@ int Mods::stk(std::string input)
 
 }
 
-void Mods::setDec(int dmg, int rate, int crit, int regen, int strength, int speed)
+void Mods::setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf)
 {
-	m_hook->setDec(dmg, rate, crit, regen, strength, speed);
+	m_hook->setDec(dmg, rate, crit, regen, strength, speed, leaf);
 }
 
-void Mods::setId(int dmg, int rate, int crit, int regen, int strength, int speed)
+void Mods::setId(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf)
 {
-	m_hook->setId(dmg, rate, crit, regen, strength, speed);
+	m_hook->setId(dmg, rate, crit, regen, strength, speed, leaf);
 }

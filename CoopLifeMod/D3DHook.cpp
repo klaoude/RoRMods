@@ -277,7 +277,7 @@ void D3DHook::textHud()
 	yoff = 1; //index of stat
 	float height = 18; //space between two stats
 
-	std::ostringstream dmg, rate, crit, regen, strength, speed;
+	std::ostringstream dmg, rate, crit, regen, strength, speed, leaf;
 
 	dmg << "DMG:  " << std::fixed << std::setprecision(d_dmg) << m_stats.players[m_pSel].stats.damage;
 	rate << "FIRERATE:  " << std::fixed << std::setprecision(d_rate) << m_stats.players[m_pSel].stats.attackSpeed;
@@ -285,18 +285,23 @@ void D3DHook::textHud()
 	regen << "REGEN:  " << std::fixed << std::setprecision(d_regen) << m_stats.players[m_pSel].stats.regeneration;
 	strength << "STRENGTH:  " << std::fixed << std::setprecision(d_strength) << m_stats.players[m_pSel].stats.strength;
 	speed << "SPEED: " << std::fixed << std::setprecision(d_speed) << m_stats.players[m_pSel].stats.speed;
+	leaf << "DROP CHANCE: " << std::fixed << std::setprecision(d_leaf) << m_leaf << "%";
 
 	if (m_iddmg > 0) DrawTextString(60.0f * m_width/100, 116.0f  + m_iddmg * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
-	yoff++; //index++
+
 	if (m_idrate > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idrate * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
-	yoff++;
+
 	if (m_idcrit > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idcrit * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
-	yoff++;
+
 	if (m_idregen > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idregen * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
-	yoff++;
+
 	if (m_idstrength > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idstrength * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
-	yoff++;
+
 	if (m_idspeed > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), speed.str().c_str(), m_pFontStat, DT_RIGHT);
+
+	if (m_idleaf > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width / 100, D3DCOLOR_ARGB(255, 192, 192, 192), leaf.str().c_str(), m_pFontStat, DT_RIGHT);
+
+
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc/* = false*/)
@@ -359,7 +364,7 @@ void D3DHook::setStat(Stats stats)
 }
 
 
-void D3DHook::setDec(int dmg, int rate, int crit, int regen, int strength, int speed)
+void D3DHook::setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf)
 {
 	d_dmg = dmg;
 	d_rate = rate;
@@ -367,9 +372,10 @@ void D3DHook::setDec(int dmg, int rate, int crit, int regen, int strength, int s
 	d_regen = regen;
 	d_strength = strength;
 	d_speed = speed;
+	d_leaf = leaf;
 }
 
-void D3DHook::setId(int dmg, int rate, int crit, int regen, int strength, int speed)
+void D3DHook::setId(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf)
 {
 	m_iddmg = dmg;
 	m_idrate = rate;
@@ -377,6 +383,7 @@ void D3DHook::setId(int dmg, int rate, int crit, int regen, int strength, int sp
 	m_idregen = regen;
 	m_idstrength = strength;
 	m_idspeed = speed;
+	m_idleaf = leaf;
 }
 
 
