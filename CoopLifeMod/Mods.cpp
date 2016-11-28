@@ -7,7 +7,8 @@ Mods::Mods(HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(
 void Mods::Init()
 {
 	m_hook->setSolo(false);
-	
+	m_hook->setlifetext(0);
+
 	Player swag;
 	Stats stat;
 
@@ -91,6 +92,10 @@ void Mods::Loop()
 	{
 		m_hook->getMod() ? m_hook->setMod(0) : m_hook->setMod(1);
 	}
+
+	if (GetAsyncKeyState(m_lifetext))
+		m_hook->setlifetext((m_hook->getlifetext() + 1) % 4);
+		
 
 	if (GetAsyncKeyState(m_quit))
 		exit(0);
@@ -287,7 +292,7 @@ void Mods::fixStat(std::vector<double>& vector, int& stats)
 }
 
 
-void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int statdown, int quit)
+void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int statdown, int quit, int cyclelifetext)
 {
 	m_host = host;
 	m_join = join;
@@ -296,6 +301,7 @@ void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int sta
 	m_statup = statup;
 	m_statdown = statdown;
 	m_quit = quit;
+	m_cyclelifetext = cyclelifetext
 }
 
 

@@ -126,6 +126,9 @@ public:
 	void setWidth(int width) { m_width = width; }
 	void setHeight(int height) { m_height = height; }
 
+	int getlifetext() { return m_lifetext; }
+	void setlifetext(int val) { m_lifetext = val; }
+
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
 	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall, m_pFontNick;	//fonts
@@ -160,5 +163,5 @@ private:
 
 	bool m_isConnect, m_mod;
 
-
+	int m_lifetext;
 };

@@ -227,7 +227,22 @@ void D3DHook::textHud()
 
 	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life and level strings to draw
 	{
-		life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
+		switch (m_lifetext) //format lifetext
+		{
+			case 0:
+				life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
+				break;
+			case 1: 
+				life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health;
+				break;
+			case 2:
+				life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.maxHealth;
+				break;
+			case 3:
+				life[i] << " ";
+				break;
+		}
+
 		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].stats.level;
 		pseudo.push_back(m_stats.players[i].pseudo);
 		oItem[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.item << " Items";
