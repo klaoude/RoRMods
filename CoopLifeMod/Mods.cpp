@@ -96,7 +96,7 @@ void Mods::Loop()
 		m_hook->getsfont() ? m_hook->setsfont(0) : m_hook->setsfont(1);
 	
 
-	if (GetAsyncKeyState(m_lifetext))
+	if (GetAsyncKeyState(m_cyclelifetext))
 		m_hook->setlifetext((m_hook->getlifetext() + 1) % 4);
 		
 
@@ -304,7 +304,7 @@ void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int sta
 	m_statup = statup;
 	m_statdown = statdown;
 	m_quit = quit;
-	m_cyclelifetext = cyclelifetext
+	m_cyclelifetext = cyclelifetext;
 	m_font = font;
 }
 

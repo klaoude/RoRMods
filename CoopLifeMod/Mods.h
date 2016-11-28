@@ -64,6 +64,6 @@ private:
 	bool m_isConnect = false;
 	bool m_isServer = false;
 
-	int m_host, m_join, m_solo, m_toggle, m_statup, m_statdown, m_quit, m_lifetext, m_font;
+	int m_host, m_join, m_solo, m_toggle, m_statup, m_statdown, m_quit, m_cyclelifetext, m_font;
 };
 

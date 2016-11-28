@@ -121,7 +121,7 @@ public:
 	bool getMod() { return m_mod; }
 
 	void setsfont(bool val) { m_sfont = val; }
-	bool getsfont() { return m_msfont; }
+	bool getsfont() { return m_sfont; }
 
 
 	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
