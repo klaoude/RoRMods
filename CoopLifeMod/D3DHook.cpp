@@ -128,27 +128,26 @@ void D3DHook::vHUD(bool init /*=false*/)
 	m_lmlife = LENGHT - 2.5f * WIDTH / 14.0f;
 	addRect(0, 0, 0, 0, D3DCOLOR_ARGB(0, 0, 0, 0)); //do not remove or world will end
 
-	float yoff = WIDTH + 15.0f;
-	int j = 0;
+	float yoff = WIDTH + 15.0f; //offset between 2 lifebars
+	int j = 0; //lifebar id
+
 	switch (m_scale) //set rect. pos. depending to scale
 	{
 		default: //TODO: set pos for each scale
 	
 			for (auto i=0; i < m_stats.players.size(); i++) //add as many lifebars outlines & backgrounds as needed
 			{
-				if (m_stats.players[i].pseudo == m_pseudo) continue;
+				if (m_stats.players[i].pseudo == m_pseudo) continue; //skip our own lifebar (keeping right y index with j)
 
 				addRect(7.0f, j * yoff + 100.0f, LENGHT, WIDTH, D3DCOLOR_ARGB(255, 64, 65, 87)); //EXTERNAL OUTLINE
 				addRect(7.0f + WIDTH / 14.0f, j * yoff + 100.0f + WIDTH / 14.0f, LENGHT - 2.5f * WIDTH / 14.0f, WIDTH - 2.f * WIDTH / 14.f, D3DCOLOR_ARGB(255, 26, 26 , 26)); //HEALTH BACKGROUND
 				j++;
 			}
 
-			j = 0;
 			refreshLife(init);
 	}
 
-	// create a vertex buffer interface called m_vbuffer
-	if (init)
+	if (init) 	// create a vertex buffer interface called m_vbuffer, ONLY the 1st call of the function
 		m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
 
 
@@ -197,13 +196,14 @@ void D3DHook::refreshLife(bool init)
 	int j = 0;
 	for (auto i = 0; i < m_stats.players.size(); i++) //calc all lenghts of player's lifebars
 	{
-		if (m_stats.players[i].pseudo == m_pseudo) continue;
+		if (m_stats.players[i].pseudo == m_pseudo) continue; //skip our own lifebar, keeping right y offset with j
 		m_llives.push_back(m_stats.players[i].stats.health * m_lmlife / m_stats.players[i].stats.maxHealth);
 		j++;
 	}
 
-	for (auto i = 0; i < 6*m_llives.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
-		m_vertices.pop_back();
+	if (!init) //remove old lifebars only if they exist 
+		for (auto i = 0; i < 6*m_llives.size(); i++) //remove 6 vertices for each players (=> remove all lifebars)
+			m_vertices.pop_back();
 
 	//TODO: dependence on m_scale
 	for (int i = 0; i < m_llives.size(); i++) //add as many lifebars as needed
@@ -221,7 +221,7 @@ void D3DHook::textHud()
 {
 
 
-	int yoff = WIDTH +15.0f;
+	int yoff = WIDTH +15.0f; //y offset of lifebars
 
 	RECT container = { 0, 0, 0, 0 }; //container for outline
 
@@ -232,7 +232,7 @@ void D3DHook::textHud()
 
 	for (int i = 0; i < m_stats.players.size(); i++) //create array containing life and level strings to draw
 	{
-		switch (m_lifetext) //format lifetext
+		switch (m_lifetext) //set lifetext format
 		{
 			case 0:
 				life[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.health << "/" << m_stats.players[i].stats.maxHealth;
@@ -263,9 +263,9 @@ void D3DHook::textHud()
 	{
 		for (int i = 0; i < m_stats.players.size(); i++) //draw life and level of each existing player
 		{
-			if (m_stats.players[i].pseudo == m_pseudo) continue; //if we're trying to draw our own health & shit
+			if (m_stats.players[i].pseudo == m_pseudo) continue; //if we're trying to draw our own health & shit, skip but keep right y offset with j
 
-			if (!m_sfont)
+			if (!m_sfont) //draw life with small or big font
 			{
 				DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, &container, 1);
 				DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
@@ -275,6 +275,7 @@ void D3DHook::textHud()
 				DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_spFont, DT_CENTER, &container, 1);
 				DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_spFont, DT_CENTER);
 			}
+
 			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].c_str(), m_pFontNick, DT_LEFT, &container, 1);
 			if (pseudo[i] == m_stats.players[m_pSel].pseudo) //if we're trying to draw the pseudo from the selected player
 				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), pseudo[i].c_str(), m_pFontNick, DT_LEFT, true);
@@ -301,14 +302,13 @@ void D3DHook::textHud()
 	DrawOutline(m_width / 2 - 85 - 78, m_height - 64 - 27 , WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), item.str().c_str(), m_pFontSmall, DT_LEFT, &container, 1);
 	DrawTextString(m_width / 2 - 85 - 78, m_height - 64 - 27, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), item.str().c_str(), m_pFontSmall, DT_LEFT);
 
-	yoff = 1; //index of stat
 	float height; //space between two stats
 	if (!m_sfont)
 		height = 18;
 	else
 		height = 13;
 
-	std::ostringstream dmg, rate, crit, regen, strength, speed, leaf;
+	std::ostringstream dmg, rate, crit, regen, strength, speed, leaf; //stats string
 
 	dmg << "DMG:  " << std::fixed << std::setprecision(d_dmg) << m_stats.players[m_pSel].stats.damage;
 	rate << "FIRERATE:  " << std::fixed << std::setprecision(d_rate) << m_stats.players[m_pSel].stats.attackSpeed;
@@ -345,13 +345,14 @@ void D3DHook::textHud()
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc/* = false*/)
 {
-	if (!calc)
+	if (!calc) //draw text with preset rectangle
 	{
 		RECT container = { x, y, x + w, y + h };
 		pfont->DrawText(NULL, str, -1, &container, align, color); //Output the text
 		return;
 	}
 
+	//draw text while calc size of rect;
 	RECT container = { x, y, 0, 0 };
 	pfont->DrawText(NULL, str, -1, &container, DT_CALCRECT, 0);
 	pfont->DrawText(NULL, str, -1, &container, align, color); //Output the text
