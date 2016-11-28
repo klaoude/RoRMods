@@ -302,7 +302,11 @@ void D3DHook::textHud()
 	DrawTextString(m_width / 2 - 85 - 78, m_height - 64 - 27, WIDTH, 2 * LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), item.str().c_str(), m_pFontSmall, DT_LEFT);
 
 	yoff = 1; //index of stat
-	float height = 18; //space between two stats
+	float height; //space between two stats
+	if (!m_sfont)
+		height = 18;
+	else
+		height = 13;
 
 	std::ostringstream dmg, rate, crit, regen, strength, speed, leaf;
 
