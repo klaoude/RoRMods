@@ -19,6 +19,7 @@ void Mods::Init()
 	m_hook->setStat(stat);
 	m_hook->setStats(swagOverflow);
 	m_hook->setMod(1);
+	m_hook->setsfont(0);
 	m_hook->initD3D(m_hWnd);
 	m_net = new Net(m_hook);
 
@@ -89,9 +90,11 @@ void Mods::Loop()
 	}
 
 	if (GetAsyncKeyState(m_toggle))
-	{
 		m_hook->getMod() ? m_hook->setMod(0) : m_hook->setMod(1);
-	}
+
+	if (GetAsyncKeyState(m_font))
+		m_hook->getsfont() ? m_hook->setsfont(0) : m_hook->setsfont(1);
+	
 
 	if (GetAsyncKeyState(m_lifetext))
 		m_hook->setlifetext((m_hook->getlifetext() + 1) % 4);
@@ -292,7 +295,7 @@ void Mods::fixStat(std::vector<double>& vector, int& stats)
 }
 
 
-void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int statdown, int quit, int cyclelifetext)
+void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int statdown, int quit, int cyclelifetext, int font)
 {
 	m_host = host;
 	m_join = join;
@@ -302,6 +305,7 @@ void Mods::setkeys(int host, int join, int solo, int toggle, int statup, int sta
 	m_statdown = statdown;
 	m_quit = quit;
 	m_cyclelifetext = cyclelifetext
+	m_font = font;
 }
 
 

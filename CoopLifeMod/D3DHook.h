@@ -120,6 +120,10 @@ public:
 	void setMod(bool mod) { m_mod = mod; }
 	bool getMod() { return m_mod; }
 
+	void setsfont(bool val) { m_sfont = val; }
+	bool getsfont() { return m_msfont; }
+
+
 	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
 	void setId(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
 
@@ -129,9 +133,11 @@ public:
 	int getlifetext() { return m_lifetext; }
 	void setlifetext(int val) { m_lifetext = val; }
 
+
+
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 
-	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall, m_pFontNick;	//fonts
+	LPD3DXFONT m_pFont, m_pFontSmall, m_pFontDefault, m_pFontStat, m_pFontDefaultSmall, m_pFontNick, m_spFont, m_spFontStat;	//fonts
 	LPDIRECT3D9 m_d3d;
 	LPDIRECT3DVERTEXBUFFER9 m_vbuffer = NULL; //vertex buffer
 	int m_width, m_height; //height & width of window
@@ -164,4 +170,6 @@ private:
 	bool m_isConnect, m_mod;
 
 	int m_lifetext;
+
+	bool m_sfont;
 };

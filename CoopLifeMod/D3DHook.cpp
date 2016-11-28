@@ -98,13 +98,18 @@ void D3DHook::initFont()
 	AddFontResourceEx("./Resources/RiskofRainSquare.ttf", FR_PRIVATE, 0); //add font to available resources
 	AddFontResourceEx("./Resources/RiskofRainFont.ttf", FR_PRIVATE, 0); //add font to available resources
 
-	D3DXCreateFont(m_d3ddev, 12, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
+	D3DXCreateFont(m_d3ddev, 18, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFont);
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_pFontSmall);
 	D3DXCreateFont(m_d3ddev, 22, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontStat);
 	D3DXCreateFont(m_d3ddev, 14, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_pFontNick);
 
 	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefaultSmall);
 	D3DXCreateFont(m_d3ddev, 17, 0, FW_BOLD, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial", &m_pFontDefault);
+
+	D3DXCreateFont(m_d3ddev, 12, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_spFont);
+	D3DXCreateFont(m_d3ddev, 13, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_spFontStat);
+
+
 }
 
 void D3DHook::vHUD(bool init /*=false*/)
@@ -260,9 +265,16 @@ void D3DHook::textHud()
 		{
 			if (m_stats.players[i].pseudo == m_pseudo) continue; //if we're trying to draw our own health & shit
 
-			DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, &container, 1);
-			DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
-
+			if (!m_sfont)
+			{
+				DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_pFont, DT_CENTER, &container, 1);
+				DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_pFont, DT_CENTER);
+			}
+			else
+			{
+				DrawOutline(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_spFont, DT_CENTER, &container, 1);
+				DrawTextString(7.0f, 100.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_spFont, DT_CENTER);
+			}
 			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].c_str(), m_pFontNick, DT_LEFT, &container, 1);
 			if (pseudo[i] == m_stats.players[m_pSel].pseudo) //if we're trying to draw the pseudo from the selected player
 				DrawTextString(8, 100 + j * yoff + WIDTH, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 0), pseudo[i].c_str(), m_pFontNick, DT_LEFT, true);
@@ -302,19 +314,27 @@ void D3DHook::textHud()
 	speed << "SPEED: " << std::fixed << std::setprecision(d_speed) << m_stats.players[m_pSel].stats.speed;
 	leaf << "DROP CHANCE: " << std::fixed << std::setprecision(d_leaf) << m_leaf << "%";
 
-	if (m_iddmg > 0) DrawTextString(60.0f * m_width/100, 116.0f  + m_iddmg * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
-
-	if (m_idrate > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idrate * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
-
-	if (m_idcrit > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idcrit * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
-
-	if (m_idregen > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idregen * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
-
-	if (m_idstrength > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idstrength * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
-
-	if (m_idspeed > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), speed.str().c_str(), m_pFontStat, DT_RIGHT);
-
-	if (m_idleaf > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idleaf * height, height, 35.75 * m_width / 100, D3DCOLOR_ARGB(255, 192, 192, 192), leaf.str().c_str(), m_pFontStat, DT_RIGHT);
+	if (!m_sfont)
+	{
+		if (m_iddmg > 0) DrawTextString(60.0f * m_width/100, 116.0f  + m_iddmg * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_pFontStat, DT_RIGHT);
+		if (m_idrate > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idrate * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_pFontStat, DT_RIGHT);
+		if (m_idcrit > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idcrit * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_pFontStat, DT_RIGHT);
+		if (m_idregen > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idregen * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_pFontStat, DT_RIGHT);
+		if (m_idstrength > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idstrength * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_pFontStat, DT_RIGHT);
+		if (m_idspeed > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), speed.str().c_str(), m_pFontStat, DT_RIGHT);
+		if (m_idleaf > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idleaf * height, height, 35.75 * m_width / 100, D3DCOLOR_ARGB(255, 192, 192, 192), leaf.str().c_str(), m_pFontStat, DT_RIGHT);
+	}
+	else
+	{
+		if (m_iddmg > 0) DrawTextString(60.0f * m_width/100, 116.0f  + m_iddmg * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), dmg.str().c_str(),  m_spFontStat, DT_RIGHT);
+		if (m_idrate > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idrate * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), rate.str().c_str(), m_spFontStat, DT_RIGHT);
+		if (m_idcrit > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idcrit * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), crit.str().c_str(), m_spFontStat, DT_RIGHT);
+		if (m_idregen > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idregen * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), regen.str().c_str(), m_spFontStat, DT_RIGHT);
+		if (m_idstrength > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idstrength * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), strength.str().c_str(), m_spFontStat, DT_RIGHT);
+		if (m_idspeed > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), speed.str().c_str(), m_spFontStat, DT_RIGHT);
+		if (m_idleaf > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idleaf * height, height, 35.75 * m_width / 100, D3DCOLOR_ARGB(255, 192, 192, 192), leaf.str().c_str(), m_spFontStat, DT_RIGHT);
+	}
+	
 
 
 }
