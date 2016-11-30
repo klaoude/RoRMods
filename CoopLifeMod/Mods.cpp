@@ -93,12 +93,10 @@ void Mods::Loop()
 		m_hook->getMod() ? m_hook->setMod(0) : m_hook->setMod(1);
 
 	if (GetAsyncKeyState(m_font))
-		m_hook->getsfont() ? m_hook->setsfont(0) : m_hook->setsfont(1);
-	
+		m_hook->getsfont() ? m_hook->setsfont(0) : m_hook->setsfont(1);	
 
 	if (GetAsyncKeyState(m_cyclelifetext))
-		m_hook->setlifetext((m_hook->getlifetext() + 1) % 4);
-		
+		m_hook->setlifetext((m_hook->getlifetext() + 1) % 4);		
 
 	if (GetAsyncKeyState(m_quit))
 		exit(0);
