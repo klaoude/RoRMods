@@ -147,16 +147,16 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
 	wc.cbSize = sizeof(WNDCLASSEX);
-	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.style = CS_VREDRAW | CS_HREDRAW;
 	wc.lpfnWndProc = WindowProc;
 	wc.hInstance = hInstance;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)RGB(0, 0, 0);
+	wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(0, 0, 0));
 	wc.lpszClassName = "WindowClass";
 
 	RegisterClassEx(&wc);
 
-	hWnd = CreateWindowEx(0,
+	/*hWnd = CreateWindowEx(0,
 		"WindowClass",
 		"",
 		WS_EX_TOPMOST | WS_POPUP,
@@ -165,7 +165,12 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 		NULL,
 		NULL,
 		hInstance,
-		NULL);
+		NULL);*/
+
+	hWnd = CreateWindowEx(WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_TOOLWINDOW, "WindowClass", "", WS_POPUP, rc.left, rc.top, s_width, s_height, 0, 0, 0, 0);
+
+	SetLayeredWindowAttributes(hWnd, 0, 1.0f, LWA_ALPHA);
+	SetLayeredWindowAttributes(hWnd, 0, RGB(0, 0, 0), LWA_COLORKEY);
 
 	SetWindowLong(hWnd, GWL_EXSTYLE, (int)GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW);
 	//SetLayeredWindowAttributes(hWnd, RGB(0, 0, 0), 255, ULW_COLORKEY);
@@ -174,4 +179,6 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 	ShowWindow(hWnd, nCmdShow);
 
 	::SetWindowPos(FindWindow("YYGameMakerYY", value), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+
+	SetForegroundWindow(FindWindow("YYGameMakerYY", value));
 }
