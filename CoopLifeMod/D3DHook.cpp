@@ -272,8 +272,8 @@ void D3DHook::textHud()
 			}
 			else
 			{
-				DrawOutline(7.0f, 103.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_spFont, DT_CENTER, &container, 1);
-				DrawTextString(7.0f, 103.0f + j * yoff + WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_spFont, DT_CENTER);
+				DrawOutline(7.0f, 100.0f + j * yoff + 1.5*WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 64, 64, 64), life[i].str().c_str(), m_spFont, DT_CENTER, &container, 1);
+				DrawTextString(7.0f, 100.0f + j * yoff + 1.5*WIDTH / 14, WIDTH, LENGHT, D3DCOLOR_ARGB(255, 255, 255, 255), life[i].str().c_str(), m_spFont, DT_CENTER);
 			}
 
 			DrawOutline(8, 100 + j * yoff + WIDTH, WIDTH, 4*LENGHT, D3DCOLOR_ARGB(255, 26, 26, 26), pseudo[i].c_str(), m_pFontNick, DT_LEFT, &container, 1);
