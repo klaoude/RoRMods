@@ -144,9 +144,8 @@ std::vector<LPVOID> leaf_offsets =
 	(LPVOID)0x0,
 	(LPVOID)0x0,
 	(LPVOID)0x4,
-	(LPVOID)-0xBC6E00
+	(LPVOID)0xEF0
 };
-
 
 std::vector<LPVOID> level_offsets =
 {
