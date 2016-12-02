@@ -21,8 +21,7 @@ void D3DHook::render()
 
 	// select the vertex buffer to display
 	m_d3ddev->SetStreamSource(0, m_vbuffer, 0, sizeof(CUSTOMVERTEX));
-	// copy the vertex buffer to the back buffer
-	
+	// copy the vertex buffer to the back buffer	
 
 	if (!m_solo && !m_isConnect) //draw howto if...
 		DrawTextString(m_width / 2 - 150, m_height / 15, 100, 300, D3DCOLOR_ARGB(255, 255, 255, 255), "F1 to host | F2 to connect | F3 to dismiss", m_pFontDefault, DT_CENTER);
@@ -108,15 +107,12 @@ void D3DHook::initFont()
 
 	D3DXCreateFont(m_d3ddev, 11, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainSquare", &m_spFont);
 	D3DXCreateFont(m_d3ddev, 11, 0, FW_NORMAL, 1, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "RiskofRainFont", &m_spFontStat);
-
-
 }
 
 void D3DHook::vHUD(bool init /*=false*/)
 {	
 	if (m_stats.players.size() == 0)
 		return;
-	
 
 	for (auto i = 0; i < m_stats.players.size(); i++) //fix life value somtimes going over maxhealth
 		if (m_stats.players[i].stats.health > m_stats.players[i].stats.maxHealth)
@@ -149,8 +145,6 @@ void D3DHook::vHUD(bool init /*=false*/)
 
 	if (init) 	// create a vertex buffer interface called m_vbuffer, ONLY the 1st call of the function
 		m_d3ddev->CreateVertexBuffer(m_vertices.size() * sizeof(CUSTOMVERTEX), NULL, CUSTOMFVF, D3DPOOL_MANAGED, &m_vbuffer, NULL);
-
-
 
 	VOID* pVoid;	// a void pointer
 
@@ -187,7 +181,6 @@ void D3DHook::addLifeRect(float x, float y, float w, D3DCOLOR color, int player)
 
 void D3DHook::refreshLife(bool init)
 {
-
 	int yoff = WIDTH + 15.0f; //y-axis offset
 
 	m_llife = m_life * m_lmlife / m_mlife; //calc lenght of lifebar
@@ -213,14 +206,10 @@ void D3DHook::refreshLife(bool init)
 		else
 			addLifeRect(7.0f + WIDTH / 14.0f, i * yoff + 100.0f + WIDTH / 14.0f, WIDTH - 2.0f * WIDTH / 14.0f, D3DCOLOR_ARGB(255, 136, 211, 103), i); //HEALTH
 	}
-
-
 }
 
 void D3DHook::textHud()
 {
-
-
 	int yoff = WIDTH +15.0f; //y offset of lifebars
 
 	RECT container = { 0, 0, 0, 0 }; //container for outline
@@ -251,7 +240,6 @@ void D3DHook::textHud()
 		lvl[i] << "LV. " << std::fixed << std::setprecision(0) << m_stats.players[i].stats.level;
 		pseudo.push_back(m_stats.players[i].pseudo);
 		oItem[i] << std::fixed << std::setprecision(0) << m_stats.players[i].stats.item << " Items";
-
 	}
 
 	item << std::fixed << m_item << " ITEMS";
@@ -338,9 +326,6 @@ void D3DHook::textHud()
 		if (m_idspeed > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idspeed * height, height, 35.75 * m_width/100, D3DCOLOR_ARGB(255, 192, 192, 192), speed.str().c_str(), m_spFontStat, DT_RIGHT);
 		if (m_idleaf > 0) DrawTextString(60.0f * m_width / 100, 116.0f + m_idleaf * height, height, 35.75 * m_width / 100, D3DCOLOR_ARGB(255, 192, 192, 192), leaf.str().c_str(), m_spFontStat, DT_RIGHT);
 	}
-	
-
-
 }
 
 void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc/* = false*/)
@@ -355,8 +340,7 @@ void D3DHook::DrawTextString(int x, int y, int h, int w, DWORD color, const char
 	//draw text while calc size of rect;
 	RECT container = { x, y, 0, 0 };
 	pfont->DrawText(NULL, str, -1, &container, DT_CALCRECT, 0);
-	pfont->DrawText(NULL, str, -1, &container, align, color); //Output the text
-	
+	pfont->DrawText(NULL, str, -1, &container, align, color); //Output the text	
 }
 
 void D3DHook::DrawOutline(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, RECT *container, int size)
@@ -403,7 +387,6 @@ void D3DHook::setStat(Stats stats)
 	setmlife(stats.maxHealth);
 }
 
-
 void D3DHook::setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf)
 {
 	d_dmg = dmg;
@@ -425,7 +408,6 @@ void D3DHook::setId(int dmg, int rate, int crit, int regen, int strength, int sp
 	m_idspeed = speed;
 	m_idleaf = leaf;
 }
-
 
 /*
 void D3DHook::drawString(int x, int y, DWORD color, LPD3DXFONT g_pFont, const char * fmt)

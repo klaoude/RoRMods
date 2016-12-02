@@ -10,7 +10,7 @@ typedef std::map<double, int> CounterMap;
 class Mods
 {
 public:
-	Mods(HWND hWnd, int width, int height);
+	Mods(Log* log, HWND hWnd, int width, int height);
 
 	void Init();
 
@@ -36,7 +36,7 @@ private:
 	void fixStat(std::vector<double>& vector, float& stats);
 	void fixStat(std::vector<double>& vector, int& stats);
 	
-
+	Log* m_log;
 	HWND m_hWnd;
 	D3DHook* m_hook;
 	Memory m_mem;

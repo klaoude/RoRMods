@@ -26,7 +26,7 @@ class Net
 {
 public:
 	Net() {}
-	Net(D3DHook* hook) : m_hook(hook) {}
+	Net(D3DHook* hook, Log* log) : m_hook(hook), m_log(log) {}
 
 	void create(int port);
 	void conn(std::string ip, int port);
@@ -57,4 +57,6 @@ private:
 	std::vector<Client> m_clients;
 
 	Data m_data;
+
+	Log* m_log;
 };

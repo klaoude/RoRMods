@@ -29,11 +29,18 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
 	MSG msg;
-	Mods mod(hWnd, s_width, s_height);	
+	Log log("log.log");
+	Mods mod(&log, hWnd, s_width, s_height);
+
+	log.write("---Initialisation---");
+	log.write("--Reading value in config.ini--");
 
 	std::string pseudo, ip;
 	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
 	ip = ReadString("options", "ip", "ip not defined"); //read ip from .ini
+
+	log.write("Pseudo = " + pseudo);
+	log.write("ip = " + ip);
 
 	std::string host, join, solo, toggle, statup, statdown, quit, cyclelifetext, font;
 	host = ReadString("keys", "host", "F1");
@@ -46,6 +53,8 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	cyclelifetext = ReadString("keys", "cyclelifetext", "F5");
 	font = ReadString("keys", "font", "F6");
 
+	log.write("Reading Keys");
+
 	int decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf;
 	decdmg = ReadInt("decimals", "damage", 2);
 	decrate = ReadInt("decimals", "attackSpeed", 2);
@@ -54,6 +63,8 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	decstrength = ReadInt("decimals", "strength", 2);
 	decspeed = ReadInt("decimals", "speed", 2);
 	decleaf = ReadInt("decimals", "cloverChance", 2);
+
+	log.write("Reading decimals");
 
 	int iddmg, idrate, idcrit, idregen, idstrength, idspeed, idleaf;
 	iddmg = ReadInt("index", "damage", 0);
@@ -64,7 +75,10 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	idspeed = ReadInt("index", "speed", 0);
 	idleaf = ReadInt("index", "cloverChance", 0);
 
-
+	log.write("Reading ids");
+	log.write("--Reading Done--");
+	log.write("--Setting config--");
+	
 	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown), mod.stk(quit), mod.stk(cyclelifetext), mod.stk(font));
 
 	mod.setDec(decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf);
@@ -73,6 +87,8 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	mod.setIP(ip);
 	mod.setPseudo(pseudo);
 	
+	log.write("--Setting Done--");
+
 	mod.Init();
 
 	while (TRUE)

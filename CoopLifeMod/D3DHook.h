@@ -1,15 +1,6 @@
 #pragma once
 
-#include <winsock2.h>
-#include <windows.h>
-#include <d3d9.h>
-#include <iostream>
-#include <d3dx9.h>
-#include <Dwmapi.h> 
-#include <TlHelp32.h>
-#include <vector>
-#include <sstream>
-#include <iomanip>
+#include "Log.h"
 
 struct CUSTOMVERTEX { FLOAT X, Y, Z, RHW; DWORD COLOR; }; //Vertex structure for rectangles
 #define CUSTOMFVF (D3DFVF_XYZRHW | D3DFVF_DIFFUSE)
@@ -55,16 +46,13 @@ public:
 	void render(); //draw everything
 	void initD3D(HWND hWnd);
 	
-	void initFont(); //create fonts
-	
+	void initFont(); //create fonts	
 
 	void vHUD(bool init = false); //draw rectangles
 	void addRect(float x, float y, float l, float w, D3DCOLOR color); //ad rectangle to draw
 	void addLifeRect(float x, float y, float w, D3DCOLOR color, int player); //add lifebar
 	void refreshLife(bool init); //refresh lifebar lenght
-
 	
-
 	void textHud(); //draw all texts
 	void DrawTextString(int x, int y, int h, int w, DWORD color, const char *str, LPD3DXFONT pfont, int align, bool calc = false); //draw text
 	void DrawOutline(int x, int y, int h, int w, DWORD color, const char * str, LPD3DXFONT pfont, int align, RECT *container, int size = 2); //draw outline of a text
@@ -84,7 +72,6 @@ public:
 	void setitem(int nb) { m_item = nb; }
 	void setlvl(float lvl) { m_lvl = lvl; }
 	void setleaf(int val) { m_leaf = val; }
-
 
 	void setlife(float life) { m_life = life; }
 	void setmlife(float mlife) { m_mlife = mlife; }
@@ -123,7 +110,6 @@ public:
 	void setsfont(bool val) { m_sfont = val; }
 	bool getsfont() { return m_sfont; }
 
-
 	void setDec(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
 	void setId(int dmg, int rate, int crit, int regen, int strength, int speed, int leaf);
 
@@ -132,8 +118,6 @@ public:
 
 	int getlifetext() { return m_lifetext; }
 	void setlifetext(int val) { m_lifetext = val; }
-
-
 
 private:
 	LPDIRECT3DDEVICE9 m_d3ddev; 

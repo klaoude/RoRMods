@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="D3DHook.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="Mods.cpp" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D3DHook.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Mods.h" />
     <ClInclude Include="Net.h" />

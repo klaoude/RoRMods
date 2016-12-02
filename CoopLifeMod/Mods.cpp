@@ -1,11 +1,12 @@
 #include "Mods.h"
 #include "Offsets.h"
 
-Mods::Mods(HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(width, height))
+Mods::Mods(Log* log, HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(width, height)), m_log(log)
 {}
 
 void Mods::Init()
 {
+	m_log->write("---[Mods] Initialisation---");
 	m_hook->setSolo(false);
 	m_hook->setlifetext(0);
 
@@ -21,11 +22,12 @@ void Mods::Init()
 	m_hook->setMod(1);
 	m_hook->setsfont(0);
 	m_hook->initD3D(m_hWnd);
-	m_net = new Net(m_hook);
+	m_net = new Net(m_hook, m_log);
 
 	m_mem.Open("Risk of Rain");
 
 	m_hook->setPseudo(m_pseudo);
+	m_log->write("---[Mods] Init Ended---");
 }
 
 void Mods::Loop()

@@ -60,6 +60,7 @@ void dePackerize(Player& player, std::vector<std::string> infoSplited)
 
 void Net::create(int port)
 {
+	m_log->write("---[Net]Create---");
 	WSADATA WSAData;
 	WSAStartup(MAKEWORD(2, 0), &WSAData);
 
@@ -74,18 +75,19 @@ void Net::create(int port)
 	ss << port;
 	ss << ")";
 	std::string str = ss.str();
+	m_log->write("[Net] Server created " + port);
 	str.resize(29);
 	m_hook->setInfo(str.c_str(), 60);
 
 	m_threads.push_back(std::thread(&Net::ServerThread, this));
+	m_log->write("---[Net]Create ended---");
 }
 
 void Net::ServerThread()
 {
-	printf("Server thread created\n");
+	m_log->write("---[Net]Server thread created---");
 	while (1)
 	{
-		printf("Waiting for a new connection\n");
 		bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
 		listen(m_server.socket, 0);
 
@@ -103,6 +105,7 @@ void Net::ServerThread()
 
 void Net::conn(std::string ip, int port)
 {
+	m_log->write("---[Net]Conn---");
 	WSADATA WSAData;
 	WSAStartup(MAKEWORD(2, 0), &WSAData);
 
@@ -124,6 +127,7 @@ void Net::conn(std::string ip, int port)
 	m_hook->setInfo("Connection Establish !", 60);
 
 	m_isServer = false;
+	m_log->write("---[Net]Conn ended---");
 }
 
 void Net::sendInfo(Player p)
