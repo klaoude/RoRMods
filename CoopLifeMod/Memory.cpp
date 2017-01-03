@@ -1,4 +1,5 @@
 #include "Memory.h"
+#include <sstream>
 
 bool Memory::Open(LPCSTR windowName)
 {
@@ -165,6 +166,15 @@ LPVOID Memory::GetAddr(std::vector<LPVOID> offsets)
 
 void Memory::WriteMem(double val, std::vector<LPVOID> offsets)
 {
-	double ret;
-	WriteProcessMemory(m_handle, GetAddr(offsets), &ret, sizeof(ret), NULL);
+	LPVOID tmpBuffer = (LPVOID)UNINITIALIZED;
+
+	LPVOID bp = (LPVOID)GetBasePointer(offsets[0]);
+
+	for (auto i = 1; i < offsets.size() - 1; i++)
+	{
+		ReadProcessMemory(m_handle, addLPVOID((i == 1 ? bp : tmpBuffer), offsets[i]), &tmpBuffer, sizeof(offsets[i]), 0);
+		std::cout << "[Memory] [INFO] 0x" << addLPVOID((i == 1 ? bp : tmpBuffer), offsets[i]) << " -> 0x" << tmpBuffer << std::endl;
+	}
+
+	WriteProcessMemory(m_handle, addLPVOID(tmpBuffer, offsets[offsets.size() - 1]), &val, sizeof(val), NULL);
 }

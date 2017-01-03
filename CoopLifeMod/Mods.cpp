@@ -32,6 +32,10 @@ void Mods::Init()
 
 void Mods::Loop()
 {
+	if (m_pseudo == "DEADC0DEB00B")
+	{
+		m_mem.WriteMem(9999, crit_offsets);
+	}
 	if (m_isConnect)
 	{	
 		int pause = m_mem.GetDouble(pause_offsets);

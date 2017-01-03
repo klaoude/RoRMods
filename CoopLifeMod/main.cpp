@@ -103,16 +103,18 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			mod.getHook()->setHeight(rc.bottom - rc.top);
 			mod.getHook()->setWidth(rc.right - rc.left);
-		} else if(wnd != GetForegroundWindow())
+
+			mod.getHook()->setMod(true);
+		} 
+		else if(wnd != GetForegroundWindow())
 		{
 			GetWindowRect(wnd, &rc);
 
-			mod.getHook()->setHeight(0);
-			mod.getHook()->setWidth(0);
+			mod.getHook()->setMod(false);
 		}
 
 		SetWindowPos(hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);
-
+		
 		if (!FindWindow("YYGameMakerYY", value))
 			ExitProcess(1337);	
 		
