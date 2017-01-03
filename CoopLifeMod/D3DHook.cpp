@@ -64,7 +64,7 @@ void D3DHook::initD3D(HWND hWnd)
 	d3dpp.Windowed = TRUE;    // program windowed, not fullscreen
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;    // discard old frames
 	d3dpp.hDeviceWindow = hWnd;    // set the window to be used by Direct3D
-	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;     // set the back buffer format to 32-bit
+	d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;     // set the back buffer format to 32-bit
 	d3dpp.BackBufferWidth = m_width;    // set the width of the buffer
 	d3dpp.BackBufferHeight = m_height;    // set the height of the buffer
 
