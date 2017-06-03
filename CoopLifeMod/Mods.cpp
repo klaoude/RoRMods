@@ -82,7 +82,8 @@ void Mods::Loop()
 			char* ip = m_mem.getChar(ipOffsets, 15);
 			std::string ipStr = std::string(ip);
 			ipStr.resize(15);
-			m_net->conn(m_ipAddr, m_mem.GetDouble(portClientOffsets) + 1);
+			//m_net->conn(m_ipAddr, m_mem.GetDouble(portClientOffsets) + 1);
+			m_net->conn("127.0.0.1", 1338);
 			m_isConnect = true;
 			m_hook->setIsCon(m_isConnect);
 			m_hook->setSolo(false);

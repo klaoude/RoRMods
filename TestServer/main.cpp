@@ -4,7 +4,9 @@ int main(int argc, char** argv)
 {
 	Net net;
 	bool s = false;
-		net.conn("127.0.0.1", 1338);
+	
+	net.conn("127.0.0.1", 1338);
+	//net.create(1338);
 
 	Stats stat;
 	stat.attackSpeed = 1;
@@ -31,6 +33,12 @@ int main(int argc, char** argv)
 			dt = net.recvData();
 			for (auto i : dt.players)
 				std::cout << "Health of " << i.pseudo << " = " << i.stats.health << std::endl;
+		}
+		else
+		{
+			net.recvAllInfo();
+			net.addInfo(p);
+			net.broadcastData();
 		}
 
 		Sleep(100);

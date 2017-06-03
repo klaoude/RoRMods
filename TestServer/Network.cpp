@@ -15,71 +15,8 @@ std::vector<std::string> split(const std::string &s, char delim) {
 	return elems;
 }
 
-void Net::create(int port)
+void Packer(std::stringstream& ss, Player p)
 {
-	WSADATA WSAData;
-	WSAStartup(MAKEWORD(2, 0), &WSAData);
-
-	m_server.socket = socket(AF_INET, SOCK_STREAM, 0);
-	m_server.addr.sin_addr.s_addr = htonl(INADDR_ANY);
-	m_server.addr.sin_family = AF_INET;
-	m_server.addr.sin_port = htons(port);
-	m_isServer = true;
-
-	printf("Server created\n");
-
-	m_threads.push_back(std::thread(&Net::ServerThread, this));
-}
-
-void Net::ServerThread()
-{
-	printf("Server thread created\n");
-	while (1)
-	{
-		printf("Waiting for a new connection\n");
-		bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
-		listen(m_server.socket, 0);
-
-		Client cl;
-		int sizeof_csin = sizeof(cl.addr);
-
-		cl.socket = accept(m_server.socket, (SOCKADDR*)&cl.addr, &sizeof_csin);
-		if (cl.socket != INVALID_SOCKET)
-		{
-			printf("Client Connected !\n");
-			m_clients.push_back(cl);
-		}			
-	}	
-}
-
-void Net::conn(std::string ip, int port)
-{
-	WSADATA WSAData;
-	WSAStartup(MAKEWORD(2, 0), &WSAData);
-
-	TIMEVAL Timeout;
-	Timeout.tv_sec = 5;
-	Timeout.tv_usec = 0;
-
-	m_server.socket = socket(AF_INET, SOCK_STREAM, 0);
-
-	m_server.addr.sin_family = AF_INET;
-	m_server.addr.sin_addr.s_addr = inet_addr(ip.c_str());
-	m_server.addr.sin_port = htons(port);
-
-	if (connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr)) == SOCKET_ERROR)
-		printf("Connection failed\n");
-
-	m_isServer = false;
-}
-
-void Net::sendInfo(Player p)
-{
-	char buffer[1024];
-
-	std::string dataStr;
-	std::stringstream ss;
-		
 	ss << p.isConnected;
 	ss << "|";
 	ss << p.stats.health;
@@ -101,6 +38,98 @@ void Net::sendInfo(Player p)
 	ss << p.stats.item;
 	ss << "|";
 	ss << p.pseudo;
+	ss << "|";
+	ss << p.stats.speed;
+}
+
+void dePackerize(Player& player, std::vector<std::string> infoSplited)
+{
+	player.isConnected = true;//? infoSplited[0] == "204" : false;
+	player.stats.health = atof(infoSplited[1].c_str());
+	player.stats.maxHealth = atof(infoSplited[2].c_str());
+	player.stats.damage = atof(infoSplited[3].c_str());
+	player.stats.attackSpeed = atof(infoSplited[4].c_str());
+	player.stats.critical = atof(infoSplited[5].c_str());
+	player.stats.regeneration = atof(infoSplited[6].c_str());
+	player.stats.strength = atof(infoSplited[7].c_str());
+	player.stats.level = atof(infoSplited[8].c_str());
+	player.stats.item = atof(infoSplited[9].c_str());
+	player.pseudo = infoSplited[10];
+	player.stats.speed = atof(infoSplited[11].c_str());
+}
+
+void Net::create(int port)
+{
+	WSADATA WSAData;
+	WSAStartup(MAKEWORD(2, 0), &WSAData);
+
+	m_server.socket = socket(AF_INET, SOCK_STREAM, 0);
+	m_server.addr.sin_addr.s_addr = htonl(INADDR_ANY);
+	m_server.addr.sin_family = AF_INET;
+	m_server.addr.sin_port = htons(port);
+	m_isServer = true;
+
+	std::stringstream ss;
+	ss << "Server created ! (port:";
+	ss << port;
+	ss << ")";
+	std::string str = ss.str();
+	str.resize(29);
+
+	m_threads.push_back(std::thread(&Net::ServerThread, this));
+	//m_log->write("---[Net]Create ended---");
+}
+
+void Net::ServerThread()
+{
+	while (1)
+	{
+		bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
+		listen(m_server.socket, 0);
+
+		Client cl;
+		int sizeof_csin = sizeof(cl.addr);
+
+		cl.socket = accept(m_server.socket, (SOCKADDR*)&cl.addr, &sizeof_csin);
+		if (cl.socket != INVALID_SOCKET)
+		{
+			m_clients.push_back(cl);
+		}
+	}
+}
+
+void Net::conn(std::string ip, int port)
+{
+	WSADATA WSAData;
+	WSAStartup(MAKEWORD(2, 0), &WSAData);
+
+	TIMEVAL Timeout;
+	Timeout.tv_sec = 5;
+	Timeout.tv_usec = 0;
+
+	m_server.socket = socket(AF_INET, SOCK_STREAM, 0);
+
+	m_server.addr.sin_family = AF_INET;
+	m_server.addr.sin_addr.s_addr = inet_addr(ip.c_str());
+	m_server.addr.sin_port = htons(port);
+
+	if (connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr)) == SOCKET_ERROR)
+	{
+		return;
+	}
+
+	m_isServer = false;
+	//m_log->write("---[Net]Conn ended---");
+}
+
+void Net::sendInfo(Player p)
+{
+	char buffer[1024];
+
+	std::string dataStr;
+	std::stringstream ss;
+
+	Packer(ss, p);
 
 	dataStr = ss.str();
 
@@ -139,17 +168,7 @@ Player Net::recvInfo(Client c)
 		std::string dataStr = buffer;
 
 		std::vector<std::string> infoSplited = split(dataStr, '|');
-		player.isConnected = true;
-		player.stats.health = atof(infoSplited[1].c_str());
-		player.stats.maxHealth = atof(infoSplited[2].c_str());
-		player.stats.damage = atof(infoSplited[3].c_str());
-		player.stats.attackSpeed = atof(infoSplited[4].c_str());
-		player.stats.critical = atof(infoSplited[5].c_str());
-		player.stats.regeneration = atof(infoSplited[6].c_str());
-		player.stats.strength = atof(infoSplited[7].c_str());
-		player.stats.level = atof(infoSplited[8].c_str());
-		player.stats.item = atof(infoSplited[9].c_str());
-		player.pseudo = infoSplited[10];
+		dePackerize(player, infoSplited);
 
 		return player;
 	}
@@ -165,34 +184,14 @@ void Net::broadcastData()
 	for (auto i : m_data.players)
 	{
 		ss << ">";
-		ss << i.isConnected;
-		ss << "|";
-		ss << i.stats.health;
-		ss << "|";
-		ss << i.stats.maxHealth;
-		ss << "|";
-		ss << i.stats.damage;
-		ss << "|";
-		ss << i.stats.attackSpeed;
-		ss << "|";
-		ss << i.stats.critical;
-		ss << "|";
-		ss << i.stats.regeneration;
-		ss << "|";
-		ss << i.stats.strength;
-		ss << "|";
-		ss << i.stats.level;
-		ss << "|";
-		ss << i.stats.item;
-		ss << "|";
-		ss << i.pseudo;
+		Packer(ss, i);
 	}
 
 	dataStr = ss.str();
 
 	strcpy(buffer, dataStr.c_str());
 
-	for(auto c : m_clients)
+	for (auto c : m_clients)
 		send(c.socket, buffer, sizeof(buffer), 0);
 }
 
@@ -211,19 +210,21 @@ Data Net::recvData()
 	{
 		Player player;
 		std::vector<std::string> infoSplited = split(splited[i], '|');
-		player.isConnected = true ? infoSplited[0] == "1" : false;
-		player.stats.health = atof(infoSplited[1].c_str());
-		player.stats.maxHealth = atof(infoSplited[2].c_str());
-		player.stats.damage = atof(infoSplited[3].c_str());
-		player.stats.attackSpeed = atof(infoSplited[4].c_str());
-		player.stats.critical = atof(infoSplited[5].c_str());
-		player.stats.regeneration = atof(infoSplited[6].c_str());
-		player.stats.strength = atof(infoSplited[7].c_str());
-		player.stats.level = atof(infoSplited[8].c_str());
-		player.stats.item = atof(infoSplited[9].c_str());
-		player.pseudo = infoSplited[10];
+		dePackerize(player, infoSplited);
 		data.players.push_back(player);
 	}
 
 	return data;
+}
+
+void Net::addInfo(Player p)
+{
+	m_data.players.push_back(p);
+}
+
+void Net::clear()
+{
+	WSACleanup();
+	for (auto &t : m_threads)
+		t.join();
 }

@@ -21,10 +21,12 @@ struct Stats
 	double strength;
 	double regeneration;
 	double critical;
+	double speed;
 
 	int level;
 	int item;
 };
+
 
 struct Player //send les float avec 2 decimales mini please, thx.
 {
@@ -58,6 +60,8 @@ struct Server
 class Net
 {
 public:
+	Net() {}
+
 	void create(int port);
 	void conn(std::string ip, int port);
 
@@ -66,8 +70,11 @@ public:
 	Data recvData();
 
 	//Server fonctions
-	void recvAllInfo();	
+	void recvAllInfo();
 	void broadcastData();
+	void addInfo(Player p);
+
+	Data getData() { return m_data; }
 
 	void clear();
 
