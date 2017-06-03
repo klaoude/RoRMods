@@ -3,10 +3,13 @@
 int main(int argc, char** argv)
 {
 	Net net;
+
 	bool s = false;
 	
-	net.conn("127.0.0.1", 1338);
-	//net.create(1338);
+	if(!s)
+		net.conn("127.0.0.1", 1338);
+	else
+		net.create(1338);
 
 	Stats stat;
 	stat.attackSpeed = 1;
