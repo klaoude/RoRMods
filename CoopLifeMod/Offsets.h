@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include <Windows.h>
 
@@ -27,6 +28,24 @@ std::vector<LPVOID> damage_offsets =
 	(LPVOID)0x0,
 	(LPVOID)0x4,
 	(LPVOID)0x90
+};
+
+std::vector<LPVOID> crit_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0xC90
+};
+
+std::vector<LPVOID> item_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0x6D0
 };
 
 std::vector<LPVOID> jumpHeight_offsets =
@@ -74,6 +93,24 @@ std::vector<LPVOID> fallingSpeed_offsets =
 	(LPVOID)0xC30
 };
 
+std::vector<LPVOID> speed_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0xB60
+};
+
+std::vector<LPVOID> gold_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0x6F0
+};
+
 std::vector<LPVOID> numItem1_offsets =
 {
 	(LPVOID)0x005AE468,
@@ -99,6 +136,15 @@ std::vector<LPVOID> regeneration_offsets =
 	(LPVOID)0x0,
 	(LPVOID)0x4,
 	(LPVOID)0x12C0
+};
+
+std::vector<LPVOID> leaf_offsets =
+{
+	(LPVOID)0x005AE468,
+	(LPVOID)0x0,
+	(LPVOID)0x0,
+	(LPVOID)0x4,
+	(LPVOID)0xEF0
 };
 
 std::vector<LPVOID> level_offsets =
@@ -157,4 +203,14 @@ std::vector<LPVOID> scale_offsets =
 	(LPVOID)0x0,
 	(LPVOID)0x4,
 	(LPVOID)0xA60
+};
+
+std::vector<LPVOID> version_offsets = 
+{
+	(LPVOID)0x0059D34C,
+	(LPVOID)0x80,
+	(LPVOID)0x4,
+	(LPVOID)0x3F0,
+	(LPVOID)0x0,
+	(LPVOID)0x0
 };

@@ -1,11 +1,4 @@
-#include "Net.h"
-#include "D3DHook.h"
-#include "Memory.h"
-#include <sstream>
-#include <map>
-#include "Offsets.h"
-
-typedef std::map<int, int> CounterMap;
+#include "Mods.h"
 
 int s_width = 800;
 int s_height = 600;
@@ -13,121 +6,116 @@ HWND hWnd;
 const MARGINS  margin = { 0,0,s_width,s_height };
 const char* value = "Risk of Rain";
 
-Memory mem;
-
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
-void setStat(D3DHook *hook, int health, int maxHealth);
+
+char* ReadString(char* szSection, char* szKey, const char* szDefaultValue)
+{
+	char* szResult = new char[255];
+	memset(szResult, 0x00, 255);
+	GetPrivateProfileString(szSection, szKey,
+		szDefaultValue, szResult, 255, "./Resources/config.ini");
+	return szResult;
+}
+
+int ReadInt(char* szSection, char* szKey, int iDefaultValue)
+{
+	int iResult = GetPrivateProfileInt(szSection, szKey, iDefaultValue, "./Resources/config.ini");
+	return iResult;
+}
 
 int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	WinApiInit(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 
-	D3DHook hook(s_width, s_height);
-	
-	hook.initD3D(hWnd);
 	MSG msg;
+	Log log("log.log");
+	Mods mod(&log, hWnd, s_width, s_height);
+
+	log.write("---Initialisation---");
+	log.write("--Reading value in config.ini--");
+
+	std::string pseudo, ip;
+	pseudo = ReadString("options", "nickname", "no nickname"); //read pseudo from .ini
+	ip = ReadString("options", "ip", "ip not defined"); //read ip from .ini
+
+	log.write("Pseudo = " + pseudo);
+	log.write("ip = " + ip);
+
+	std::string host, join, solo, toggle, statup, statdown, quit, cyclelifetext, font;
+	host = ReadString("keys", "host", "F1");
+	join = ReadString("keys", "join", "F2");
+	solo = ReadString("keys", "solo", "F3");
+	toggle = ReadString("keys", "toggle", "F8");
+	statup = ReadString("keys", "statup", "PGUP");
+	statdown = ReadString("keys", "statdown", "PGDOWN");
+	quit = ReadString("keys", "quit", "F9");
+	cyclelifetext = ReadString("keys", "cyclelifetext", "F5");
+	font = ReadString("keys", "font", "F6");
+
+	log.write("Reading Keys");
+
+	int decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf;
+	decdmg = ReadInt("decimals", "damage", 2);
+	decrate = ReadInt("decimals", "attackSpeed", 2);
+	deccrit = ReadInt("decimals", "crit", 2);
+	decregen = ReadInt("decimals", "regen", 2);
+	decstrength = ReadInt("decimals", "strength", 2);
+	decspeed = ReadInt("decimals", "speed", 2);
+	decleaf = ReadInt("decimals", "cloverChance", 2);
+
+	log.write("Reading decimals");
+
+	int iddmg, idrate, idcrit, idregen, idstrength, idspeed, idleaf;
+	iddmg = ReadInt("index", "damage", 0);
+	idrate = ReadInt("index", "attackSpeed", 0);
+	idcrit = ReadInt("index", "crit", 0);
+	idregen = ReadInt("index", "regen", 0);
+	idstrength = ReadInt("index", "strength", 0);
+	idspeed = ReadInt("index", "speed", 0);
+	idleaf = ReadInt("index", "cloverChance", 0);
+
+	log.write("Reading ids");
+	log.write("--Reading Done--");
+	log.write("--Setting config--");
 	
-	mem.Open(value);
+	mod.setkeys(mod.stk(host), mod.stk(join), mod.stk(solo), mod.stk(toggle), mod.stk(statup), mod.stk(statdown), mod.stk(quit), mod.stk(cyclelifetext), mod.stk(font));
 
-	int health = 0, maxHealth = 0;	
+	mod.setDec(decdmg, decrate, deccrit, decregen, decstrength, decspeed, decleaf);
+	mod.setId(iddmg, idrate, idcrit, idregen, idstrength, idspeed, idleaf);
 
-	int frame = 0;
-	int fps = 10;
-	std::stringstream s;
-	std::string healthStr;
-	int stableHealth = 1;
-	int oldMax = 1;
+	mod.setIP(ip);
+	mod.setPseudo(pseudo);
+	
+	log.write("--Setting Done--");
 
-	std::vector<int> maxHealths;
+	mod.Init();
 
-	CounterMap counts;
-	CounterMap::iterator it;
-
-	bool isConnect = false;
-
-	Net net(&hook);
-
-	char* ip;
-	std::string ipstr;
-
-	int swag = 0;
 	while (TRUE)
 	{			
-		bool f1 = false;
-		if (isConnect)
+		mod.Loop();
+
+		RECT rc;
+		HWND wnd = FindWindow("YYGameMakerYY", value);
+		if (wnd != NULL && wnd == GetForegroundWindow())
 		{
-			if (maxHealths.size() > 20)
-				maxHealths.erase(maxHealths.begin());
+			GetWindowRect(wnd, &rc);
 
-			if (maxHealth > 0)
-				maxHealths.push_back(maxHealth);
+			mod.getHook()->setHeight(rc.bottom - rc.top);
+			mod.getHook()->setWidth(rc.right - rc.left);
 
-			if (maxHealths.size() > 19)
-			{
-				counts.clear();
-				for (int i = 0; i < maxHealths.size(); ++i)
-				{
-					it = counts.find(maxHealths[i]);
-					if (it != counts.end()) {
-						it->second++;
-					}
-					else {
-						counts[maxHealths[i]] = 1;
-					}
-				}
+			mod.getHook()->setMod(true);
+		} 
+		else if(wnd != GetForegroundWindow())
+		{
+			GetWindowRect(wnd, &rc);
 
-				int max = 0;
-				int pos = 0;
-				int i = 0;
-				for (auto it = counts.begin(); it != counts.end(); it++)
-				{
-					if (it->second > max)
-					{
-						max = it->second;
-						pos = i;
-					}
-					i++;
-				}
-
-				it = counts.begin();
-				for (auto j = 0; j < pos; j++)
-					it++;
-				maxHealth = it->first;
-			}
-
-			/*net.sendDouble(health);
-			net.sendDouble(maxHealth);
-			health = net.recvDouble();
-			maxHealth = net.recvDouble();*/
-
-			setStat(&hook, 0, 0);			
+			mod.getHook()->setMod(false);
 		}
-		else
-		{
-			if(f1)
-				net.create(mem.GetDouble(portServerOffsets) + 1);
-			else if (GetAsyncKeyState(VK_F1))
-			{
-				net.create(mem.GetDouble(portServerOffsets) + 1);
-				f1 = true;
-				//isConnect = true;
-			}				
-			else if (GetAsyncKeyState(VK_F2))
-			{
-				ip = mem.getChar(ipOffsets, 15);
-				ipstr = std::string(ip);				
-				ipstr.resize(15);
-				net.conn(ipstr, mem.GetDouble(portClientOffsets) + 1);
-				isConnect = true;
-			}	
-		}	
 
-		hook.render();	
-
-		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-
-		if (!FindWindow(NULL, value))
+		SetWindowPos(hWnd, HWND_TOPMOST, rc.left, rc.top, 0, 0, SWP_NOSIZE);
+		
+		if (!FindWindow("YYGameMakerYY", value))
 			ExitProcess(1337);	
 		
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -137,9 +125,11 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 		if (msg.message == WM_QUIT)
+		{
+			mod.Stop();
 			exit(0);
+		}			
 
-		frame++;
 		Sleep(10);
 	}
 
@@ -167,7 +157,7 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 {
 	RECT rc;
 
-	HWND newhwnd = FindWindow(NULL, value);
+	HWND newhwnd = FindWindow("YYGameMakerYY", value);
 	if (newhwnd != NULL)
 	{
 		GetWindowRect(newhwnd, &rc);
@@ -181,16 +171,16 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 	ZeroMemory(&wc, sizeof(WNDCLASSEX));
 
 	wc.cbSize = sizeof(WNDCLASSEX);
-	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.style = CS_VREDRAW | CS_HREDRAW;
 	wc.lpfnWndProc = WindowProc;
 	wc.hInstance = hInstance;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)RGB(0, 0, 0);
+	wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(0, 0, 0));
 	wc.lpszClassName = "WindowClass";
 
 	RegisterClassEx(&wc);
 
-	hWnd = CreateWindowEx(0,
+	/*hWnd = CreateWindowEx(0,
 		"WindowClass",
 		"",
 		WS_EX_TOPMOST | WS_POPUP,
@@ -199,44 +189,20 @@ void WinApiInit(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, i
 		NULL,
 		NULL,
 		hInstance,
-		NULL);
+		NULL);*/
 
-	SetWindowLong(hWnd, GWL_EXSTYLE, (int)GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_LAYERED | WS_EX_TRANSPARENT);
-	SetLayeredWindowAttributes(hWnd, RGB(0, 0, 0), 0, ULW_COLORKEY);
-	SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA);
+	hWnd = CreateWindowEx(WS_EX_TOPMOST | WS_EX_TRANSPARENT | WS_EX_LAYERED | WS_EX_TOOLWINDOW, "WindowClass", "", WS_POPUP, rc.left, rc.top, s_width, s_height, 0, 0, 0, 0);
+
+	SetLayeredWindowAttributes(hWnd, 0, 1.0f, LWA_ALPHA);
+	SetLayeredWindowAttributes(hWnd, 0, RGB(0, 0, 0), LWA_COLORKEY);
+
+	SetWindowLong(hWnd, GWL_EXSTYLE, (int)GetWindowLong(hWnd, GWL_EXSTYLE) | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW);
+	//SetLayeredWindowAttributes(hWnd, RGB(0, 0, 0), 255, ULW_COLORKEY);
+	//SetLayeredWindowAttributes(hWnd, 0, 255, LWA_ALPHA);
 
 	ShowWindow(hWnd, nCmdShow);
 
-	::SetWindowPos(FindWindow(NULL, value), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-}
+	::SetWindowPos(FindWindow("YYGameMakerYY", value), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
-
-void setStat(D3DHook *hook, int health, int maxHealth)
-{
-	int stableHealth = 1;
-
-	if (health >= 1 && health < 10000)
-	{
-		hook->setlife(health);
-		hook->setmlife(maxHealth);
-
-		stableHealth = health;
-	}
-	else
-	{
-		hook->setlife(stableHealth);
-		hook->setmlife(maxHealth);
-	}
-
-	hook->setdmg(mem.GetDouble(damage_offsets));
-	hook->setrate(mem.GetDouble(attackSpeed_offsets));
-	hook->setstrength(mem.GetDouble(resistance_offsets));
-	hook->setregen(mem.GetDouble(regeneration_offsets));
-	hook->setdmg(mem.GetDouble(damage_offsets));
-	hook->setlvl(mem.GetDouble(level_offsets));
-
-	hook->setcrit(13.37);
-	hook->setitem(69);
-
-	hook->setpause(mem.GetDouble(pause_offsets));
+	SetForegroundWindow(FindWindow("YYGameMakerYY", value));
 }

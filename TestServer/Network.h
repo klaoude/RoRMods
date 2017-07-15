@@ -1,10 +1,45 @@
 #pragma once
 
+#include <sys/types.h>
+#include <winsock2.h>
+#include <Windows.h>
+#include <iostream>
+#include <string>
 #include <thread>
-
-#include "D3DHook.h"
+#include <vector>
+#include <sstream>
 
 #pragma comment (lib, "Ws2_32.lib")
+
+struct Stats
+{
+	float health;
+	float maxHealth;
+
+	double damage;
+	double attackSpeed;
+	double strength;
+	double regeneration;
+	double critical;
+	double speed;
+
+	int level;
+	int item;
+};
+
+
+struct Player //send les float avec 2 decimales mini please, thx.
+{
+	bool isConnected;
+	std::string pseudo;
+
+	Stats stats;
+};
+
+struct Data
+{
+	std::vector<Player> players;
+};
 
 struct Client
 {
@@ -26,7 +61,6 @@ class Net
 {
 public:
 	Net() {}
-	Net(D3DHook* hook, Log* log) : m_hook(hook), m_log(log) {}
 
 	void create(int port);
 	void conn(std::string ip, int port);
@@ -48,7 +82,6 @@ private:
 	void ServerThread();
 	Player recvInfo(Client client);
 
-	D3DHook* m_hook;
 	Server m_server;
 
 	bool m_isServer;
@@ -57,6 +90,4 @@ private:
 	std::vector<Client> m_clients;
 
 	Data m_data;
-
-	Log* m_log;
 };

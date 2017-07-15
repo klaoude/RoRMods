@@ -1,4 +1,4 @@
-#include "Net.h"
+#include "Network.h"
 
 void split(const std::string &s, char delim, std::vector<std::string> &elems) {
 	std::stringstream ss;
@@ -60,7 +60,6 @@ void dePackerize(Player& player, std::vector<std::string> infoSplited)
 
 void Net::create(int port)
 {
-	m_log->write("---[Net]Create---");
 	WSADATA WSAData;
 	WSAStartup(MAKEWORD(2, 0), &WSAData);
 
@@ -75,17 +74,14 @@ void Net::create(int port)
 	ss << port;
 	ss << ")";
 	std::string str = ss.str();
-	m_log->write("[Net] Server created " + port);
 	str.resize(29);
-	m_hook->setInfo(str.c_str(), 60);
 
 	m_threads.push_back(std::thread(&Net::ServerThread, this));
-	m_log->write("---[Net]Create ended---");
+	//m_log->write("---[Net]Create ended---");
 }
 
 void Net::ServerThread()
 {
-	m_log->write("---[Net]Server thread created---");
 	while (1)
 	{
 		bind(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr));
@@ -97,7 +93,6 @@ void Net::ServerThread()
 		cl.socket = accept(m_server.socket, (SOCKADDR*)&cl.addr, &sizeof_csin);
 		if (cl.socket != INVALID_SOCKET)
 		{
-			m_hook->setInfo("Client Connected !", 60);
 			m_clients.push_back(cl);
 		}
 	}
@@ -105,7 +100,6 @@ void Net::ServerThread()
 
 void Net::conn(std::string ip, int port)
 {
-	m_log->write("---[Net]Conn---");
 	WSADATA WSAData;
 	WSAStartup(MAKEWORD(2, 0), &WSAData);
 
@@ -121,13 +115,11 @@ void Net::conn(std::string ip, int port)
 
 	if (connect(m_server.socket, (SOCKADDR*)&m_server.addr, sizeof(m_server.addr)) == SOCKET_ERROR)
 	{
-		m_hook->setErr("Connection Failed !", 60);
 		return;
 	}
-	m_hook->setInfo("Connection Establish !", 60);
 
 	m_isServer = false;
-	m_log->write("---[Net]Conn ended---");
+	//m_log->write("---[Net]Conn ended---");
 }
 
 void Net::sendInfo(Player p)
@@ -230,7 +222,7 @@ void Net::addInfo(Player p)
 	m_data.players.push_back(p);
 }
 
-void Net::clear() 
+void Net::clear()
 {
 	WSACleanup();
 	for (auto &t : m_threads)
