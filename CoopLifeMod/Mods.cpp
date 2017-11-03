@@ -1,7 +1,7 @@
 #include "Mods.h"
 #include "Offsets.h"
 
-Mods::Mods(Log* log, HWND hWnd, int width, int height) : m_hWnd(hWnd), m_hook(new D3DHook(width, height)), m_log(log)
+Mods::Mods(Log* log, HWND hWnd, int width, int height) : m_log(log), m_hWnd(hWnd), m_hook(new D3DHook(width, height))
 {}
 
 void Mods::Init()

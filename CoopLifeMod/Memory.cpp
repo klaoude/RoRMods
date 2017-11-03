@@ -115,14 +115,14 @@ double Memory::GetDouble(std::vector<LPVOID> offsets)
 	return ret;
 }
 
-double Memory::GetDouble(LPVOID addr)
+double Memory::GetDouble(LPVOID addr) const
 {
 	double ret; 
 	ReadProcessMemory(m_handle, addr, &ret, sizeof(ret), 0);
 	return ret;
 }
 
-char* Memory::getChar(LPVOID addr, int size)
+char* Memory::getChar(LPVOID addr, int size) const
 {
 	char* ret = new char[size];
 	ReadProcessMemory(m_handle, addr, &ret[0], 2, 0);

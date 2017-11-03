@@ -16,9 +16,9 @@ public:
 	LPVOID GetBasePointer(LPVOID offset = 0x0);
 
 	double GetDouble(std::vector<LPVOID> offsets);
-	double GetDouble(LPVOID addr);
+	double GetDouble(LPVOID addr) const;
 
-	char* getChar(LPVOID addr, int size);
+	char* getChar(LPVOID addr, int size) const;
 	char* getChar(std::vector<LPVOID> offsets, int size);
 
 	LPVOID GetAddr(std::vector<LPVOID> offsets);
